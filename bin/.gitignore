@@ -1,7 +1,5 @@
-/Library.class
-/LibraryTest.class
-/GameState.class
-/Test.class
-/Player.class
 /ContractCard.class
+/Player.class
 /TrainCard.class
+/Edge.class
+/City.class
