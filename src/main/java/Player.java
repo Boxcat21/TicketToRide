@@ -31,21 +31,15 @@ public class Player {
 	public ArrayList<ContractCard> getContracts() {
 		return contracts;
 	}
-	public void setContracts(ArrayList<ContractCard> contracts) {
-		this.contracts = contracts;
-	}
+	
 	public ArrayList<TrainCard> getTrainCards() {
 		return trainCards;
 	}
-	public void setTrainCards(ArrayList<TrainCard> trainCards) {
-		this.trainCards = trainCards;
-	}
+	
 	public int getTrains() {
 		return trains;
 	}
-	public void reduceTrains(int trains) {
-		this.trains -= trains;
-	}
+	
 	public String getTrainColor() {
 		return trainColor;
 	}
@@ -53,5 +47,17 @@ public class Player {
 		this.trainColor = trainColor;
 	}
 	
+	public void addTrainCard(TrainCard t) {
+		trainCards.add(t);
+	}
+	public void addContractCard(ContractCard c) {
+		contracts.add(c);
+	}
+	public boolean reduceTrains(int numRemoved) {
+		if ( trains < 3) 
+			return false;
+		trains -= numRemoved;
+		return true;
+	}
 	
 }
