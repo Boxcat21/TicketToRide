@@ -25,4 +25,25 @@ public class GameState {
 	public void placeTrain(Edge e) {
 		
 	}
+	public void chooseTrainCard(int choice) {
+		
+	}
+	public void drawTrainCard() {
+		
+	}
+	public String chooseContractCard(ArrayList<Integer> choices) {
+		return "";
+	}
+	public void endGame() {
+		
+	}
+	public void commitTurn() {
+		
+	}
+	public String longestPath() {
+		return "";
+	}
+	public String mostContractCards() {
+		return "";
+	}
 }
