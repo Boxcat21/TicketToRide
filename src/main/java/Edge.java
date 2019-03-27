@@ -6,7 +6,7 @@ public class Edge {
 	private boolean hasTrains;
 	private City[] cities;
 	
-	public Edge(int l, String c, City[] c) {
+	public Edge(int l, String s, City[] c) {
 		
 	}
 	public int getLength() {
