@@ -1,9 +1,13 @@
-<<<<<<< HEAD
+/BoardDrawer.class
+/City.class
+/ContractCard.class
+/Edge.class
+/GamePanel.class
 /GraphicsRunner.class
-/GamePanel.class
-/BoardDrawer.class
-=======
-/BoardDrawer.class
-/GamePanel.class
->>>>>>> 5e44bd242cd38d5230d3a488fadd368fa9a26358
 /HandDrawer.class
+/Player.class
+/TrainCard.class
+/CityCoordInputs.class
+/UpdatedUI.png
+/CoordRunner.class
+/UpdatedUI2.png
