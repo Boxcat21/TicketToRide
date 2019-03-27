@@ -3,9 +3,12 @@ public class Edge {
 	private int length;
 	private String color;
 	private Player player;
-	private boolean hasPassed;
+	private boolean hasTrains;
 	private City[] cities;
 	
+	public Edge(int l, String c, City[] c) {
+		
+	}
 	public int getLength() {
 		return length;
 	}

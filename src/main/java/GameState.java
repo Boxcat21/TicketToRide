@@ -19,5 +19,10 @@ public class GameState {
 	public Player getCurPlayer() {
 		return curPlayer;
 	}
-	
+	public Queue<Player> getPlayerList() {
+		return players;
+	}
+	public void placeTrain(Edge e) {
+		
+	}
 }
