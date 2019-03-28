@@ -1,12 +1,13 @@
 
 public class TrainCard {
 	private String color;
-	private int cardVal;
+	
+	public TrainCard(String col)
+	{
+		color = col;
+	}
 	
 	public String getColor() {
 		return color;
-	}
-	public int getCardVal() {
-		return cardVal;
 	}
 }
