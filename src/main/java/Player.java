@@ -26,7 +26,7 @@ public class Player {
 		return points;
 	}
 	public void addPoints(int points) {
-		this.points = points;
+		this.points += points;
 	}
 	public ArrayList<ContractCard> getContracts() {
 		return contracts;
