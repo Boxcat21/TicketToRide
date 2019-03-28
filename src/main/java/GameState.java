@@ -23,6 +23,9 @@ public class GameState {
 		return players;
 	}
 	public void placeTrain(Edge e) {
+		if (!e.getHasTrains())
+			e.setHasTrains();
+		turnCounter-=2;
 		
 	}
 	public boolean chooseTrainCard(int choice) {

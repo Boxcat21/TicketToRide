@@ -47,7 +47,7 @@ public class GamePanel extends JPanel implements MouseListener{
 	}
 	@Override
 	public void paintComponent(Graphics g) {
-		
+		g.draw3DRect(20, 20, 30, 30, true);
 	}
 	
 	
