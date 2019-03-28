@@ -10,6 +10,9 @@ public class GamePanel extends JPanel implements MouseListener{
 	
 	public GamePanel() { 
 		game = new GameState();
+		setSize(1920,1080);
+		setVisible(true);
+		
 		
 	}
 
