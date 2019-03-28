@@ -15,7 +15,7 @@ public class CityCoordInputs extends JComponent
 	{
 		BufferedImage img = null;
 		try {
-				img = ImageIO.read(new File("UpdatedUI.png"));
+				img = ImageIO.read(new File("UpdatedUIBetter.png"));
 			} catch (IOException e) {
 			}
 		if(img==null)
