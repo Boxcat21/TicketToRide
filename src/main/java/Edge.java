@@ -24,4 +24,14 @@ public class Edge {
 	public City[] getCities() {
 		return cities;
 	}
+	public boolean setHasTrains() {
+		if ( hasTrains) 
+			return false;
+		hasTrains = true;
+		return true;
+		
+	}
+	public boolean getHasTrains() {
+		return hasTrains;
+	}
 }

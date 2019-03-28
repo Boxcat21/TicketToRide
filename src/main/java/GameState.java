@@ -23,7 +23,8 @@ public class GameState {
 		return players;
 	}
 	public void placeTrain(Edge e) { // Ryan
-		
+		if ( !e.getHasTrains())
+			e.setHasTrains();	
 	}
 	public void chooseTrainCard(int choice) {
 		
