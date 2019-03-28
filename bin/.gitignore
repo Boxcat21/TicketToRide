@@ -1,6 +1,7 @@
 /BoardDrawer.class
 /City.class
 /CityCoordInputs.class
+/ConnecetdCities.txt
 /ContractCard.class
 /CoordRunner.class
 /Edge.class
@@ -12,3 +13,5 @@
 /Player.class
 /Test.class
 /TrainCard.class
+/tickets.txt
+

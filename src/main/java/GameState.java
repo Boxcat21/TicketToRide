@@ -22,15 +22,28 @@ public class GameState {
 	public Queue<Player> getPlayerList() {
 		return players;
 	}
-	public void placeTrain(Edge e) { // Ryan
-		if ( !e.getHasTrains())
-			e.setHasTrains();	
-	}
-	public void chooseTrainCard(int choice) {
+	public void placeTrain(Edge e) {
 		
+	}
+	public boolean chooseTrainCard(int choice) {
+		TrainCard t = displayCards.remove(choice);
+		
+		if(t.getColor().equals("rainbow")) {
+			turnCounter -= 2;
+			if(turnCounter < 0)
+				return false;
+		}
+		else
+			turnCounter--;
+		
+		curPlayer.addTrainCard(t);
+		
+		checkTurn();
+		
+		return true;
 	}
 	public void drawTrainCard() {
-		
+		curPlayer.addTrainCard(trainCardDeck.pop());
 	}
 	public String chooseContractCard(ArrayList<Integer> choices) {
 		return "";
@@ -38,7 +51,7 @@ public class GameState {
 	public void endGame() {
 		
 	}
-	public void commitTurn() {
+	public void endTurn() {
 		
 	}
 	public String longestPath() {
@@ -46,5 +59,9 @@ public class GameState {
 	}
 	public String mostContractCards() {
 		return "";
+	}
+	public void checkTurn() {
+		if(this.turnCounter == 0)
+			endTurn();
 	}
 }
