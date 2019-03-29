@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
@@ -16,7 +17,7 @@ public class GameState {
 	private ArrayList<Edge> edges;
 	private ArrayList<City> cities;
 	
-	public GameState() {
+	public GameState() throws FileNotFoundException {
 			//Reading in contracts
 			contractList = new LinkedList<>();
 			Scanner scan = new Scanner(new File("tickets.txt"));
