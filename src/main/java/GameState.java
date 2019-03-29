@@ -32,14 +32,14 @@ public class GameState {
 					if(c.getName().equals(temp[1]))
 					two = c;		
 				}
-				contractList.add(new ContractCard(one,two,temp[2]));			
+				contractList.add(new ContractCard(one,two,Integer.parseInt(temp[2])));			
 			}
 			//Writing traincards
 			ArrayList<TrainCard> list = new ArrayList<TrainCard>();
 			trainCardDeck = new Stack();
 			for(int i=0;i<4;i++)
 			{
-				for(int i)
+				//for(int i)
 					
 			}
 			
