@@ -96,7 +96,18 @@ public class GameState {
 		curPlayer.addTrainCard(trainCardDeck.pop());
 	}
 	public String chooseContractCard(ArrayList<Integer> choices) {
-		return "";
+		ContractCard[] cards = new ContractCard[3];
+		
+		cards[0] = contractList.poll();
+		cards[1] = contractList.poll();
+		cards[2] = contractList.poll();
+		
+		for(int i = 0; i < choices.size(); i++)
+		{
+			curPlayer.addContractCard(cards[choices.get(i)]);
+		}
+		
+		return "" + curPlayer.getContracts();
 	}
 	public void endGame() {
 		
