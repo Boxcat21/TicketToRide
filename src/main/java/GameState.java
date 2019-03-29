@@ -75,13 +75,15 @@ public class GameState {
 		
 		
 	}
-	public boolean chooseTrainCard(int choice) {
+	public void chooseTrainCard(int choice) {
 		TrainCard t = displayCards.remove(choice);
 		
 		if(t.getColor().equals("rainbow")) {
 			turnCounter -= 2;
-			if(turnCounter < 0)
-				return false;
+			if(turnCounter < 0) {
+				turnCounter +=2;
+				return;
+			}
 		}
 		else
 			turnCounter--;
@@ -89,11 +91,19 @@ public class GameState {
 		curPlayer.addTrainCard(t);
 		
 		checkTurn();
-		
-		return true;
 	}
 	public void drawTrainCard() {
+		turnCounter -= 2;
+		if(turnCounter < 0) {
+			turnCounter += 2;
+			return;
+		}
+		else
+			turnCounter--;
+		
 		curPlayer.addTrainCard(trainCardDeck.pop());
+		
+		checkTurn();
 	}
 	public String chooseContractCard(ArrayList<Integer> choices) {
 		ContractCard[] cards = new ContractCard[3];
