@@ -1,6 +1,7 @@
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.io.IOException;
 
 import javax.swing.JPanel;
 
@@ -8,7 +9,7 @@ public class GamePanel extends JPanel implements MouseListener{
 	
 	private GameState game;
 	
-	public GamePanel() { 
+	public GamePanel() throws IOException{ 
 		game = new GameState();
 		setSize(1920,1080);
 		setVisible(true);

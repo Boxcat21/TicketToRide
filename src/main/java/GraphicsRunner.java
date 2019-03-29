@@ -1,8 +1,10 @@
+import java.io.IOException;
+
 import javax.swing.JFrame;
 
 public class GraphicsRunner extends JFrame{
 	
-	public GraphicsRunner(String name) {
+	public GraphicsRunner(String name) throws IOException{
 		super(name);
 		add(new GamePanel());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -11,9 +13,9 @@ public class GraphicsRunner extends JFrame{
 		setVisible(true);
 		
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException{
 		
-		new GraphicsRunner("Yett");
+		new GraphicsRunner("Yeet");
 		
 	}
 }
