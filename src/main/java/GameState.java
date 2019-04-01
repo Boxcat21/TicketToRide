@@ -1,9 +1,11 @@
+import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
@@ -65,13 +67,24 @@ public class GameState {
 		curPlayer = players.peek();
 		turnCounter = 0;
 		// edges and cities
+		cities = new ArrayList<>();
+		//Puts all of the connecteed cities in a hashmap with the corresponding point
+		HashMap<String, Point> connectedCities = new HashMap<String, Point>();
+		scan = new Scanner(new File("CityPoints.txt"));
+		while(scan.hasNextLine())
+		{
+			String[] temp = scan.nextLine().split(",");
+			 connectedCities.put(temp[0],new Point(Integer.parseInt(temp[1]),Integer.parseInt(temp[2])));
+		}
+		//Reads in the connected cities
 		scan = new Scanner(new File("ConnectedCities.txt"));
 		HashMap<String, String> previous = new HashMap<>();
 
 		while (scan.hasNextLine()) {
 			String[] temp = scan.nextLine().split(",");
 			if (!((previous.get(temp[1]).equals(temp[0]) || (previous.get(temp[0]).equals(temp[1]))))) {
-
+				//needs fix
+				cities.add(new City(connectedCities.get(temp[0]),temp[0],new ArrayList<>()));
 			}
 		}
 	}
