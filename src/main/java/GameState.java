@@ -88,21 +88,10 @@ public class GameState {
 			 while(scan.hasNextLine())
 			 {
 				 String[] temp = scan.nextLine().split(",");
-				 if(!((previous.get(temp[1]).equals(temp[0])||(previous.get(temp[0]).equals(temp[1])))))
+				 if(!((previous.get(temp[1]).equals(temp[0])||(previous.get(temp[0]).equals(temp[1]))))) {
 					 
-						 
-						 
-				 
-				 
+				 }
 			 }
-			 
-			 
-			 
-			 
-
-			
-
-		
 	}
 	public Player getCurPlayer() {
 		return curPlayer;
