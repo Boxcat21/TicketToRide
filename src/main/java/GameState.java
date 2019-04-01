@@ -18,7 +18,7 @@ public class GameState {
 	private int turnCounter;
 	private ArrayList<Edge> edges;
 	private ArrayList<City> cities;
-	
+	public static final String[] TRAIN_COLORS = {"Purple","White", "Blue", "Yellow", "Orange", "Black", "Red", "Green"};
 	public GameState() throws FileNotFoundException {
 			//Reading in contracts
 			cities = new ArrayList<>();
@@ -42,25 +42,9 @@ public class GameState {
 			ArrayList<TrainCard> list = new ArrayList<TrainCard>();
 			trainCardDeck = new Stack();
 			for(int j=0;j<8;j++)
-			for(int i=0;i<12;i++)
-			{
-				if(j==0)
-					trainCardDeck.add(new TrainCard("Purple"));	
-				else if(j==1)
-					trainCardDeck.add(new TrainCard("White"));	
-				else if(j==2)
-					trainCardDeck.add(new TrainCard("Blue"));
-				else if(j==3)
-					trainCardDeck.add(new TrainCard("Yellow"));	
-				else if(j==4)
-					trainCardDeck.add(new TrainCard("Orange"));	
-				else if(j==5)
-					trainCardDeck.add(new TrainCard("Black"));	
-				else if(j==6)
-					trainCardDeck.add(new TrainCard("Red"));
-				else if(j==7)
-					trainCardDeck.add(new TrainCard("Green"));	
-			}
+				for(int i=0;i<12;i++)
+					trainCardDeck.add(new TrainCard(this.TRAIN_COLORS[j]));	
+			
 			for(int i=0;i<14;i++)
 				trainCardDeck.add(new TrainCard("Wild"));
 			Collections.shuffle(trainCardDeck);
