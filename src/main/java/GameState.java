@@ -22,7 +22,6 @@ public class GameState {
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
 			"Green" };
-
 	public GameState() throws FileNotFoundException {
 		// Reading in contracts
 		cities = new ArrayList<>();
