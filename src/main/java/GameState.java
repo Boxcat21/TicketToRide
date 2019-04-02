@@ -100,7 +100,7 @@ public class GameState {
 		if (!e.getHasTrains())
 			e.setHasTrains();
 		turnCounter -= 2;
-
+		checkTurn();
 	}
 
 	public boolean chooseTrainCard(int choice) {
