@@ -1,9 +1,11 @@
+import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
@@ -18,7 +20,8 @@ public class GameState {
 	private int turnCounter;
 	private ArrayList<Edge> edges;
 	private ArrayList<City> cities;
-	private String yeet;
+	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
+			"Green" };
 	public GameState() throws FileNotFoundException {
 		// Reading in contracts
 		cities = new ArrayList<>();
@@ -40,24 +43,9 @@ public class GameState {
 		ArrayList<TrainCard> list = new ArrayList<TrainCard>();
 		trainCardDeck = new Stack();
 		for (int j = 0; j < 8; j++)
-			for (int i = 0; i < 12; i++) {
-				if (j == 0)
-					trainCardDeck.add(new TrainCard("Purple"));
-				else if (j == 1)
-					trainCardDeck.add(new TrainCard("White"));
-				else if (j == 2)
-					trainCardDeck.add(new TrainCard("Blue"));
-				else if (j == 3)
-					trainCardDeck.add(new TrainCard("Yellow"));
-				else if (j == 4)
-					trainCardDeck.add(new TrainCard("Orange"));
-				else if (j == 5)
-					trainCardDeck.add(new TrainCard("Black"));
-				else if (j == 6)
-					trainCardDeck.add(new TrainCard("Red"));
-				else if (j == 7)
-					trainCardDeck.add(new TrainCard("Green"));
-			}
+			for (int i = 0; i < 12; i++)
+				trainCardDeck.add(new TrainCard(this.TRAIN_COLORS[j]));
+
 		for (int i = 0; i < 14; i++)
 			trainCardDeck.add(new TrainCard("Wild"));
 		Collections.shuffle(trainCardDeck);
@@ -78,13 +66,24 @@ public class GameState {
 		curPlayer = players.peek();
 		turnCounter = 0;
 		// edges and cities
+		cities = new ArrayList<>();
+		//Puts all of the connecteed cities in a hashmap with the corresponding point
+		HashMap<String, Point> connectedCities = new HashMap<String, Point>();
+		scan = new Scanner(new File("CityPoints.txt"));
+		while(scan.hasNextLine())
+		{
+			String[] temp = scan.nextLine().split(",");
+			 connectedCities.put(temp[0],new Point(Integer.parseInt(temp[1]),Integer.parseInt(temp[2])));
+		}
+		//Reads in the connected cities
 		scan = new Scanner(new File("ConnectedCities.txt"));
 		HashMap<String, String> previous = new HashMap<>();
 
 		while (scan.hasNextLine()) {
 			String[] temp = scan.nextLine().split(",");
 			if (!((previous.get(temp[1]).equals(temp[0]) || (previous.get(temp[0]).equals(temp[1]))))) {
-
+				//needs fix
+				cities.add(new City(connectedCities.get(temp[0]),temp[0],new ArrayList<>()));
 			}
 		}
 	}
