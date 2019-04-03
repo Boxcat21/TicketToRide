@@ -137,9 +137,19 @@ public class GameState {
 	}
 
 	public String longestPath() {
+		ArrayList<City> startCities = this.cities;
+		
+		while(startCities.size() > 0) {
+			ArrayList<Edge> longest = longestPathRecur(startCities.get(0));
+			longest.indexOf(startCities.get(0));
+			
+		}
+		
 		return "";
 	}
-
+	public ArrayList<Edge> longestPathRecur(City c) {
+		return null;
+	}
 	public String mostContractCards() {
 		//Abhinav
 		return "";
