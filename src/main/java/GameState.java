@@ -3,9 +3,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
@@ -22,10 +22,15 @@ public class GameState {
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
 			"Green" };
+	private String longestPath;
+	private String mostContracts;
+	
 	public GameState() throws FileNotFoundException {
 		// Reading in contracts
 		cities = new ArrayList<>();
 		contractList = new LinkedList<>();
+		longestPath = "";
+		mostContracts = "";
 		Scanner scan = new Scanner(new File("tickets.txt"));
 		for (int i = 0; i < Integer.parseInt(scan.nextLine()); i++) {
 			String[] temp = scan.nextLine().split("|");
@@ -63,8 +68,8 @@ public class GameState {
 		players.add(new Player("green"));
 		players.add(new Player("yellow"));
 		players.add(new Player("blue"));
-		curPlayer = players.peek();
-		turnCounter = 0;
+		curPlayer = players.poll();
+		turnCounter = 2;
 		// edges and cities
 		cities = new ArrayList<>();
 		//Puts all of the connecteed cities in a hashmap with the corresponding point
@@ -128,12 +133,36 @@ public class GameState {
 		return "";
 	}
 
-	public void endGame() {
+	public ArrayList<Player> endGame() { 
+		turnCounter = 0;
+		longestPath = longestPath();
+		mostContracts = mostContractCards();
+		ArrayList<Player> winnerPoints = new ArrayList<>();
+		winnerPoints.addAll(players);
+		Collections.sort(winnerPoints, new Comparator<Player>() {
+			@Override
+			public int compare(Player p1, Player p2) {
+				return p1.getPoints() - p2.getPoints();
+			}
+		}); // sorts the winners by order of points
+		return winnerPoints;
 		
 	}
 
 	public void endTurn() {
-		//Sid
+		Player temp = players.poll();
+		// goes to next player
+		players.offer(curPlayer);
+		curPlayer = temp;
+		
+		turnCounter = 2;
+		
+	}
+	public String getLongestPath() {
+		return longestPath;
+	}
+	public String getMostContracts() {
+		return mostContracts;
 	}
 
 	public String longestPath() {
@@ -146,7 +175,19 @@ public class GameState {
 	}
 
 	public void checkTurn() {
-		if (this.turnCounter == 0)
-			endTurn();
+		boolean lastRound = false;
+		for ( Player p : players )  
+			if ( p.getTrains() < 3) {
+				lastRound = true;
+				break;
+			}
+		
+		if (this.turnCounter == 0 && !lastRound) {
+			endTurn(); 
+			return;
+		}
+		if ( lastRound ) //still need to fix to run one more round before ending 
+			endGame();
+		return;
 	}
 }
