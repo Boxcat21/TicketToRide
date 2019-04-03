@@ -2,6 +2,7 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -67,7 +68,8 @@ public class GameState {
 		turnCounter = 0;
 		// edges and cities
 		cities = new ArrayList<>();
-		//Puts all of the connecteed cities in a hashmap with the corresponding point
+		edges = new ArrayList<>();
+		//Puts all of the connected cities in a hashmap with the corresponding point
 		HashMap<String, Point> connectedCities = new HashMap<String, Point>();
 		scan = new Scanner(new File("CityPoints.txt"));
 		while(scan.hasNextLine())
@@ -75,6 +77,30 @@ public class GameState {
 			String[] temp = scan.nextLine().split(",");
 			 connectedCities.put(temp[0],new Point(Integer.parseInt(temp[1]),Integer.parseInt(temp[2])));
 		}
+		//reads in the edges: ensures no repeats
+		scan = new Scanner(new File("ConnectedCities.txt"));
+		HashMap<String, City[]> edgeTemp = new HashMap<>();
+		while(scan.hasNextLine())
+		{
+			String[] temp = scan.nextLine().split(",");
+			boolean b = true;
+			City[] cityArr = edgeTemp.get(temp[0]);
+			if(cityArr==null)
+				edgeTemp.put(temp[0],new City[2]);
+			else
+			{
+				for(int i =0; i<cityArr.length;i++)
+			{
+				 if(Arrays.asList(edgeTemp.get(cityArr[i])).contains(temp[0]))
+					 b= false;
+			}
+			if(!b)
+				cityArr[1] = new City(temp[1],connectedCities.get(temp[1]));
+			
+			}
+			
+		}
+
 		//Reads in the connected cities
 		scan = new Scanner(new File("ConnectedCities.txt"));
 		HashMap<String, String> previous = new HashMap<>();
