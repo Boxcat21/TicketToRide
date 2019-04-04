@@ -84,25 +84,12 @@ public class GameState {
 		}
 		//reads in the edges: ensures no repeats
 		scan = new Scanner(new File("ConnectedCities.txt"));
-		HashMap<String, City[]> edgeTemp = new HashMap<>();
+		HashMap<String, ArrayList<Edge>> edgeTemps = new HashMap<>();
 		while(scan.hasNextLine())
 		{
-			String[] temp = scan.nextLine().split(",");
-			boolean b = true;
-			City[] cityArr = edgeTemp.get(temp[0]);
-			if(cityArr==null)
-				edgeTemp.put(temp[0],new City[2]);
-			else
-			{
-				for(int i =0; i<cityArr.length;i++)
-			{
-				 if(Arrays.asList(edgeTemp.get(cityArr[i])).contains(temp[0]))
-					 b= false;
-			}
-			if(!b)
-				cityArr[1] = new City(connectedCities.get(temp[1]),temp[1],null);
+			String[] line = scan.nextLine().split(",");
+			edgeTemps.put(line[0],null);
 			
-			}
 			
 		}
 
@@ -233,7 +220,24 @@ public class GameState {
 		return null;
 	}
 	public String mostContractCards() {
-		//Abhinav
+		//Cole (NOT DONE)
+		int temp;
+		Player highest;
+		Player p;
+		
+		for(int i = 0; i <= 4; i++)
+		{
+			p = players.poll();
+			for(i = 0; i <= p.getContracts().size(); i++)
+			{
+				if(p.getContracts().get(i).isComplete())
+				{
+					temp++;
+				}
+			}
+			
+			if()
+		}
 		return "";
 	}
 
