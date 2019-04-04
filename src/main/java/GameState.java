@@ -76,7 +76,7 @@ public class GameState {
 		edges = new ArrayList<>();
 		//Puts all of the connected cities in a hashmap with the corresponding point
 		HashMap<String, Point> connectedCities = new HashMap<String, Point>();
-		scan = new Scanner(new File("CityPoints.txt"));
+		scan = new Scanner(new File("Cities.txt"));
 		while(scan.hasNextLine())
 		{
 			String[] temp = scan.nextLine().split(",");
@@ -100,7 +100,7 @@ public class GameState {
 					 b= false;
 			}
 			if(!b)
-				cityArr[1] = new City(temp[1],connectedCities.get(temp[1]));
+				cityArr[1] = new City(connectedCities.get(temp[1]),temp[1],null);
 			
 			}
 			
