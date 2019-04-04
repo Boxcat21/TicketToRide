@@ -184,14 +184,11 @@ public class GameState {
 		turnCounter = 2;
 		
 	}
-	public int getLongestPath() {
-		return longestPath();
-	}
 	public String getMostContracts() {
 		return mostContracts;
 	}
 
-	public int longestPath() {
+	public String longestPath() {
 		ArrayList<City> startCities = this.cities;
 		
 		while(startCities.size() > 0) {
@@ -208,7 +205,7 @@ public class GameState {
 			
 		}
 		
-		return 0;
+		return "";
 	}
 	public ArrayList<Edge> longestPathRecur(City c) {
 		return null;
