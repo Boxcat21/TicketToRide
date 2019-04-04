@@ -10,6 +10,7 @@ public class ContractCard {
 		cities[0] = one;
 		cities[1] = two;
 		value = p;
+		complete = false;
 	}
 	
 	public boolean isComplete()

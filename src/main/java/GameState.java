@@ -211,7 +211,24 @@ public class GameState {
 		return null;
 	}
 	public String mostContractCards() {
-		//Abhinav
+		//Cole (NOT DONE)
+		int temp;
+		Player highest;
+		Player p;
+		
+		for(int i = 0; i <= 4; i++)
+		{
+			p = players.poll();
+			for(i = 0; i <= p.getContracts().size(); i++)
+			{
+				if(p.getContracts().get(i).isComplete())
+				{
+					temp++;
+				}
+			}
+			
+			if()
+		}
 		return "";
 	}
 
