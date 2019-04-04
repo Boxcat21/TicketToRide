@@ -26,5 +26,10 @@ public class ContractCard {
 	{
 		complete = true;
 	}
-	
+	public City getCity1() {
+		return cities[0];
+	}
+	public City getCity2() {
+		return cities[1];
+	}
 }
