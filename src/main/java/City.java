@@ -6,6 +6,13 @@ public class City {
 	private String name;
 	private ArrayList<Edge> edges;
 	
+	public City(Point p, String n, ArrayList<Edge> e)
+	{
+		point = p;
+		name = n;
+		edges = e;
+	}
+	
 	public Point getPoint() {
 		return point;
 	}

@@ -10,7 +10,7 @@ public class ImageReadTest {
 		
 		BufferedImage bf = null;
 		try { 
-		bf = ImageIO.read(new File("C:\\Users\\slhscs310\\Downloads\\png2jpg\\Capture.jpg"));
+		bf = ImageIO.read(new File("UpdatedUIBetter.png"));
 		}
 		catch(Exception e) {}
 		
