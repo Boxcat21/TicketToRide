@@ -1,10 +1,11 @@
+import java.util.ArrayList;
 
 public class Edge {
 	private int length;
 	private String color;
 	private Player player;
 	private boolean hasTrains;
-	private City[] cities;
+	private ArrayList<City> cities;
 	
 	public Edge(int l, String s, City[] c) {
 		
@@ -21,7 +22,7 @@ public class Edge {
 	public void setPlayer(Player p) {
 		player = p;
 	}
-	public City[] getCities() {
+	public ArrayList<City> getCities() {
 		return cities;
 	}
 	public boolean setHasTrains() {
