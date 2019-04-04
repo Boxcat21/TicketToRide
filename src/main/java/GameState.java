@@ -76,7 +76,7 @@ public class GameState {
 		edges = new ArrayList<>();
 		//Puts all of the connected cities in a hashmap with the corresponding point
 		HashMap<String, Point> connectedCities = new HashMap<String, Point>();
-		scan = new Scanner(new File("CityPoints.txt"));
+		scan = new Scanner(new File("Cities.txt"));
 		while(scan.hasNextLine())
 		{
 			String[] temp = scan.nextLine().split(",");
@@ -100,7 +100,7 @@ public class GameState {
 					 b= false;
 			}
 			if(!b)
-				cityArr[1] = new City(temp[1],connectedCities.get(temp[1]));
+				cityArr[1] = new City(connectedCities.get(temp[1]),temp[1],null);
 			
 			}
 			
@@ -193,9 +193,6 @@ public class GameState {
 		turnCounter = 2;
 		
 	}
-	public String getLongestPath() {
-		return longestPath;
-	}
 	public String getMostContracts() {
 		return mostContracts;
 	}
@@ -204,8 +201,16 @@ public class GameState {
 		ArrayList<City> startCities = this.cities;
 		
 		while(startCities.size() > 0) {
-			ArrayList<Edge> longest = longestPathRecur(startCities.get(0));
-			longest.indexOf(startCities.get(0));
+			City start = startCities.get(0);
+			ArrayList<Edge> longest = longestPathRecur(start);
+			
+			City newStart;
+			if(longest.indexOf(start) > longest.size()/2) {
+				ArrayList<City> temp1 = longest.get(0).getCities();
+				ArrayList<City> temp2 = longest.get(1).getCities();
+				
+			}
+			
 			
 		}
 		
