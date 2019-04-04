@@ -165,12 +165,8 @@ public class GameState {
 		mostContracts = mostContractCards();
 		ArrayList<Player> winnerPoints = new ArrayList<>();
 		winnerPoints.addAll(players);
-		Collections.sort(winnerPoints, new Comparator<Player>() {
-			@Override
-			public int compare(Player p1, Player p2) {
-				return p1.getPoints() - p2.getPoints();
-			}
-		}); // sorts the winners by order of points
+		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
+		// sorts the winners by order of points
 		return winnerPoints;
 		
 	}
@@ -188,21 +184,35 @@ public class GameState {
 		return mostContracts;
 	}
 
-	public String longestPath() {
+	public String longestPath() { //THINGS TO DO: Check for sketchy case, run for all players, do the recursion, return cities overlapped to remove from start cities
 		ArrayList<City> startCities = this.cities;
 		
 		while(startCities.size() > 0) {
 			City start = startCities.get(0);
 			ArrayList<Edge> longest = longestPathRecur(start);
 			
-			City newStart;
+			//FIX FINDING END CITY ASAP - for future SID, cause current sid lazy af
+			City newStart = null;
+			ArrayList<City> temp1;
+			ArrayList<City> temp2;
 			if(longest.indexOf(start) > longest.size()/2) {
-				ArrayList<City> temp1 = longest.get(0).getCities();
-				ArrayList<City> temp2 = longest.get(1).getCities();
-				
+				temp1 = longest.get(0).getCities();
+				temp2 = longest.get(1).getCities();
+			}
+			else {
+				temp1 = longest.get(0).getCities();
+				temp2 = longest.get(1).getCities();
 			}
 			
+			for(int i = 0; i < 2; i++)
+				if(temp1.contains(temp2.get(i)))
+					newStart = temp2.get(i);
+			//ASUMING NEW START IS RIGHT
+			longest = longestPathRecur(newStart);
 			
+			for(int i = 0; i < longest.size(); i++) {
+				
+			}
 		}
 		
 		return "";
