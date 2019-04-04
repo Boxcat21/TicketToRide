@@ -132,6 +132,18 @@ public class GameState {
 			e.setHasTrains();
 		turnCounter -= 2;
 		checkTurn();
+		checkContracts();
+	}
+
+	private void checkContracts() {
+		ArrayList<ContractCard> contracts = curPlayer.getContracts();
+		for ( ContractCard c : contracts) {
+			City one = c.getCity1();
+			City two = c.getCity2(); // are the references correct?
+			
+			one.get
+		}
+		
 	}
 
 	public boolean chooseTrainCard(int choice) {
