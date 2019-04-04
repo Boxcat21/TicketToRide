@@ -132,6 +132,15 @@ public class GameState {
 			e.setHasTrains();
 		turnCounter -= 2;
 		checkTurn();
+		checkContracts();
+	}
+
+	private void checkContracts() {
+		ArrayList<ContractCard> contracts = curPlayer.getContracts();
+		for ( ContractCard c : contracts) {
+			
+		}
+		
 	}
 
 	public boolean chooseTrainCard(int choice) {
