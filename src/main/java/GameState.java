@@ -119,6 +119,18 @@ public class GameState {
 			e.setHasTrains();
 		turnCounter -= 2;
 		checkTurn();
+		checkContracts();
+	}
+
+	private void checkContracts() {
+		ArrayList<ContractCard> contracts = curPlayer.getContracts();
+		for ( ContractCard c : contracts) {
+			City one = c.getCity1();
+			City two = c.getCity2(); // are the references correct?
+			
+			one.get
+		}
+		
 	}
 
 	public boolean chooseTrainCard(int choice) {
@@ -171,14 +183,11 @@ public class GameState {
 		turnCounter = 2;
 		
 	}
-	public int getLongestPath() {
-		return longestPath();
-	}
 	public String getMostContracts() {
 		return mostContracts;
 	}
 
-	public int longestPath() {
+	public String longestPath() {
 		ArrayList<City> startCities = this.cities;
 		
 		while(startCities.size() > 0) {
@@ -195,7 +204,7 @@ public class GameState {
 			
 		}
 		
-		return 0;
+		return "";
 	}
 	public ArrayList<Edge> longestPathRecur(City c) {
 		return null;
