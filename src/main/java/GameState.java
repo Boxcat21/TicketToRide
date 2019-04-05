@@ -185,7 +185,7 @@ public class GameState {
 		return mostContracts;
 	}
 
-	public String longestPath() { //THINGS TO DO: Check for sketchy case, run for all players, do the recursion, return cities overlapped to remove from start cities
+	public String longestPath() { //THINGS TO DO: Check for sketchy case, do the recursion
 		ArrayList<City> startCities = this.cities;
 		
 		int[] longestCntPerPlyr = {0,0,0,0};
@@ -193,7 +193,7 @@ public class GameState {
 		for(int n = 0; n < longestCntPerPlyr.length; n++) { //COUNT = N
 			while(startCities.size() > 0) {
 				City start = startCities.get(0);
-				ArrayList<Edge> longest = longestPathRecur(start);
+				ArrayList<Edge> longest = longestPathRecur(start, new ArrayList<Edge>(), PLAYER_COLORS[n]);
 				
 				//FIX FINDING END CITY ASAP - for future SID, cause current sid lazy af
 				City newStart = null;
@@ -213,7 +213,7 @@ public class GameState {
 				else
 					newStart = temp1.get(0);
 				//ASUMING NEW START IS RIGHT :: I THINK IT WAS FIXED - future sid
-				longest = longestPathRecur(newStart);
+				longest = longestPathRecur(newStart, new ArrayList<Edge>(), PLAYER_COLORS[n]);
 				
 				for(int i = 0; i < longest.size(); i++) {
 					longestCntPerPlyr[n] += longest.get(i).getLength();
@@ -229,7 +229,9 @@ public class GameState {
 		
 		return "";
 	}
-	public ArrayList<Edge> longestPathRecur(City c) {
+	public ArrayList<Edge> longestPathRecur(City c, ArrayList<Edge> passedEdges, String color) {
+		ArrayList<Edge> edges = c.getEdges(color);
+		
 		return null;
 	}
 	public String mostContractCards() {
@@ -254,7 +256,7 @@ public class GameState {
 		return "";
 	}
 
-	public void checkTurn() {
+	public void checkTurn() { //Note to ryan: also need to check for 3 wilds face up (idk if there are more scenarios but i know that is one of them)
 		boolean lastRound = false;
 		for ( Player p : players )  
 			if ( p.getTrains() < 3) {
