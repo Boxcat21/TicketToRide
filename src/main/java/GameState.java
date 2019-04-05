@@ -23,8 +23,11 @@ public class GameState {
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
 			"Green" };
+	public static final String[] PLAYER_COLORS = {"Red", "Green", "Yellow", "Blue"};
 	private String longestPath;
 	private String mostContracts;
+	//for longest path
+	private ArrayList<City> passedCities;
 	
 	public GameState() throws FileNotFoundException {
 		// Reading in contracts
@@ -65,10 +68,8 @@ public class GameState {
 
 		// adding players, cur player and turncounter
 		players = new LinkedList<>();
-		players.add(new Player("red"));
-		players.add(new Player("green"));
-		players.add(new Player("yellow"));
-		players.add(new Player("blue"));
+		for(int i = 0; i < this.PLAYER_COLORS.length; i++) 
+			players.add(new Player(PLAYER_COLORS[i]));
 		curPlayer = players.poll();
 		turnCounter = 2;
 		// edges and cities
@@ -104,6 +105,7 @@ public class GameState {
 				cities.add(new City(connectedCities.get(temp[0]),temp[0],new ArrayList<>()));
 			}
 		}
+		this.passedCities = new ArrayList<City>();
 	}
 
 	public Player getCurPlayer() {
@@ -186,32 +188,42 @@ public class GameState {
 	public String longestPath() { //THINGS TO DO: Check for sketchy case, run for all players, do the recursion, return cities overlapped to remove from start cities
 		ArrayList<City> startCities = this.cities;
 		
-		while(startCities.size() > 0) {
-			City start = startCities.get(0);
-			ArrayList<Edge> longest = longestPathRecur(start);
-			
-			//FIX FINDING END CITY ASAP - for future SID, cause current sid lazy af
-			City newStart = null;
-			ArrayList<City> temp1;
-			ArrayList<City> temp2;
-			if(longest.indexOf(start) > longest.size()/2) {
-				temp1 = longest.get(0).getCities();
-				temp2 = longest.get(1).getCities();
-			}
-			else {
-				temp1 = longest.get(longest.size()-1).getCities();
-				temp2 = longest.get(longest.size()-2).getCities();
-			}
-			
-			if(temp2.contains(temp1.get(0)))
-				newStart = temp1.get(1);
-			else
-				newStart = temp1.get(0);
-			//ASUMING NEW START IS RIGHT :: I THINK IT WAS FIXED - future sid
-			longest = longestPathRecur(newStart);
-			
-			for(int i = 0; i < longest.size(); i++) {
+		int[] longestCntPerPlyr = {0,0,0,0};
+		
+		for(int n = 0; n < longestCntPerPlyr.length; n++) { //COUNT = N
+			while(startCities.size() > 0) {
+				City start = startCities.get(0);
+				ArrayList<Edge> longest = longestPathRecur(start);
 				
+				//FIX FINDING END CITY ASAP - for future SID, cause current sid lazy af
+				City newStart = null;
+				ArrayList<City> temp1;
+				ArrayList<City> temp2;
+				if(longest.indexOf(start) > longest.size()/2) {
+					temp1 = longest.get(0).getCities();
+					temp2 = longest.get(1).getCities();
+				}
+				else {
+					temp1 = longest.get(longest.size()-1).getCities();
+					temp2 = longest.get(longest.size()-2).getCities();
+				}
+				
+				if(temp2.contains(temp1.get(0)))
+					newStart = temp1.get(1);
+				else
+					newStart = temp1.get(0);
+				//ASUMING NEW START IS RIGHT :: I THINK IT WAS FIXED - future sid
+				longest = longestPathRecur(newStart);
+				
+				for(int i = 0; i < longest.size(); i++) {
+					longestCntPerPlyr[n] += longest.get(i).getLength();
+				}
+				for(int i = 0; i < startCities.size(); i++) {
+					if(passedCities.contains(startCities.get(i))) {
+						startCities.remove(i);
+						i--;
+					}
+				}
 			}
 		}
 		
