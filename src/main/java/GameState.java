@@ -89,10 +89,19 @@ public class GameState {
 		while(scan.hasNextLine())
 		{
 			String[] line = scan.nextLine().split(",");
+			ArrayList<Edge> cityTemps = new ArrayList<Edge>();
+			if(edgeTemps.get(line[0])==null)
+			{
+				edgeTemps.put(line[0],cityTemps);
+			}
+			
+			cityTemps.add(new Edge(Integer.parseInt(line[2]),line[3],null));
 			edgeTemps.put(line[0],null);
 			
 			
 		}
+		
+		
 
 		//Reads in the connected cities
 		scan = new Scanner(new File("ConnectedCities.txt"));

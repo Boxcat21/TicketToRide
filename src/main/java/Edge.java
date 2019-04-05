@@ -7,7 +7,7 @@ public class Edge {
 	private boolean hasTrains;
 	private ArrayList<City> cities;
 	
-	public Edge(int l, String s, City[] c) 
+	public Edge(int l, String s, ArrayList<City> c) 
 	{
 		
 	}
