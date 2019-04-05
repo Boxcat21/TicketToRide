@@ -199,14 +199,15 @@ public class GameState {
 				temp2 = longest.get(1).getCities();
 			}
 			else {
-				temp1 = longest.get(0).getCities();
-				temp2 = longest.get(1).getCities();
+				temp1 = longest.get(longest.size()-1).getCities();
+				temp2 = longest.get(longest.size()-2).getCities();
 			}
 			
-			for(int i = 0; i < 2; i++)
-				if(temp1.contains(temp2.get(i)))
-					newStart = temp2.get(i);
-			//ASUMING NEW START IS RIGHT
+			if(temp2.contains(temp1.get(0)))
+				newStart = temp1.get(1);
+			else
+				newStart = temp1.get(0);
+			//ASUMING NEW START IS RIGHT :: I THINK IT WAS FIXED - future sid
 			longest = longestPathRecur(newStart);
 			
 			for(int i = 0; i < longest.size(); i++) {
@@ -221,7 +222,7 @@ public class GameState {
 	}
 	public String mostContractCards() {
 		//Cole (NOT DONE)
-		int temp;
+		int temp = 0;
 		Player highest;
 		Player p;
 		
@@ -236,7 +237,7 @@ public class GameState {
 				}
 			}
 			
-			if()
+			//if()
 		}
 		return "";
 	}
