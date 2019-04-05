@@ -128,7 +128,7 @@ public class GameState {
 			City one = c.getCity1();
 			City two = c.getCity2(); // are the references correct?
 			
-			one.get
+			//one.get
 		}
 		
 	}
