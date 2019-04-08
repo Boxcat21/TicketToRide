@@ -271,6 +271,13 @@ public class GameState {
 	}
 
 	public void checkTurn() { //Note to ryan: also need to check for 3 wilds face up (idk if there are more scenarios but i know that is one of them)
+		if ( checkWilds()) { // if there are 3+ wild cards in the deck
+			discardTrainCard.addAll(displayCards);
+			displayCards.clear();
+			Collections.shuffle(trainCardDeck);
+			for ( int i = 0; i < 5; i++ )
+				displayCards.add(trainCardDeck.pop());
+		}
 		boolean lastRound = false;
 		for ( Player p : players )  
 			if ( p.getTrains() < 3) {
@@ -285,5 +292,16 @@ public class GameState {
 		if ( lastRound ) //still need to fix to run one more round before ending 
 			endGame();
 		return;
+	}
+
+	private boolean checkWilds() {
+		int count = 0;
+		for ( TrainCard t : displayCards) {
+			if ( t.getColor().equals("Rainbow"))
+				count++;
+			if ( count == 3) 
+				return true;
+		}
+		return false;
 	}
 }
