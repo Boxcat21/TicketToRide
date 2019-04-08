@@ -229,21 +229,21 @@ public class GameState {
 				
 				//FIX FINDING END CITY ASAP - for future SID, cause current sid lazy af
 				City newStart = null;
-				ArrayList<City> temp1;
-				ArrayList<City> temp2;
+				ArrayList<City> endingEdgeCities1;
+				ArrayList<City> endingEdgeCities2;
 				if(longest.indexOf(start) > longest.size()/2) {
-					temp1 = longest.get(0).getCities();
-					temp2 = longest.get(1).getCities();
+					endingEdgeCities1 = longest.get(0).getCities();
+					endingEdgeCities2 = longest.get(1).getCities();
 				}
 				else {
-					temp1 = longest.get(longest.size()-1).getCities();
-					temp2 = longest.get(longest.size()-2).getCities();
+					endingEdgeCities1 = longest.get(longest.size()-1).getCities();
+					endingEdgeCities2 = longest.get(longest.size()-2).getCities();
 				}
 				
-				if(temp2.contains(temp1.get(0)))
-					newStart = temp1.get(1);
+				if(endingEdgeCities2.contains(endingEdgeCities1.get(0)))
+					newStart = endingEdgeCities1.get(1);
 				else
-					newStart = temp1.get(0);
+					newStart = endingEdgeCities1.get(0);
 				//ASUMING NEW START IS RIGHT :: I THINK IT WAS FIXED - future sid
 				longest = longestPathRecur(newStart, new ArrayList<Edge>(), PLAYER_COLORS[n]);
 				
@@ -263,6 +263,11 @@ public class GameState {
 	}
 	public ArrayList<Edge> longestPathRecur(City c, ArrayList<Edge> passedEdges, String color) {
 		ArrayList<Edge> edges = c.getEdges(color);
+		
+		ArrayList<ArrayList<Edge>> paths = new ArrayList<ArrayList<Edge>>();
+		for(int i = 0; i < edges.size(); i++) {
+			//paths.add(longestPathRec)
+		}
 		
 		return null;
 	}
