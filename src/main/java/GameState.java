@@ -22,7 +22,7 @@ public class GameState {
 	private ArrayList<Edge> edges;
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
-			"Green" };
+			"Green","Rainbow"};
 	public static final String[] PLAYER_COLORS = {"Red", "Green", "Yellow", "Blue"};
 	private String longestPath;
 	private String mostContracts;
