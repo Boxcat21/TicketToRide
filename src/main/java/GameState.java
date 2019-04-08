@@ -22,7 +22,7 @@ public class GameState {
 	private ArrayList<Edge> edges;
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
-			"Green","Rainbow"};
+			"Green", "Rainbow"};
 	public static final String[] PLAYER_COLORS = {"Red", "Green", "Yellow", "Blue"};
 	private String longestPath;
 	private String mostContracts;
@@ -139,9 +139,32 @@ public class GameState {
 			City one = c.getCity1();
 			City two = c.getCity2(); // are the references correct?
 			
-			//one.get
+			ArrayList<Edge> city1Edges = one.getEdges(curPlayer.getTrainColor());
+			ArrayList<Edge> city2Edges = two.getEdges(curPlayer.getTrainColor());
+			
+			if ( city1Edges.isEmpty() || city2Edges.isEmpty() ) // no path, nothing to find here! 
+				return;
+			
+			// calls traversals from each city, storing the added edges
+			ArrayList<Edge> sharedCity1 = new ArrayList<>();
+			sharedCity1 = checkContractsHelper(sharedCity1, one);
+			
+			ArrayList<Edge> sharedCity2 = new ArrayList<>();
+			sharedCity1 = checkContractsHelper(sharedCity2, two);
+			// retainAll edges, if resulting set.isEmpty(), no path
+			sharedCity1.retainAll(sharedCity2);
+			if (sharedCity1.isEmpty()) 
+				return;
+			else // there is a path, add points
+				curPlayer.addPoints(c.getNumPoints());
+			
 		}
 		
+	}
+	
+	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, City start) {
+		
+		return shared;
 	}
 
 	public boolean chooseTrainCard(int choice) {
@@ -265,7 +288,7 @@ public class GameState {
 		return "";
 	}
 
-	public void checkTurn() { //Note to ryan: also need to check for 3 wilds face up (idk if there are more scenarios but i know that is one of them)
+	public void checkTurn() { 
 		if ( checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
@@ -286,6 +309,7 @@ public class GameState {
 		}
 		if ( lastRound ) //still need to fix to run one more round before ending 
 			endGame();
+		checkContracts();
 		return;
 	}
 
