@@ -277,8 +277,16 @@ public class GameState {
 		ArrayList<Edge> edges = c.getEdges(color);
 		
 		ArrayList<ArrayList<Edge>> paths = new ArrayList<ArrayList<Edge>>();
-		for(int i = 0; i < edges.size(); i++) {
-			
+		if(edges.size() > 0) {
+			for(int i = 0; i < edges.size(); i++) {
+				if(!passedEdges.contains(edges.get(i))) {
+					passedEdges.add(edges.get(i));
+					ArrayList<Edge> temp = longestPathRecur(edges.get(0).getOtherCity(c), passedEdges, color);
+				}
+			}
+		}
+		else {
+			return new ArrayList<Edge>();
 		}
 		
 		return null;
