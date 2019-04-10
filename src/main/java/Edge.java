@@ -13,6 +13,9 @@ public class Edge {
 		color = s;
 		cities= c;
 	}
+	public Edge() {
+		// TODO Auto-generated constructor stub
+	}
 	public int getLength() {
 		return length;
 	}
@@ -38,6 +41,7 @@ public class Edge {
 	public boolean getHasTrains() {
 		return hasTrains;
 	}
+
 	public City getOtherCity(City c) {
 		if(c.equals(cities.get(0)))
 			return cities.get(1);
@@ -46,4 +50,5 @@ public class Edge {
 		else
 			return null;
 	}
+
 }
