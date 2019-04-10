@@ -9,7 +9,9 @@ public class Edge {
 	
 	public Edge(int l, String s, ArrayList<City> c) 
 	{
-		
+		length = l;
+		color = s;
+		cities= c;
 	}
 	public Edge() {
 		// TODO Auto-generated constructor stub
@@ -39,5 +41,14 @@ public class Edge {
 	public boolean getHasTrains() {
 		return hasTrains;
 	}
-	
+
+	public City getOtherCity(City c) {
+		if(c.equals(cities.get(0)))
+			return cities.get(1);
+		else if(c.equals(cities.get(1)))
+			return cities.get(0);
+		else
+			return null;
+	}
+
 }
