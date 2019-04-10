@@ -126,9 +126,12 @@ public class GameState {
 	}
 
 	public void placeTrain(Edge e) {
-		if (!e.getHasTrains())
+		if (!e.getHasTrains()) {
 			e.setHasTrains();
-		turnCounter -= 2;
+			e.setPlayer(curPlayer);
+			turnCounter -= 2;
+		}
+
 		checkTurn();
 		checkContracts();
 	}
@@ -147,10 +150,10 @@ public class GameState {
 			
 			// calls traversals from each city, storing the added edges
 			ArrayList<Edge> sharedCity1 = new ArrayList<>();
-			sharedCity1 = checkContractsHelper(sharedCity1, one);
+			sharedCity1 = checkContractsHelper(sharedCity1, city1Edges, one);
 			
 			ArrayList<Edge> sharedCity2 = new ArrayList<>();
-			sharedCity1 = checkContractsHelper(sharedCity2, two);
+			sharedCity1 = checkContractsHelper(sharedCity2, city2Edges, two);
 			// retainAll edges, if resulting set.isEmpty(), no path
 			sharedCity1.retainAll(sharedCity2);
 			if (sharedCity1.isEmpty()) 
@@ -162,8 +165,17 @@ public class GameState {
 		
 	}
 	
-	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, City start) {
-		
+	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, ArrayList<Edge> cityEdges, City start) {
+		if ( start == null || cityEdges == null) 
+			return shared;
+		else {
+			Edge current = new Edge();
+			for ( Edge e  : cityEdges ) 
+				if ( e.getCities().contains(start))
+					current = e;
+			cityEdges.remove(current);
+			return checkContractsHelper(shared, cityEdges, current.getOtherCity(start));
+		}
 		return shared;
 	}
 

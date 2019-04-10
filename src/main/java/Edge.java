@@ -11,6 +11,9 @@ public class Edge {
 	{
 		
 	}
+	public Edge() {
+		// TODO Auto-generated constructor stub
+	}
 	public int getLength() {
 		return length;
 	}
@@ -36,4 +39,5 @@ public class Edge {
 	public boolean getHasTrains() {
 		return hasTrains;
 	}
+	
 }
