@@ -75,14 +75,17 @@ public class GameState {
 		// edges and cities
 		cities = new ArrayList<>();
 		edges = new ArrayList<>();
-		//Puts all of the connected cities in a hashmap with the corresponding point
 		HashMap<String, Point> connectedCities = new HashMap<String, Point>();
+	//Puts all of the connected cities in a hashmap with the corresponding point
 		scan = new Scanner(new File("Cities.txt"));
 		while(scan.hasNextLine())
 		{
 			String[] temp = scan.nextLine().split(",");
 			 connectedCities.put(temp[0],new Point(Integer.parseInt(temp[1]),Integer.parseInt(temp[2])));
 		}
+		
+		/*
+	
 		//reads in the edges: ensures no repeats
 		scan = new Scanner(new File("ConnectedCities.txt"));
 		HashMap<String, ArrayList<Edge>> edgeTemps = new HashMap<>();
@@ -99,7 +102,7 @@ public class GameState {
 			edgeTemps.put(line[0],null);
 			
 			
-		}
+		}*/
 		
 		
 
@@ -111,7 +114,7 @@ public class GameState {
 			String[] temp = scan.nextLine().split(",");
 			if (!((previous.get(temp[1]).equals(temp[0]) || (previous.get(temp[0]).equals(temp[1]))))) {
 				//needs fix
-				cities.add(new City(connectedCities.get(temp[0]),temp[0],new ArrayList<>()));
+				cities.add(new City(connectedCities.get(temp[0]),temp[0],new ArrayList<Edge>()));
 			}
 		}
 		this.passedCities = new ArrayList<City>();
@@ -265,16 +268,8 @@ public class GameState {
 		ArrayList<Edge> edges = c.getEdges(color);
 		
 		ArrayList<ArrayList<Edge>> paths = new ArrayList<ArrayList<Edge>>();
-		if(edges.size() > 0) {
-			for(int i = 0; i < edges.size(); i++) {
-				if(!passedEdges.contains(edges.get(i))) {
-					passedEdges.add(edges.get(i));
-					ArrayList<Edge> temp = longestPathRecur(edges.get(0).getOtherCity(c), passedEdges, color);
-				}
-			}
-		}
-		else {
-			return new ArrayList<Edge>();
+		for(int i = 0; i < edges.size(); i++) {
+			//paths.add(longestPathRec)
 		}
 		
 		return null;
