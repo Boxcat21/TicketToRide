@@ -57,6 +57,7 @@ public class GamePanel extends JPanel implements MouseListener{
 		g2.setColor(Color.ORANGE);
 		g2.fillRect(1441, 0, 480, 1080);
 		g2.fillRect(0, 721, 1920, 360);
+		
 	}
 	
 	
