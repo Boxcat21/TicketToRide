@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Scanner;
 import java.util.Stack;
@@ -106,7 +107,7 @@ public class GameState {
 		
 		
 
-		//Reads in the connected cities
+		//Reads in the connected cities. and init each city with the corresponding point, name, but with an empty arraylist
 		scan = new Scanner(new File("ConnectedCities.txt"));
 		HashMap<String, String> previous = new HashMap<>();
 
@@ -118,7 +119,42 @@ public class GameState {
 			}
 		}
 		this.passedCities = new ArrayList<City>();
+		//Making the list of edges - city value will be used from the list of cities
+	
+	scan = new Scanner(new File("Cities.txt"));
+	while(scan.hasNextLine())
+	{
+		String[] temp = scan.nextLine().split(",");
+		ArrayList<City> cityTemps = new ArrayList<>();
+		for(City c:cities)	
+			if(c.getName().equals(temp[0]))
+				cityTemps.add(c);
+		edges.add(new Edge(Integer.parseInt(temp[2]),temp[3],cityTemps));
+		cityTemps = new ArrayList<>();
+		
 	}
+
+		//Connecting all of the cities to edges; edges to cities was done above
+	for(City c:cities)
+	{
+		ArrayList<Edge> edgeTemps = new ArrayList<>();
+		for(Edge e:edges)
+			{
+				if(e.getCities().contains(c));
+				edgeTemps.add(e);
+			}
+		
+			
+		c = new City(c.getPoint(),c.getName(),null);
+	}
+	
+
+	}
+		
+	
+	
+	
+	
 
 	public Player getCurPlayer() {
 		return curPlayer;
@@ -163,7 +199,7 @@ public class GameState {
 				return;
 			else // there is a path, add points
 				curPlayer.addPoints(c.getNumPoints());
-			
+			// add method to make sure contracts are added to player, also setComplete
 		}
 		
 	}
