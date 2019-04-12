@@ -16,6 +16,7 @@ public class City {
 	public Point getPoint() {
 		return point;
 	}
+
 	public String getName() {
 		return name;
 	}
