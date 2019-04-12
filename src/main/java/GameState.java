@@ -163,7 +163,7 @@ public class GameState {
 				return;
 			else // there is a path, add points
 				curPlayer.addPoints(c.getNumPoints());
-			
+			// add method to make sure contracts are added to player, also setComplete
 		}
 		
 	}
