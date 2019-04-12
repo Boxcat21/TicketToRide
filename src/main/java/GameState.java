@@ -215,7 +215,6 @@ public class GameState {
 			cityEdges.remove(current);
 			return checkContractsHelper(shared, cityEdges, current.getOtherCity(start));
 		}
-		return shared;
 	}
 
 	public boolean chooseTrainCard(int choice) {
