@@ -14,6 +14,16 @@ public class TextRunner {
 		{
 			testDrawTrainCards();
 		}
+		else if(scan.nextLine().equals("c"))
+		{
+			testDrawContract();
+		}
+		else if(scan.nextLine().equals("p"))
+		{
+			testPlaceTrains();
+		}
+		
+		
 	}
 	public static void testDrawTrainCards()
 	{
