@@ -9,7 +9,7 @@ public class GraphicsRunner extends JFrame{
 		add(new GamePanel());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(1920,1080);
-//		setUndecorated(true);
+		//setUndecorated(true);
 		setVisible(true);
 		
 	}

@@ -32,6 +32,20 @@ public class Player {
 		return contracts;
 	}
 	
+	public ArrayList<ContractCard> getCompleted()
+	{
+		ArrayList<ContractCard> temp = new ArrayList<ContractCard>();
+		for(int i = 0; i < contracts.size(); i++)
+		{
+			if(contracts.get(i).isComplete())
+			{
+				temp.add(contracts.get(i));
+			}
+		}
+		
+		return temp;
+	}
+	
 	public ArrayList<TrainCard> getTrainCards() {
 		return trainCards;
 	}
@@ -59,6 +73,13 @@ public class Player {
 		trains -= numRemoved;
 		return true;
 	}
+	
+	public String toString()
+	{
+		return "| " + trainColor + ": " + points + " |";
+	}
+	
+	
 	
 	
 	

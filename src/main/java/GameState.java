@@ -322,25 +322,19 @@ public class GameState {
 		return null;
 	}
 	public String mostContractCards() {
-		//Cole (NOT DONE)
-		int temp = 0;
-		Player highest;
-		Player p;
+		//Cole (DONE, untested)
+		Player p = players.peek();
+		Player highest = players.peek();
 		
 		for(int i = 0; i <= 4; i++)
 		{
 			p = players.poll();
-			for(i = 0; i <= p.getContracts().size(); i++)
+			if(p.getCompleted().size() > highest.getCompleted().size())
 			{
-				if(p.getContracts().get(i).isComplete())
-				{
-					temp++;
-				}
+				highest = p;
 			}
-			
-			//if()
 		}
-		return "";
+		return p.toString();
 	}
 
 	public void checkTurn() { 
