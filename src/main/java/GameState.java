@@ -163,6 +163,10 @@ public class GameState {
 	public Queue<Player> getPlayerList() {
 		return players;
 	}
+	public ArrayList<TrainCard> getDisplayCards()
+	{
+		return displayCards;
+	}
 
 	public void placeTrain(Edge e) {
 		if (!e.getHasTrains()) {
