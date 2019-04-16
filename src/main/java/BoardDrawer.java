@@ -1,3 +1,4 @@
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
 import java.io.File;
@@ -11,8 +12,11 @@ public class BoardDrawer {
 	private static String[] citys;
 	private static Point[] points;
 	
-	public BoardDrawer() throws FileNotFoundException {
-		Scanner sc = new Scanner(new File("Cities"));
+	private static void init() {
+		Scanner sc = null;
+		try {
+			sc = new Scanner(new File("Cities"));
+		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
 		citys = new String[35];
 		points = new Point[35]; 
@@ -30,10 +34,17 @@ public class BoardDrawer {
 	}
 	
 	public static void drawBoard(Graphics g, ArrayList<City> cities, ArrayList<Edge> edges) {
+		init();
 		//City points from text file (prob in constructor)
 		//Cities
+		int r = 10;
 		for(int i = 0; i < citys.length; i++) {
-			g.fillOval((int)points[i].getX(), (int)points[i].getY(), 10, 10);
+			g.setColor(new Color(153, 76, 0)); //dark orange
+			g.fillOval((int)points[i].getX()-r, (int)points[i].getY(), r, r);
+			
+			g.setColor(Color.BLACK);
+			g.drawOval((int)points[i].getX()-r, (int)points[i].getY(), r, r);
+			
 		}
 	}
 	
