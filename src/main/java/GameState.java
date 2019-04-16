@@ -37,17 +37,18 @@ public class GameState {
 		longestPath = "";
 		mostContracts = "";
 		Scanner scan = new Scanner(new File("tickets.txt"));
-		for (int i = 0; i < Integer.parseInt(scan.nextLine()); i++) {
+		int counter = Integer.parseInt(scan.nextLine());
+		for (int i = 0; i < counter; i++) {
 			String[] temp = scan.nextLine().split("|");
 			City one = null;
 			City two = null;
 			for (City c : cities) {
-				if (c.getName().equals(temp[0]))
-					one = c;
 				if (c.getName().equals(temp[1]))
+					one = c;
+				if (c.getName().equals(temp[2]))
 					two = c;
 			}
-			contractList.add(new ContractCard(one, two, Integer.parseInt(temp[2])));
+			contractList.add(new ContractCard(one, two, Integer.parseInt(temp[0])));
 		}
 		// Adding train cards
 		ArrayList<TrainCard> list = new ArrayList<TrainCard>();
@@ -78,7 +79,7 @@ public class GameState {
 		edges = new ArrayList<>();
 		HashMap<String, Point> connectedCities = new HashMap<String, Point>();
 	//Puts all of the connected cities in a hashmap with the corresponding point
-		scan = new Scanner(new File("Cities.txt"));
+		scan = new Scanner(new File("Cities"));
 		while(scan.hasNextLine())
 		{
 			String[] temp = scan.nextLine().split(",");
@@ -108,7 +109,7 @@ public class GameState {
 		
 
 		//Reads in the connected cities. and init each city with the corresponding point, name, but with an empty arraylist
-		scan = new Scanner(new File("ConnectedCities.txt"));
+		scan = new Scanner(new File("ConnecetdCities.txt"));
 		HashMap<String, String> previous = new HashMap<>();
 
 		while (scan.hasNextLine()) {
@@ -143,9 +144,8 @@ public class GameState {
 				if(e.getCities().contains(c));
 				edgeTemps.add(e);
 			}
-		
-			
-		c = new City(c.getPoint(),c.getName(),null);
+		c = new City(c.getPoint(),c.getName(),edgeTemps);
+		edgeTemps = new ArrayList<>();
 	}
 	
 
