@@ -6,7 +6,7 @@ Montreal,Boston|2,gray
 Sault St. Marie,Montreal|5,black
 Sault St. Marie,Winnipeg|6,gray
 Sault St. Marie,Duluth|3,gray
-Sault St.Marie,Toronto|2,gray
+Sault St. Marie,Toronto|2,gray
 Toronto,Montreal|3,gray
 Toronto,Sault St. Marie|2,gray
 Toronto,Duluth|6,pink
@@ -83,7 +83,7 @@ Saint Louis,Chicago|2,white
 Nashville,Saint Louis|2,gray
 Nashville,Little Rock|3,white
 Nashville,Atlanta|1,gray
-Nashville,Rayleigh|3,black
+Nashville,Raleigh|3,black
 Nashville,Pittsburgh|4,yellow
 Raleigh,Pittsburgh|2,gray
 Raleigh,Nashville|3,black

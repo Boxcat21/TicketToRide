@@ -8,10 +8,18 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 public class BoardDrawer {
-	
+	/*FIX FOR PROGRESS IN THIS CLASS--
+	 * 
+	 * typos in connectedcities.txt - actually i think i got rid of them all
+	 * add pheonix in cities
+	 * remove redundancies in connectedcities IF POSSIBLE -- i think i can do that in code, idk if there were some connections left out
+	 * ^we might have to check that too
+	 * */
 	private static String[] citys;//35
 	private static Point[] points;//35
 	private static int[][] connectedData; //201
+	private static int[] lengths; //201
+	private static String[] colors; //201
 	private static void init() {
 		//city points
 		Scanner sc = null;
@@ -35,10 +43,12 @@ public class BoardDrawer {
 		
 		//connected cities
 		try {
-			sc = new Scanner(new File("ConnectedCities.txt"));
+			sc = new Scanner(new File("ConnecetdCities.txt"));
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
-		connectedData = new int[201][4];
+		connectedData = new int[201][2];
+		lengths = new int[201];
+		colors = new String[201];
 		
 		cnt = 0;
 		while(sc.hasNextLine()) {
@@ -50,10 +60,15 @@ public class BoardDrawer {
 			connectedData[cnt][0] = index1;
 			connectedData[cnt][1] = index2;
 			
-			
+			lengths[cnt] = Integer.parseInt(line.substring(line.indexOf("|")+1,line.lastIndexOf(",")));
+			colors[cnt] = line.substring(line.lastIndexOf(","));
+			cnt++;
 		}
-		
-		
+		for(int[] a : connectedData) {
+			for(int i : a)
+				System.out.print(i + " ");
+			System.out.println();
+		}
 	}
 	private static int findCitysIndex(String name) {
 		for(int i = 0; i < citys.length; i++) {
