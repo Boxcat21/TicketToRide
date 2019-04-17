@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Scanner;
 public class BoardDrawer {
 	
-	private static String[] citys;
-	private static Point[] points;
-	
+	private static String[] citys;//35
+	private static Point[] points;//35
+	private static int[][] connectedData; //201
 	private static void init() {
 		//city points
 		Scanner sc = null;
@@ -38,11 +38,19 @@ public class BoardDrawer {
 			sc = new Scanner(new File("ConnectedCities.txt"));
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
+		connectedData = new int[201][4];
+		
+		cnt = 0;
 		while(sc.hasNextLine()) {
 			String line = sc.nextLine();
 			
 			int index1 = findCitysIndex(line.substring(0, line.indexOf(",")));
-			//int index2 = findCitysIndex(line.substring(line.indexOf(",")+1,))
+			int index2 = findCitysIndex(line.substring(line.indexOf(",")+1,line.indexOf("|")));
+			
+			connectedData[cnt][0] = index1;
+			connectedData[cnt][1] = index2;
+			
+			
 		}
 		
 		
