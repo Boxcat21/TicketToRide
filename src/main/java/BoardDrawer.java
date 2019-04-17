@@ -13,6 +13,7 @@ public class BoardDrawer {
 	private static Point[] points;
 	
 	private static void init() {
+		//city points
 		Scanner sc = null;
 		try {
 			sc = new Scanner(new File("Cities"));
@@ -31,12 +32,32 @@ public class BoardDrawer {
 			points[cnt] = new Point(x,y);
 			cnt++;
 		}
+		
+		//connected cities
+		try {
+			sc = new Scanner(new File("ConnectedCities.txt"));
+		} catch (FileNotFoundException e) {e.printStackTrace();}
+		
+		while(sc.hasNextLine()) {
+			String line = sc.nextLine();
+			
+			int index1 = findCitysIndex(line.substring(0, line.indexOf(",")));
+			//int index2 = findCitysIndex(line.substring(line.indexOf(",")+1,))
+		}
+		
+		
 	}
-	
+	private static int findCitysIndex(String name) {
+		for(int i = 0; i < citys.length; i++) {
+			if(citys[i].equals(name))
+				return i;
+		}
+		return -1;
+	}
 	public static void drawBoard(Graphics g, ArrayList<City> cities, ArrayList<Edge> edges) {
 		init();
 		//City points from text file (prob in constructor)
-		//Cities
+		//Cities NEED TO LABEL THE CITIES
 		int r = 10;
 		for(int i = 0; i < citys.length; i++) {
 			g.setColor(new Color(153, 76, 0)); //dark orange
@@ -44,8 +65,10 @@ public class BoardDrawer {
 			
 			g.setColor(Color.BLACK);
 			g.drawOval((int)points[i].getX()-r, (int)points[i].getY(), r, r);
-			
 		}
+		//connecting edges
+		
+		
 	}
 	
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
