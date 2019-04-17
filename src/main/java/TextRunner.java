@@ -1,6 +1,7 @@
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.ArrayList;
+import java.util.Arrays;
 public class TextRunner {
 	static GameState g;
 	static Scanner scan;
@@ -56,7 +57,16 @@ public class TextRunner {
 
 	public static void testDrawContract()
 	{
-		
+		ArrayList<ContractCard> c = g.getDisplayContracts();
+		for(int i = 0; i<c.size();i++)	
+		System.out.println(c.get(i).getCity1()+ " to "+c.get(i).getCity2());
+		System.out.println("put in each number the numbers of the cards you want in the corresponding order of the display and seperate by comma");
+		String[] arr = scan.nextLine().split(",");
+		ArrayList<Integer> choices = new ArrayList<>();
+		for(String str:arr)
+			choices.add(Integer.parseInt(str));
+		g.chooseContractCard(choices);
+			
 	}
 	public static void testPlaceTrains()
 	{

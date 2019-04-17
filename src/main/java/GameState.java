@@ -167,6 +167,13 @@ public class GameState {
 	{
 		return displayCards;
 	}
+	public ArrayList<ContractCard> getDisplayContracts()
+	{
+		ArrayList<ContractCard> temps  = new ArrayList<>();
+		for(int i = 0; i<3; i++)
+			temps.add(this.contractList.poll());
+		return temps;
+	}
 
 	public void placeTrain(Edge e) {
 		if (!e.getHasTrains()) {
@@ -242,8 +249,19 @@ public class GameState {
 		curPlayer.addTrainCard(trainCardDeck.pop());
 	}
 
-	public String chooseContractCard(ArrayList<Integer> choices) {
-		return "";
+	public String chooseContractCard(ArrayList<Integer> choices)
+	{
+		if(choices.size()<1)
+			return "Invalid. You must choose at least one contract.";
+		for(int i=0; i<3;i++)
+			if(i==choices.get(i))
+				this.contractList.offer(this.getDisplayContracts().get(i));
+		turnCounter -=2;
+		return "Successful";
+		
+			
+		
+			
 	}
 
 	public ArrayList<Player> endGame() { 
