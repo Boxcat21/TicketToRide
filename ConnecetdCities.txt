@@ -29,7 +29,7 @@ Winnipeg,Helena|4,blue
 Winnipeg,Duluth|4,black
 Duluth,Sault St. Marie|3,gray
 Duluth,Winnipeg|3,gray
-Duluth,Helena|6,Duluth
+Duluth,Helena|6,orange
 Duluth,Omaha|2,gray
 Duluth,Omaha|2,gray
 Duluth,Chicago|3,red
