@@ -111,10 +111,9 @@ public class GameState {
 		//Reads in the connected cities. and init each city with the corresponding point, name, but with an empty arraylist
 		scan = new Scanner(new File("ConnecetdCities.txt"));
 		HashMap<String, String> previous = new HashMap<>();
-
 		while (scan.hasNextLine()) {
 			String[] temp = scan.nextLine().split(",");
-			if (!((previous.get(temp[1]).equals(temp[0]) || (previous.get(temp[0]).equals(temp[1]))))) {
+			if (previous.get(temp[1])!=null&&!((previous.get(temp[1]).equals(temp[0]) || (previous.get(temp[0]).equals(temp[1]))))) {
 				//needs fix
 				cities.add(new City(connectedCities.get(temp[0]),temp[0],new ArrayList<Edge>()));
 			}
@@ -122,7 +121,7 @@ public class GameState {
 		this.passedCities = new ArrayList<City>();
 		//Making the list of edges - city value will be used from the list of cities
 	
-	scan = new Scanner(new File("Cities.txt"));
+	scan = new Scanner(new File("ConnecetdCities.txt"));
 	while(scan.hasNextLine())
 	{
 		String[] temp = scan.nextLine().split(",");
@@ -158,6 +157,10 @@ public class GameState {
 
 	public Player getCurPlayer() {
 		return curPlayer;
+	}
+	public ArrayList<Edge> getEdges()
+	{
+		return this.edges;
 	}
 
 	public Queue<Player> getPlayerList() {

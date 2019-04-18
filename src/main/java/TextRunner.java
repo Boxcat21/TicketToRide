@@ -70,7 +70,19 @@ public class TextRunner {
 	}
 	public static void testPlaceTrains()
 	{
-		
+		System.out.println("Enter the two cities with commas that you want to place your train on - any order is fine.");
+		String[] arr = scan.nextLine().split(",");
+		ArrayList<Edge> edges = g.getEdges();
+		for(Edge e:edges)
+		{
+			ArrayList<String> list = new ArrayList<>();
+			list.add(e.getCities().get(0).getName());
+			list.add(e.getCities().get(1).getName());
+			if(list.contains(arr[0])&&list.contains(arr[1]))
+				g.placeTrain(e);
+
+		}
+
 	}
 	
 
