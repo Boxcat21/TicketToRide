@@ -25,7 +25,7 @@ public class HandDrawer {
 		for ( int i = 0; i < COLOR_NAMES.length; i++) {
 			
 			g2.setColor(Color.BLACK);
-			g2.setStroke(new BasicStroke(5));
+			g2.setStroke(new BasicStroke(6));
 			g2.drawRect(x, 900, 30, 180);
 			g2.drawRect(x+30, 900, 30, 180);
 			g2.drawLine(x, 940, x+60, 940);
@@ -43,11 +43,31 @@ public class HandDrawer {
 			g2.drawString(getCount(TRAIN_COLORS[i], trainCard), x+28, 1010);
 			x+=120;
 		}
-		
-		
-		
-		
 	}
+		
+		
+	public static void drawContractSelection(Graphics g, ArrayList<ContractCard> selection) {
+		selection.add(new ContractCard(new City(null, "Elleh1", null), new City(null, "Elleh2", null), 20));
+		selection.add(new ContractCard(new City(null, "Elleh1", null), new City(null, "Elleh2", null), 20));
+		selection.add(new ContractCard(new City(null, "Elleh1", null), new City(null, "Elleh2", null), 20));
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setStroke(new BasicStroke(6));
+		g2.drawRect(600, 760, 250, 100);
+		g2.setStroke(new BasicStroke(1));
+		g2.setColor(Color.WHITE);
+		g2.fillRect(600, 760, 250, 100);
+		g2.setColor(Color.BLACK);
+		g2.drawRect(600,760,200,33);
+		g2.drawString(selection.get(0).getCity1().getName() + " to " + selection.get(0).getCity2().getName(), 610, 780);
+		g2.drawRect(600,793,200,33);
+		g2.drawString(selection.get(1).getCity1().getName() + " to " + selection.get(1).getCity2().getName(), 610, 800);
+		g2.drawRect(600,826,200,33);
+		g2.drawString(selection.get(2).getCity1().getName() + " to " + selection.get(2).getCity2().getName(), 610, 840);
+	}
+		
+		
+		
+	
 	private static String getCount(String string, ArrayList<TrainCard> list) {
 		int count = 0;
 		for ( TrainCard c : list )

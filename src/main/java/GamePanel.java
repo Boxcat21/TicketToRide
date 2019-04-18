@@ -1,9 +1,8 @@
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 
@@ -60,6 +59,7 @@ public class GamePanel extends JPanel implements MouseListener{
 //		g2.fillRect(0, 721, 1920, 360);
 		Player p = new Player("Yeet");
 		HandDrawer.drawHand(g, p);
+		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());
 	}
 	
 	
