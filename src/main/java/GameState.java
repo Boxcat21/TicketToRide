@@ -124,12 +124,14 @@ public class GameState {
 	scan = new Scanner(new File("ConnecetdCities.txt"));
 	while(scan.hasNextLine())
 	{
-		String[] temp = scan.nextLine().split(",");
+		String[] tempFirstTwo = scan.nextLine().split(",");
+		String[] tempLastTwo = scan.nextLine().split("|");
+
 		ArrayList<City> cityTemps = new ArrayList<>();
 		for(City c:cities)	
-			if(c.getName().equals(temp[0]))
+			if(c.getName().equals(tempFirstTwo[0]))
 				cityTemps.add(c);
-		edges.add(new Edge(Integer.parseInt(temp[2]),temp[3],cityTemps));
+		edges.add(new Edge(Integer.parseInt(tempLastTwo[0]),tempLastTwo[1],cityTemps));
 		cityTemps = new ArrayList<>();
 		
 	}

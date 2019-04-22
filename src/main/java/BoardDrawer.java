@@ -27,8 +27,8 @@ public class BoardDrawer {
 			sc = new Scanner(new File("Cities"));
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
-		citys = new String[35];
-		points = new Point[35]; 
+		citys = new String[36];
+		points = new Point[36]; 
 		
 		int cnt = 0;
 		while(sc.hasNextLine()) {
@@ -43,7 +43,7 @@ public class BoardDrawer {
 		
 		//connected cities
 		try {
-			sc = new Scanner(new File("ConnecetdCities.txt"));
+			sc = new Scanner(new File("ConnectedCities.txt"));
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
 		connectedData = new int[201][2];
