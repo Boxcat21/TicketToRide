@@ -109,7 +109,7 @@ public class GameState {
 		
 
 		//Reads in the connected cities. and init each city with the corresponding point, name, but with an empty arraylist
-		scan = new Scanner(new File("ConnecetdCities.txt"));
+		scan = new Scanner(new File("ConnectedCities.txt"));
 		HashMap<String, String> previous = new HashMap<>();
 		while (scan.hasNextLine()) {
 			String[] temp = scan.nextLine().split(",");
@@ -121,23 +121,41 @@ public class GameState {
 		this.passedCities = new ArrayList<City>();
 		//Making the list of edges - city value will be used from the list of cities
 	
-	scan = new Scanner(new File("ConnecetdCities.txt"));
+	scan = new Scanner(new File("ConnectedCities.txt"));
 	while(scan.hasNextLine())
 	{
-		String[] tempFirstTwo = scan.nextLine().split(",");
-		String[] tempLastTwo = scan.nextLine().split("|");
-
+		String line = scan.nextLine();
+		
+		String[] tempFirstTwo = line.substring(0,line.indexOf('|')+1).split(",");
+		String[] tempLastTwo = line.substring(line.indexOf('|')+1,line.length()).split(",");
 		ArrayList<City> cityTemps = new ArrayList<>();
 		for(City c:cities)	
 			if(c.getName().equals(tempFirstTwo[0]))
 				cityTemps.add(c);
 		edges.add(new Edge(Integer.parseInt(tempLastTwo[0]),tempLastTwo[1],cityTemps));
 		cityTemps = new ArrayList<>();
-		
 	}
 
 		//Connecting all of the cities to edges; edges to cities was done above
-	for(City c:cities)
+	for(int i = cities.size()-1; i>=0;i--)
+	{
+		ArrayList<Edge> edgeTemps = new ArrayList<>();
+		for(Edge e:edges)
+			{					
+			
+
+				if(e.getCities().contains(cities.get(i)));
+				{
+				edgeTemps.add(e);
+					
+				}
+				
+			}
+		City oldCity = cities.remove(i);
+		cities.add(i, new City(oldCity.getPoint(),oldCity.getName(),edgeTemps)); 
+		edgeTemps = new ArrayList<>();
+	}
+	/*for(City c:cities)
 	{
 		ArrayList<Edge> edgeTemps = new ArrayList<>();
 		for(Edge e:edges)
@@ -147,7 +165,10 @@ public class GameState {
 			}
 		c = new City(c.getPoint(),c.getName(),edgeTemps);
 		edgeTemps = new ArrayList<>();
-	}
+	}*/
+	
+	for(City c:cities)
+		System.out.println(c.getPoint());
 	
 
 	}
