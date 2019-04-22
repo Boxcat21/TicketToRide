@@ -60,6 +60,8 @@ public class GamePanel extends JPanel implements MouseListener{
 		Player p = new Player("Yeet");
 		HandDrawer.drawHand(g, p);
 		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());
+		HandDrawer.drawContractCards(g, p.getCompleted());
+		HandDrawer.advanceCard(g, p, -1); // changes top contract card
 	}
 	
 	
