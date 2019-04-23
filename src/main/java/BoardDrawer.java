@@ -34,7 +34,7 @@ public class BoardDrawer {
 		while(sc.hasNextLine()) {
 			String line = sc.nextLine();
 			
-			int x = Integer.parseInt(line.substring(line.indexOf(",")+1,line.lastIndexOf(",")));
+			int x = Integer.parseInt(line.substring(line.indexOf(",")+1,line.lastIndexOf(",")))-50;
 			int y = Integer.parseInt(line.substring(line.lastIndexOf(",")+1));
 			citys[cnt] = line.substring(0, line.indexOf(","));
 			points[cnt] = new Point(x,y);
@@ -61,14 +61,10 @@ public class BoardDrawer {
 			connectedData[cnt][1] = index2;
 			
 			lengths[cnt] = Integer.parseInt(line.substring(line.indexOf("|")+1,line.lastIndexOf(",")));
-			colors[cnt] = line.substring(line.lastIndexOf(","));
+			colors[cnt] = line.substring(line.lastIndexOf(",")+1);
 			cnt++;
 		}
-		for(int[] a : connectedData) {
-			for(int i : a)
-				System.out.print(i + " ");
-			System.out.println();
-		}
+		
 	}
 	private static int findCitysIndex(String name) {
 		for(int i = 0; i < citys.length; i++) {
@@ -84,14 +80,23 @@ public class BoardDrawer {
 		int r = 10;
 		for(int i = 0; i < citys.length; i++) {
 			g.setColor(new Color(153, 76, 0)); //dark orange
-			g.fillOval((int)points[i].getX()-r, (int)points[i].getY(), r, r);
+			g.fillOval((int)points[i].getX()-r/2, (int)points[i].getY()-r/2, r, r);
 			
 			g.setColor(Color.BLACK);
-			g.drawOval((int)points[i].getX()-r, (int)points[i].getY(), r, r);
+			g.drawOval((int)points[i].getX()-r/2, (int)points[i].getY()-r/2, r, r);
 		}
+		//g.fillOval(1535, 755, 10, 10);
 		//connecting edges
-		
-		
+		for(int i = 0; i < 1; i++) {
+			int x1 = (int) points[connectedData[i][0]].getX();
+			int y1 = (int) points[connectedData[i][0]].getY();
+			
+			int x2 = (int) points[connectedData[i][1]].getX();
+			int y2 = (int) points[connectedData[i][1]].getY();
+			
+			g.setColor(Color.BLACK);
+			g.drawLine(x1, y1, x2, y2);
+		}
 	}
 	
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
