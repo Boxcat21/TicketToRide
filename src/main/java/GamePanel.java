@@ -58,10 +58,13 @@ public class GamePanel extends JPanel implements MouseListener{
 //		g2.fillRect(1441, 0, 480, 1080);
 //		g2.fillRect(0, 721, 1920, 360);
 		Player p = new Player("Yeet");
+		p.addContractCard(new ContractCard(new City(null, "Elleh1", null), new City(null, "Elleh2", null), 20));
+		p.addContractCard(new ContractCard(new City(null, "Elleh2", null), new City(null, "Elleh3", null), 20));
+		p.addContractCard(new ContractCard(new City(null, "Elleh3", null), new City(null, "Elleh4", null), 20));
 		HandDrawer.drawHand(g, p);
 		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());
-		HandDrawer.drawContractCards(g, p.getCompleted());
-		HandDrawer.advanceCard(g, p, -1); // changes top contract card
+		HandDrawer.drawContractCards(g, p.getContracts());
+		HandDrawer.advanceCard(g, p,1); // changes top contract card
 	}
 	
 	

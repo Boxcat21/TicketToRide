@@ -33,4 +33,8 @@ public class ContractCard {
 	public City getCity2() {
 		return cities[1];
 	}
+	@Override
+	public String toString() {
+		return cities[0].getName() + " to " + cities[1].getName();
+	}
 }

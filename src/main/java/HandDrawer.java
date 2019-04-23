@@ -68,6 +68,7 @@ public class HandDrawer {
 	}
 	
 	public static void drawContractCards(Graphics g, ArrayList<ContractCard> cards) {
+	
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(4));
 		g2.setColor(Color.BLACK);
@@ -75,6 +76,11 @@ public class HandDrawer {
 		g2.setColor(Color.WHITE);
 		g2.fillRect(1100, 765, 199, 84);
 		// draw contents here
+		g2.setColor(Color.BLACK);
+		
+		g2.drawString(cards.get(0).toString(), 1125, 800);
+		
+		
 		
 	}
 	
