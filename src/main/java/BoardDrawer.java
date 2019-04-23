@@ -94,11 +94,12 @@ public class BoardDrawer {
 			int x2 = (int) points[connectedData[i][1]].getX();
 			int y2 = (int) points[connectedData[i][1]].getY();
 			
-			g.setColor(Color.BLACK);
-			g.drawLine(x1, y1, x2, y2);
+			
 		}
 	}
-	
+	private static boolean drawRotatedRect(int x1, int y1, int x2, int y2, int l, int w) {
+		return false;
+	}
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
 	}
