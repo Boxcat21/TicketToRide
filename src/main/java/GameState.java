@@ -142,12 +142,9 @@ public class GameState {
 		ArrayList<Edge> edgeTemps = new ArrayList<>();
 		for(Edge e:edges)
 			{					
-			
-
 				if(e.getCities().contains(cities.get(i)));
 				{
 				edgeTemps.add(e);
-					
 				}
 				
 			}
