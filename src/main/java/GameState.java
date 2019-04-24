@@ -112,11 +112,20 @@ public class GameState {
 		scan = new Scanner(new File("ConnectedCities.txt"));
 		HashMap<String, String> previous = new HashMap<>();
 		while (scan.hasNextLine()) {
-			String[] temp = scan.nextLine().split(",");
-			if (previous.get(temp[1])!=null&&!((previous.get(temp[1]).equals(temp[0]) || (previous.get(temp[0]).equals(temp[1]))))) {
-				//needs fix
-				cities.add(new City(connectedCities.get(temp[0]),temp[0],new ArrayList<Edge>()));
+			String line = scan.nextLine();
+			String[] tempFirstTwo = line.substring(0,line.indexOf('|')+1).split(",");
+			String cityOne = tempFirstTwo[0];
+			String cityTwo = tempFirstTwo[1];
+
+			if(!previous.containsKey(cityOne)||previous.containsKey(cityTwo))
+			{
+				//if(!(previous.get(cityOne).equals(cityTwo)||previous.get(cityTwo).equals(cityOne)))
+					cities.add(new City(connectedCities.get(tempFirstTwo[0]),tempFirstTwo[0],new ArrayList<Edge>()));	
 			}
+			previous.put(cityOne,cityTwo);
+			previous.put(cityTwo,cityOne);
+			//if (previous.get(tempFirstTwo[1])!=null&&!((previous.get(tempFirstTwo[1]).equals(tempFirstTwo[0]) || (previous.get(tempFirstTwo[0]).equals(tempFirstTwo[1]))))) {
+						
 		}
 		this.passedCities = new ArrayList<City>();
 		//Making the list of edges - city value will be used from the list of cities
@@ -152,6 +161,8 @@ public class GameState {
 		cities.add(i, new City(oldCity.getPoint(),oldCity.getName(),edgeTemps)); 
 		edgeTemps = new ArrayList<>();
 	}
+	
+	System.out.println( cities.get(10).getAllEdges().get(2).getColor());
 	/*for(City c:cities)
 	{
 		ArrayList<Edge> edgeTemps = new ArrayList<>();
@@ -163,9 +174,7 @@ public class GameState {
 		c = new City(c.getPoint(),c.getName(),edgeTemps);
 		edgeTemps = new ArrayList<>();
 	}*/
-	
-	for(City c:cities)
-		System.out.println(c.getPoint());
+
 	
 
 	}
