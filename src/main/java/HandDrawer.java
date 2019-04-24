@@ -2,6 +2,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -11,7 +12,7 @@ public class HandDrawer {
 			"Green", "Rainbow" };
 	public static final Color[] COLOR_NAMES = { new Color(84, 22, 180), Color.WHITE, Color.BLUE, Color.YELLOW,
 			Color.ORANGE, Color.BLACK, Color.RED, Color.GREEN, new Color(255, 0, 127) };
-
+	public static final int ARR_SIZE = 10;
 	public HandDrawer() {
 
 	}
@@ -79,7 +80,12 @@ public class HandDrawer {
 		g2.setColor(Color.BLACK);
 		
 		g2.drawString(cards.get(0).toString(), 1125, 800);
+		g2.setColor(Color.BLACK);
 		
+		g2.drawRect(1050, 790, 35, 35);
+		g2.drawRect(1315, 790, 35, 35);
+		drawArrow(g, 1085, 807, 1050, 807 );
+		drawArrow(g, 1315, 807, 1350, 807);
 		
 		
 	}
@@ -99,5 +105,23 @@ public class HandDrawer {
 				count++;
 		return "" + count;
 	}
+	
+	public static  void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
+		
+        Graphics2D g = (Graphics2D) g1.create();
+        g.setStroke(new BasicStroke(3));
+        double dx = x2 - x1, dy = y2 - y1;
+        double angle = Math.atan2(dy, dx);
+        int len = (int) Math.sqrt(dx*dx + dy*dy);
+        AffineTransform at = AffineTransform.getTranslateInstance(x1, y1);
+        at.concatenate(AffineTransform.getRotateInstance(angle));
+        g.transform(at);
+
+        // Draw horizontal arrow starting in (0, 0)
+        g.drawLine(0, 0, len, 0);
+        g.fillPolygon(new int[] {len, len-ARR_SIZE, len-ARR_SIZE, len},
+                      new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 3);
+    }
+
 
 }
