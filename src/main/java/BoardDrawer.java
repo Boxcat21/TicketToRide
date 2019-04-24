@@ -1,6 +1,9 @@
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.awt.Shape;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -20,7 +23,10 @@ public class BoardDrawer {
 	private static int[][] connectedData; //201
 	private static int[] lengths; //201
 	private static String[] colors; //201
+	private static ArrayList<Shape> rotatedRects;
 	private static void init() {
+		//rotato bato
+		rotatedRects = new ArrayList<Shape>();
 		//city points
 		Scanner sc = null;
 		try {
@@ -94,11 +100,35 @@ public class BoardDrawer {
 			int x2 = (int) points[connectedData[i][1]].getX();
 			int y2 = (int) points[connectedData[i][1]].getY();
 			
+			g.drawLine(x1, y1, x2, y2);
 			
+			int distance = (int) Math.round(Math.sqrt(Math.pow(x2-x1, 2)+Math.pow(y2-y1, 2)));
+			//oppositeRectPoint(x1, x2, distance, 20, )
+			double angle = (double) Math.toDegrees(Math.atan2(y1 - y2, x1 - x2));
+			
+			if(angle < 0)
+				angle += 360;
+			
+			drawRotatedRect(x1, x2, angle, distance, 20, Color.BLACK);
 		}
+		
 	}
-	private static boolean drawRotatedRect(int x1, int y1, int x2, int y2, int l, int w) {
-		return false;
+	private static void drawRotatedRect(int x, int y, double angle, int length, int width, Color color) {
+		double theta = Math.toRadians(angle);
+		
+		Rectangle2D rect = new Rectangle2D.Double(length/2.,-width/2.,length, width);
+		
+		AffineTransform tran = new AffineTransform();
+		
+		double alpha = Math.toRadians(90 - angle);
+		
+		int trigX = (int) (Math.cos(alpha)*(50/2));
+		int trigY = (int) (Math.sin(alpha)*(50/2));
+		tran.translate(trigX+x,-trigY+y);
+		tran.rotate(theta);
+		tran.translate(length/2, width/2);
+		
+		Shape rotatedRect = tran.createTransformedShape(rect);
 	}
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
