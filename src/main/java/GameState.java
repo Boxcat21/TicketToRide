@@ -113,15 +113,16 @@ public class GameState {
 		HashMap<String, String> previous = new HashMap<>();
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
-			String[] tempFirstTwo = line.substring(0,line.indexOf('|')+1).split(",");
+			String[] tempFirstTwo = line.substring(0,line.indexOf('|')).split(",");
 			String cityOne = tempFirstTwo[0];
 			String cityTwo = tempFirstTwo[1];
-
-			if(!previous.containsKey(cityOne)||previous.containsKey(cityTwo))
+			if(previous.containsKey(cityOne))
 			{
-				//if(!(previous.get(cityOne).equals(cityTwo)||previous.get(cityTwo).equals(cityOne)))
-					cities.add(new City(connectedCities.get(tempFirstTwo[0]),tempFirstTwo[0],new ArrayList<Edge>()));	
-			}
+				if(!(previous.get(cityOne).equals(cityTwo)))
+					cities.add(new City(connectedCities.get(tempFirstTwo[0]),tempFirstTwo[0],new ArrayList<Edge>()));
+			}	
+			else 
+				cities.add(new City(connectedCities.get(tempFirstTwo[0]),tempFirstTwo[0],new ArrayList<Edge>()));
 			previous.put(cityOne,cityTwo);
 			previous.put(cityTwo,cityOne);
 			//if (previous.get(tempFirstTwo[1])!=null&&!((previous.get(tempFirstTwo[1]).equals(tempFirstTwo[0]) || (previous.get(tempFirstTwo[0]).equals(tempFirstTwo[1]))))) {
@@ -163,7 +164,7 @@ public class GameState {
 	}
 	
 	System.out.println( cities.get(10).getAllEdges().get(2).getColor());
-	/*for(City c:cities)
+	for(City c:cities)
 	{
 		ArrayList<Edge> edgeTemps = new ArrayList<>();
 		for(Edge e:edges)
@@ -173,7 +174,10 @@ public class GameState {
 			}
 		c = new City(c.getPoint(),c.getName(),edgeTemps);
 		edgeTemps = new ArrayList<>();
-	}*/
+	}
+	
+	for(City c: cities)
+		System.out.println(c.getName());
 
 	
 
