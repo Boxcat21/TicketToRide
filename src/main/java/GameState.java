@@ -118,29 +118,32 @@ public class GameState {
 			String cityTwo = tempFirstTwo[1];
 			if(previous.containsKey(cityOne))
 			{
+				
 				if(!(previous.get(cityOne).equals(cityTwo)))
+				{
 					cities.add(new City(connectedCities.get(tempFirstTwo[0]),tempFirstTwo[0],new ArrayList<Edge>()));
-			}	
+				}
+					
 			else 
 				cities.add(new City(connectedCities.get(tempFirstTwo[0]),tempFirstTwo[0],new ArrayList<Edge>()));
 			previous.put(cityOne,cityTwo);
 			previous.put(cityTwo,cityOne);
 			//if (previous.get(tempFirstTwo[1])!=null&&!((previous.get(tempFirstTwo[1]).equals(tempFirstTwo[0]) || (previous.get(tempFirstTwo[0]).equals(tempFirstTwo[1]))))) {
 						
-		}
+		}}
 		this.passedCities = new ArrayList<City>();
 		//Making the list of edges - city value will be used from the list of cities
 	
 	scan = new Scanner(new File("ConnectedCities.txt"));
 	while(scan.hasNextLine())
 	{
-		String line = scan.nextLine();
+		String line1 = scan.nextLine();
 		
-		String[] tempFirstTwo = line.substring(0,line.indexOf('|')+1).split(",");
-		String[] tempLastTwo = line.substring(line.indexOf('|')+1,line.length()).split(",");
+		String[] tempFirstTwo1 = line1.substring(0,line1.indexOf('|')+1).split(",");
+		String[] tempLastTwo = line1.substring(line1.indexOf('|')+1,line1.length()).split(",");
 		ArrayList<City> cityTemps = new ArrayList<>();
 		for(City c:cities)	
-			if(c.getName().equals(tempFirstTwo[0]))
+			if(c.getName().equals(tempFirstTwo1[0]))
 				cityTemps.add(c);
 		edges.add(new Edge(Integer.parseInt(tempLastTwo[0]),tempLastTwo[1],cityTemps));
 		cityTemps = new ArrayList<>();
