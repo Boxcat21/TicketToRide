@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.AffineTransform;
@@ -81,54 +82,56 @@ public class BoardDrawer {
 	}
 	public static void drawBoard(Graphics g, ArrayList<City> cities, ArrayList<Edge> edges) {
 		init();
+		// connecting edges
+		for (int i = 0; i < connectedData.length; i++) {
+			int x1 = (int) points[connectedData[i][0]].getX();
+			int y1 = (int) points[connectedData[i][0]].getY();
+
+			int x2 = (int) points[connectedData[i][1]].getX();
+			int y2 = (int) points[connectedData[i][1]].getY();
+
+			int distance = (int) Math.round(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
+			// oppositeRectPoint(x1, x2, distance, 20, )
+			double angle = (double) Math.toDegrees(Math.atan2(y2 - y1, x2 - x1));
+
+			if (angle < 0)
+				angle += 360;
+			drawRotatedRect(g, x1, y1, angle, distance, 10, Color.BLACK);
+		}
 		//City points from text file (prob in constructor)
 		//Cities NEED TO LABEL THE CITIES
-		int r = 10;
+		int r = 20;
 		for(int i = 0; i < citys.length; i++) {
 			g.setColor(new Color(153, 76, 0)); //dark orange
 			g.fillOval((int)points[i].getX()-r/2, (int)points[i].getY()-r/2, r, r);
 			
 			g.setColor(Color.BLACK);
 			g.drawOval((int)points[i].getX()-r/2, (int)points[i].getY()-r/2, r, r);
+			System.out.println();
 		}
 		//g.fillOval(1535, 755, 10, 10);
-		//connecting edges
-		for(int i = 0; i < 1; i++) {
-			int x1 = (int) points[connectedData[i][0]].getX();
-			int y1 = (int) points[connectedData[i][0]].getY();
-			
-			int x2 = (int) points[connectedData[i][1]].getX();
-			int y2 = (int) points[connectedData[i][1]].getY();
-			
-			g.drawLine(x1, y1, x2, y2);
-			
-			int distance = (int) Math.round(Math.sqrt(Math.pow(x2-x1, 2)+Math.pow(y2-y1, 2)));
-			//oppositeRectPoint(x1, x2, distance, 20, )
-			double angle = (double) Math.toDegrees(Math.atan2(y1 - y2, x1 - x2));
-			
-			if(angle < 0)
-				angle += 360;
-			
-			drawRotatedRect(x1, x2, angle, distance, 20, Color.BLACK);
-		}
 		
 	}
-	private static void drawRotatedRect(int x, int y, double angle, int length, int width, Color color) {
+	private static void drawRotatedRect(Graphics g, int x, int y, double angle, int length, int width, Color color) {
 		double theta = Math.toRadians(angle);
-		
-		Rectangle2D rect = new Rectangle2D.Double(length/2.,-width/2.,length, width);
+		Rectangle2D rect = new Rectangle2D.Double(-length/2.,-width/2.,length, width);
 		
 		AffineTransform tran = new AffineTransform();
 		
 		double alpha = Math.toRadians(90 - angle);
+		int trigX = (int) (Math.round(Math.cos(alpha)*(width/2)));
+		int trigY = (int) (Math.round(Math.sin(alpha)*(width/2)));
 		
-		int trigX = (int) (Math.cos(alpha)*(50/2));
-		int trigY = (int) (Math.sin(alpha)*(50/2));
 		tran.translate(trigX+x,-trigY+y);
 		tran.rotate(theta);
 		tran.translate(length/2, width/2);
 		
 		Shape rotatedRect = tran.createTransformedShape(rect);
+		
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setColor(Color.GRAY);
+		g2d.fill(rotatedRect);
+		rotatedRects.add(rotatedRect);
 	}
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		

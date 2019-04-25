@@ -2,6 +2,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -13,37 +14,49 @@ public class HandDrawer {
 	public static final Color[] COLOR_NAMES = { new Color(84, 22, 180), Color.WHITE, Color.BLUE, Color.YELLOW,
 			Color.ORANGE, Color.BLACK, Color.RED, Color.GREEN, new Color(255, 0, 127) };
 	public static final int ARR_SIZE = 10;
+	public ArrayList<Rectangle> clickable;
 	public HandDrawer() {
-
+		
+		clickable = new ArrayList<Rectangle>();
+//		for ( int i = 0 ; i < 9; i++ ) { 
+//			clickable.add(new Rectangle(60, 900, ))
+//		}
 	}
 
 	public static void drawHand(Graphics g, Player p) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.drawRect(0, 720, 1440, 360);
-		g2.setColor(new Color(255, 0, 255));
+		g2.setColor(new Color(255, 105, 180));
 		g2.fillRect(0, 721, 1440, 360);
 		ArrayList<TrainCard> trainCard = p.getTrainCards();
 		
 		g2.setColor(Color.BLACK);
 		int x = 60;
 		for (int i = 0; i < COLOR_NAMES.length; i++) {
-
+			g2.setColor(Color.WHITE);
+			g2.fillRect(x, 900, 50, 200);
+			// g2.setColor(Color.WHITE);
+			g2.fillRect(x + 30, 900, 50, 200);
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6));
-			g2.drawRect(x, 900, 30, 180);
-			g2.drawRect(x + 30, 900, 30, 180);
-			g2.drawLine(x, 940, x + 60, 940);
-			g2.setStroke(new BasicStroke(1));
-			g2.setColor(Color.WHITE);
-			g2.fillRect(x, 900, 30, 180);
-			// g2.setColor(Color.WHITE);
-			g2.fillRect(x + 30, 900, 30, 180);
+			g2.drawRect(x, 900, 50, 200);
+			g2.drawRect(x + 30, 900, 50, 200);
+			
+			g2.setStroke(new BasicStroke(1)); // replace these with images Cole made
+			
 			g2.setColor(COLOR_NAMES[i]);
-			g2.fillRect(x, 940, 60, 120);
+			g2.fillRect(x, 940, 80, 140);
+			
+			g2.setColor(Color.BLACK);
+			g2.setStroke(new BasicStroke(6));
+			g2.drawLine(x, 940, x+80, 940);
+			g2.setStroke(new BasicStroke(2));
+			
 			if (TRAIN_COLORS[i].equals("Black"))
 				g2.setColor(Color.WHITE);
 			else
 				g2.setColor(Color.BLACK);
+			
 			g2.drawString(getCount(TRAIN_COLORS[i], trainCard), x + 28, 1010);
 			x += 120;
 		}
