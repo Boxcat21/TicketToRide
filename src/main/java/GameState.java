@@ -270,7 +270,7 @@ public class GameState {
 	public boolean chooseTrainCard(int choice) {
 		TrainCard t = displayCards.remove(choice);
 
-		if (t.getColor().equals("rainbow")) {
+		if (t.getColor().equals("Rainbow")) {
 			turnCounter -= 2;
 			if (turnCounter < 0)
 				return false;
@@ -278,7 +278,7 @@ public class GameState {
 			turnCounter--;
 
 		curPlayer.addTrainCard(t);
-
+		displayCards.add(trainCardDeck.pop());
 		checkTurn();
 
 		return true;

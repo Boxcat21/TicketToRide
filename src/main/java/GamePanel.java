@@ -14,19 +14,20 @@ public class GamePanel extends JPanel implements MouseListener{
 	
 	public GamePanel() throws IOException{ 
 		//game = new GameState();
-		 p = new Player("Yeet");
+		 p = new Player("Yeet"); // temporary testing player
 		p.addContractCard(new ContractCard(new City(null, "Elleh1", null), new City(null, "Elleh2", null), 20));
 		p.addContractCard(new ContractCard(new City(null, "Elleh2", null), new City(null, "Elleh3", null), 20));
 		p.addContractCard(new ContractCard(new City(null, "Elleh3", null), new City(null, "Elleh4", null), 20));
 		setSize(1920,1080);
 		setVisible(true);
+		addMouseListener(this);
 		
 		
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
+		System.out.println(e.getPoint());
 		
 	}
 

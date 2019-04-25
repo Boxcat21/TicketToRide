@@ -13,7 +13,7 @@ public class TextRunner {
 		 scan = new Scanner(System.in);
 		 
 		 //Starting each turn
-		System.out.println("Enter d to draw cards, enter c to draw contracts, enter p to place train");
+		System.out.println(g.getCurPlayer().toString() + ", enter d to draw cards, enter c to draw contracts, enter p to place train");
 		//Drawing cards
 		if(scan.nextLine().equals("d"))
 			testDrawTrainCards();
