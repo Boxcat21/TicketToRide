@@ -7,6 +7,7 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,6 +83,9 @@ public class BoardDrawer {
 	}
 	public static void drawBoard(Graphics g, ArrayList<City> cities, ArrayList<Edge> edges) {
 		init();
+		//
+		g.setColor(Color.LIGHT_GRAY);
+		g.fillRect(0, 0, 1535, 755);
 		// connecting edges
 		for (int i = 0; i < connectedData.length; i++) {
 			int x1 = (int) points[connectedData[i][0]].getX();
@@ -96,7 +100,14 @@ public class BoardDrawer {
 
 			if (angle < 0)
 				angle += 360;
-			drawRotatedRect(g, x1, y1, angle, distance, 10, Color.BLACK);
+			Color color;
+			try {
+			    Field field = Class.forName("java.awt.Color").getField(colors[i]);
+			    color = (Color)field.get(null);
+			} catch (Exception e) {
+			    color = Color.BLACK; // Not defined
+			}
+			drawRotatedRect(g, x1, y1, angle, distance, 10, color);
 		}
 		//City points from text file (prob in constructor)
 		//Cities NEED TO LABEL THE CITIES
@@ -129,8 +140,10 @@ public class BoardDrawer {
 		Shape rotatedRect = tran.createTransformedShape(rect);
 		
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(Color.GRAY);
+		g2d.setColor(color);
 		g2d.fill(rotatedRect);
+		g.setColor(Color.BLACK);
+		g2d.draw(rotatedRect);
 		rotatedRects.add(rotatedRect);
 	}
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
