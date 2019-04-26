@@ -17,7 +17,7 @@ public class HandDrawer {
 	public ArrayList<Rectangle> clickable;
 	public HandDrawer() {
 		
-		clickable = new ArrayList<Rectangle>();
+//		clickable = new ArrayList<Rectangle>();
 //		for ( int i = 0 ; i < 9; i++ ) { 
 //			clickable.add(new Rectangle(60, 900, ))
 //		}
@@ -25,31 +25,31 @@ public class HandDrawer {
 
 	public static void drawHand(Graphics g, Player p) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.drawRect(0, 720, 1440, 360);
+		g2.drawRect(0, 755, 1535, 325);
 		g2.setColor(new Color(255, 105, 180));
-		g2.fillRect(0, 721, 1440, 360);
+		g2.fillRect(0, 756, 1535, 325);
 		ArrayList<TrainCard> trainCard = p.getTrainCards();
 		
 		g2.setColor(Color.BLACK);
-		int x = 60;
+		int x = 90;
 		for (int i = 0; i < COLOR_NAMES.length; i++) {
 			g2.setColor(Color.WHITE);
-			g2.fillRect(x, 900, 50, 200);
+			g2.fillRect(x, 910, 50, 170);
 			// g2.setColor(Color.WHITE);
-			g2.fillRect(x + 30, 900, 50, 200);
+			g2.fillRect(x + 50, 910, 50, 170);
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6));
-			g2.drawRect(x, 900, 50, 200);
-			g2.drawRect(x + 30, 900, 50, 200);
+			g2.drawRect(x, 870, 50, 210);
+			g2.drawRect(x + 50, 870, 50, 210);
 			
 			g2.setStroke(new BasicStroke(1)); // replace these with images Cole made
 			
 			g2.setColor(COLOR_NAMES[i]);
-			g2.fillRect(x, 940, 80, 140);
+			g2.fillRect(x+1, 910, 98, 170);
 			
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6));
-			g2.drawLine(x, 940, x+80, 940);
+			g2.drawLine(x, 910, x+100, 910);
 			g2.setStroke(new BasicStroke(2));
 			
 			if (TRAIN_COLORS[i].equals("Black"))
@@ -58,7 +58,7 @@ public class HandDrawer {
 				g2.setColor(Color.BLACK);
 			
 			g2.drawString(getCount(TRAIN_COLORS[i], trainCard), x + 28, 1010);
-			x += 120;
+			x += 140;
 		}
 	}
 
