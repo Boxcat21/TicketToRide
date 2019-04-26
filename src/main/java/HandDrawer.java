@@ -25,9 +25,11 @@ public class HandDrawer {
 
 	public static void drawHand(Graphics g, Player p) {
 		Graphics2D g2 = (Graphics2D) g;
-		g2.drawRect(0, 755, 1535, 325);
-		g2.setColor(new Color(255, 105, 180));
+		//g2.setColor(new Color(255, 105, 180));
+		g2.setColor(new Color(184, 134,11));
 		g2.fillRect(0, 756, 1535, 325);
+		g2.setColor(Color.BLACK);
+		g2.drawRect(0, 755, 1535, 325);
 		ArrayList<TrainCard> trainCard = p.getTrainCards();
 		
 		g2.setColor(Color.BLACK);

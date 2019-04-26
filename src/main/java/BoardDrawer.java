@@ -86,6 +86,8 @@ public class BoardDrawer {
 		//
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, 1535, 755);
+		g.setColor(Color.BLACK);
+		g.drawRect(0, 0, 1535, 755);
 		// connecting edges
 		for (int i = 0; i < connectedData.length; i++) {
 			int x1 = (int) points[connectedData[i][0]].getX();
