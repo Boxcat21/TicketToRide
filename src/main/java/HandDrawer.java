@@ -70,16 +70,16 @@ public class HandDrawer {
 		selection.add(new ContractCard(new City(null, "Elleh1", null), new City(null, "Elleh2", null), 20));
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(6));
-		g2.drawRect(600, 760, 250, 100);
+		g2.drawRect(600, 760, 380, 100);
 		g2.setStroke(new BasicStroke(1));
 		g2.setColor(Color.WHITE);
-		g2.fillRect(600, 760, 250, 100);
+		g2.fillRect(600, 760, 380, 100);
 		g2.setColor(Color.BLACK);
-		g2.drawRect(600, 760, 200, 33);
+		g2.drawRect(600, 760, 320, 33);
 		g2.drawString(selection.get(0).getCity1().getName() + " to " + selection.get(0).getCity2().getName(), 610, 780);
-		g2.drawRect(600, 793, 200, 33);
+		g2.drawRect(600, 793, 320, 33);
 		g2.drawString(selection.get(1).getCity1().getName() + " to " + selection.get(1).getCity2().getName(), 610, 815);
-		g2.drawRect(600, 826, 200, 33);
+		g2.drawRect(600, 826, 320, 33);
 		g2.drawString(selection.get(2).getCity1().getName() + " to " + selection.get(2).getCity2().getName(), 610, 850);
 	}
 	
