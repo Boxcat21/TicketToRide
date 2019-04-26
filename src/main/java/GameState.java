@@ -109,26 +109,28 @@ public class GameState {
 		
 
 		//Reads in the connected cities. and init each city with the corresponding point, name, but with an empty arraylist
-		scan = new Scanner(new File("ConnectedCities.txt"));
+		scan = new Scanner(new File("Cities"));
 		HashMap<String, String> previous = new HashMap<>();
 		while (scan.hasNextLine()) {
-			String line = scan.nextLine();
-			String[] tempFirstTwo = line.substring(0,line.indexOf('|')).split(",");
-			String cityOne = tempFirstTwo[0];
-			String cityTwo = tempFirstTwo[1];
-			if(previous.containsKey(cityOne))
+			String city = scan.nextLine().split(",")[0];
+			cities.add(new City(connectedCities.get(city),city,new ArrayList<Edge>()));
+			
+		
+			/*if(previous.containsKey(cityOne))
 				if(!(previous.get(cityOne).equals(cityTwo)))
 				{
 					cities.add(new City(connectedCities.get(tempFirstTwo[0]),tempFirstTwo[0],new ArrayList<Edge>()));
+					if(cityOne.equals("New York"))
+						System.out.println("New York And "+cityTwo);
 				}
 					
 			else 
 				cities.add(new City(connectedCities.get(tempFirstTwo[0]),tempFirstTwo[0],new ArrayList<Edge>()));
 			previous.put(cityOne,cityTwo);
-			previous.put(cityTwo,cityOne);
-			//if (previous.get(tempFirstTwo[1])!=null&&!((previous.get(tempFirstTwo[1]).equals(tempFirstTwo[0]) || (previous.get(tempFirstTwo[0]).equals(tempFirstTwo[1]))))) {
-						
+			previous.put(cityTwo,cityOne);*/
 		}
+		for(City c: cities)
+			System.out.println(c.getName());
 		this.passedCities = new ArrayList<City>();
 		//Making the list of edges - city value will be used from the list of cities
 	
@@ -158,13 +160,13 @@ public class GameState {
 				edgeTemps.add(e);
 				}
 				
+				
 			}
 		City oldCity = cities.remove(i);
 		cities.add(i, new City(oldCity.getPoint(),oldCity.getName(),edgeTemps)); 
 		edgeTemps = new ArrayList<>();
 	}
 	
-	System.out.println( cities.get(10).getAllEdges().get(2).getColor());
 	for(City c:cities)
 	{
 		ArrayList<Edge> edgeTemps = new ArrayList<>();
@@ -177,8 +179,7 @@ public class GameState {
 		edgeTemps = new ArrayList<>();
 	}
 	
-	for(City c: cities)
-		System.out.println(c.getName());
+
 
 	
 
