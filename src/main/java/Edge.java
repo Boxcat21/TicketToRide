@@ -14,7 +14,7 @@ public class Edge {
 		cities= c;
 	}
 	public Edge() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	public int getLength() {
 		return length;
@@ -50,5 +50,9 @@ public class Edge {
 		else
 			return null;
 	}
-
+	public boolean equals(Edge other) {
+		if(this.cities.equals(other.cities))
+			return true;
+		return false;
+	}
 }

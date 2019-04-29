@@ -3,6 +3,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Shape;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
 import java.io.File;
@@ -22,10 +23,11 @@ public class BoardDrawer {
 	 * */
 	private static String[] citys;//35
 	private static Point[] points;//35
-	private static int[][] connectedData; //201
+	private static int[][] connectedData; //201 indecies of points
 	private static int[] lengths; //201
 	private static String[] colors; //201
-	private static ArrayList<Shape> rotatedRects;
+	private static ArrayList<Shape> rotatedRects; //201
+	private static ArrayList<Edge> edges;
 	private static void init() {
 		//rotato bato
 		rotatedRects = new ArrayList<Shape>();
@@ -81,7 +83,7 @@ public class BoardDrawer {
 		}
 		return -1;
 	}
-	public static void drawBoard(Graphics g, ArrayList<City> cities, ArrayList<Edge> edges) {
+	public static void drawBoard(Graphics g, ArrayList<Edge> edges) {
 		init();
 		//
 		g.setColor(Color.LIGHT_GRAY);
@@ -103,12 +105,12 @@ public class BoardDrawer {
 			if (angle < 0)
 				angle += 360;
 			Color color;
-			try {
+			try 
+			{
 			    Field field = Class.forName("java.awt.Color").getField(colors[i]);
 			    color = (Color)field.get(null);
-			} catch (Exception e) {
-			    color = Color.BLACK; // Not defined
-			}
+			} catch (Exception e) { color = null;}
+			
 			drawRotatedRect(g, x1, y1, angle, distance, 10, color);
 		}
 		//City points from text file (prob in constructor)
@@ -120,7 +122,6 @@ public class BoardDrawer {
 			
 			g.setColor(Color.BLACK);
 			g.drawOval((int)points[i].getX()-r/2, (int)points[i].getY()-r/2, r, r);
-			System.out.println();
 		}
 		//g.fillOval(1535, 755, 10, 10);
 		
@@ -150,5 +151,13 @@ public class BoardDrawer {
 	}
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
+	}
+	public static void edgeClick(MouseEvent e) {
+		Point p = e.getPoint();
+		for(int i = 0; i < rotatedRects.size(); i++) {
+			if(rotatedRects.get(i).contains(e.getPoint())) {
+				
+			}
+		}
 	}
 }

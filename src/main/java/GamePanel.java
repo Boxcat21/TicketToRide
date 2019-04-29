@@ -27,43 +27,26 @@ public class GamePanel extends JPanel implements MouseListener{
 	}
 
 	@Override
-	public void mouseClicked(MouseEvent e) {
-		System.out.println(e.getPoint());
-		
-	}
-
+	public void mouseClicked(MouseEvent e) {}
 	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mouseEntered(MouseEvent e) {	}
 	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	public void mouseExited(MouseEvent e) {}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		BoardDrawer.edgeClick(e);
 	}
-
 	@Override
-	public void mouseReleased(MouseEvent e) {
+	public void mouseReleased(MouseEvent e) {}
 	
-			
-		
-	}
 	@Override
 	public void paintComponent(Graphics g) {
-//		Graphics2D g2 = (Graphics2D) g;
-//		g2.drawRect(0, 0, 1440, 720);
-//		g2.setColor(Color.ORANGE);
-//		g2.fillRect(1441, 0, 480, 1080);
-//		g2.fillRect(0, 721, 1920, 360);
-		BoardDrawer.drawBoard(g, new ArrayList<City>(), new ArrayList<Edge>());
+		//Graphics2D g2 = (Graphics2D) g;
+		//g2.drawRect(0, 0, 1440, 720);
+		//g2.setColor(Color.ORANGE);
+		//g2.fillRect(1441, 0, 480, 1080);
+		//g2.fillRect(0, 721, 1920, 360);
+		BoardDrawer.drawBoard(g, new ArrayList<Edge>());
 		HandDrawer.drawHand(g, p);
 		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());
 		HandDrawer.drawContractCards(g, p.getContracts());
