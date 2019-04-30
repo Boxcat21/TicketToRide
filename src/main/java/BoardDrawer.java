@@ -1,4 +1,6 @@
 import java.awt.Color;
+
+import javax.imageio.*;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
@@ -6,8 +8,10 @@ import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,6 +127,14 @@ public class BoardDrawer {
 			g.setColor(Color.BLACK);
 			g.drawOval((int)points[i].getX()-r/2, (int)points[i].getY()-r/2, r, r);
 		}
+		
+		BufferedImage label = null;
+		try {
+			label = ImageIO.read(new File("CityLabels.png"));
+		}catch(IOException e) {}
+		
+		g.drawImage(label, 0, 0, null);
+		
 		//g.fillOval(1535, 755, 10, 10);
 		
 	}
