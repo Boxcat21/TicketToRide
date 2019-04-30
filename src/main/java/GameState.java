@@ -88,7 +88,7 @@ public class GameState {
 		// edges and cities
 		cities = new ArrayList<>();
 		edges = new ArrayList<>();
-		//Puts all of the connected cities in a hashmap with the corresponding point
+		//adds all the cities with null edge arraylist
 		scan = new Scanner(new File("Cities"));
 		while(scan.hasNextLine())
 		{
@@ -144,25 +144,53 @@ public class GameState {
 
 
 		this.passedCities = new ArrayList<City>();
-		//Making the list of edges - city value will be used from the list of cities
-		//HashMap<String, ArrayList<String>> CityConnections = new HashMap<String,ArrayList<String>>;
-	
+		
+		//Puts all the cities and their connections in a hashmap of string, list
+		HashMap<String, ArrayList<String>> cityConnections = new HashMap<>();
 	scan = new Scanner(new File("ConnectedCities.txt"));
 	while(scan.hasNextLine())
 	{
 		String line1 = scan.nextLine();
-		
-		String[] tempFirstTwo1 = line1.substring(0,line1.indexOf('|')+1).split(",");
+		String[] tempFirstTwo = line1.substring(0,line1.indexOf('|')+1).split(",");
 		String[] tempLastTwo = line1.substring(line1.indexOf('|')+1,line1.length()).split(",");
-		ArrayList<City> cityTemps = new ArrayList<>();
-		for(City c:cities)	
-			if(c.getName().equals(tempFirstTwo1[0]))
-				cityTemps.add(c);
-		edges.add(new Edge(Integer.parseInt(tempLastTwo[0]),tempLastTwo[1],cityTemps));
-		cityTemps = new ArrayList<>();
+		String key = tempFirstTwo[0];
+		if(cityConnections.containsKey(key))
+			{
+				ArrayList<String> temp = cityConnections.get(key);
+				temp.add(tempFirstTwo[1]);	
+			}
+		else
+		cityConnections.put(key, new ArrayList<String>());
+	}
+	
+	//Goes through the text file, check if both cities are in the key and value of hashmap, then add the edge to city
+	scan = new Scanner(new File("ConnectedCities.txt"));
+	while(scan.hasNextLine())
+	{
+		String line1 = scan.nextLine();
+		String[] tempFirstTwo = line1.substring(0,line1.indexOf('|')+1).split(",");
+		String[] tempLastTwo = line1.substring(line1.indexOf('|')+1,line1.length()).split(",");
+		String key = tempFirstTwo[0];
+		String value = tempFirstTwo[1];
+		ArrayList<Edge> tempEdges = new ArrayList<Edge>();
+		ArrayList<City> tempCities = new ArrayList<City>();
+
+		if(cityConnections.get(key).contains(value))
+		{
+			for(City c: cities)
+				if(c.getName().equals(key))
+				{
+					tempCities.add(c);
+				}		
+			tempEdges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
+			
+		}
+		
 	}
 
-		//Connecting all of the cities to edges; edges to cities was done above
+	
+	
+
 	for(int i = cities.size()-1; i>=0;i--)
 	{
 		ArrayList<Edge> edgeTemps = new ArrayList<>();
