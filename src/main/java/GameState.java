@@ -282,18 +282,17 @@ public class GameState {
 
 	public boolean chooseTrainCard(int choice) {
 		TrainCard t = displayCards.remove(choice);
-
-		if (t.getColor().equals("Rainbow")) {
+		if(turnCounter <= 0) {
+			System.out.println("Doh! That's a no-go, bro!");
+			}
+		else if (t.getColor().equals("Rainbow")) {
 			turnCounter -= 2;
-			if (turnCounter < 0)
-				return false;
 		} else
 			turnCounter--;
 
 		curPlayer.addTrainCard(t);
 		displayCards.add(trainCardDeck.pop());
 		checkTurn();
-
 		return true;
 	}
 
@@ -426,10 +425,10 @@ public class GameState {
 				break;
 			}
 		
-		if (this.turnCounter == 0 && !lastRound) {
-			endTurn(); 
+		/*if (turnCounter <= 0 && !lastRound) {
+			endTurn();
 			return;
-		}
+		}*/
 		if ( lastRound ) //still need to fix to run one more round before ending 
 			endGame();
 		checkContracts();
