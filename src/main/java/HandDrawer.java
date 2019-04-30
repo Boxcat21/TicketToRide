@@ -14,13 +14,26 @@ public class HandDrawer {
 	public static final Color[] COLOR_NAMES = { new Color(84, 22, 180), Color.WHITE, Color.BLUE, Color.YELLOW,
 			Color.ORANGE, Color.BLACK, Color.RED, Color.GREEN, new Color(255, 0, 127) };
 	public static final int ARR_SIZE = 10;
-	public ArrayList<Rectangle> clickable;
+	public static ArrayList<Rectangle> clickableAdd;
+	public static ArrayList<Rectangle> clickableSub;
+	public static ArrayList<Rectangle> clickableArrow;
+	
 	public HandDrawer() {
 		
-//		clickable = new ArrayList<Rectangle>();
-//		for ( int i = 0 ; i < 9; i++ ) { 
-//			clickable.add(new Rectangle(60, 900, ))
-//		}
+		clickableAdd = new ArrayList<Rectangle>();
+		clickableSub = new ArrayList<Rectangle>();
+		clickableArrow = new ArrayList<Rectangle>();
+		
+			int x = 90;
+			for ( int i = 0 ; i < 9; i++ ) { 
+				clickableAdd.add(new Rectangle(x, 870, 50, 40));
+				clickableSub.add(new Rectangle(x + 50, 870, 50, 40));
+				x+= 140;
+				
+			}
+			// adds the turn arrows for contract viewing 
+			clickableArrow.add(new Rectangle(1050, 790, 35, 35));
+			clickableArrow.add(new Rectangle(1315,790,35,35));
 	}
 
 	public static void drawHand(Graphics g, Player p) {
@@ -105,7 +118,7 @@ public class HandDrawer {
 		
 	}
 	
-	public static void advanceCard(Graphics g, Player p, int direction) {
+	public static void advanceCard(Player p, int direction) {
 		if ( direction < 0 ) 
 			Collections.rotate(p.getContracts(), 1);
 		else if (direction > 0 )

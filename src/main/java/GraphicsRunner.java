@@ -14,7 +14,7 @@ public class GraphicsRunner extends JFrame{
 		
 	}
 	public static void main(String[] args) throws IOException{
-		
+		System.out.println("PLEEASE");
 		new GraphicsRunner("Yeet");
 		
 	}
