@@ -27,11 +27,11 @@ public class BoardDrawer {
 	 * */
 	private static String[] citys;//35
 	private static Point[] points;//35
+	
 	private static int[][] connectedData; //201 indecies of points
 	private static int[] lengths; //201
 	private static String[] colors; //201
 	private static ArrayList<Shape> rotatedRects; //201
-	private static ArrayList<Edge> edges;
 	private static void init() {
 		//rotato bato
 		rotatedRects = new ArrayList<Shape>();
@@ -164,12 +164,23 @@ public class BoardDrawer {
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
 	}
-	public static void edgeClick(MouseEvent e) {
+	public static Edge edgeClick(MouseEvent e) {
 		Point p = e.getPoint();
 		for(int i = 0; i < rotatedRects.size(); i++) {
 			if(rotatedRects.get(i).contains(e.getPoint())) {
+				int i1 = connectedData[i][0];
+				int i2 = connectedData[i][1];
 				
+				ArrayList<City> temp = new ArrayList<City>();
+				//temp.add(citys[i1]);
+				//temp.add(citys[i2]);
+				
+				String color = colors[i];
+				int length = lengths[i];
+				
+				return new Edge(length, color, temp);
 			}
 		}
+		return null;
 	}
 }
