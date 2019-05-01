@@ -164,6 +164,7 @@ public class GameState {
 
 		}
 	}
+	System.out.println(this.getEdges());
 
 	
 	
