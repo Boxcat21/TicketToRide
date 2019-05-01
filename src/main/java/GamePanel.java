@@ -14,6 +14,7 @@ public class GamePanel extends JPanel implements MouseListener{
 	private boolean fullscreen;
 	Player p; // temporary
 	
+	
 	public GamePanel() throws IOException{ 
 		//game = new GameState();
 		 p = new Player("Yeet"); // temporary testing player
@@ -52,8 +53,11 @@ public class GamePanel extends JPanel implements MouseListener{
 	public void mouseExited(MouseEvent e) {}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		Edge edge = BoardDrawer.edgeClick(e);
-		
+		int edgeIndex = BoardDrawer.edgeClick(e);
+		if(edgeIndex != -1) {
+			this.repaint();
+			//do thing with BoardDrawer.drawBoard();
+		}
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {}
@@ -74,7 +78,6 @@ public class GamePanel extends JPanel implements MouseListener{
 		g.fillRect(1535, 0, 1920-1535, 1080);
 		g.setColor(Color.BLACK);
 		g.drawRect(1535, 0, 1920-1535, 1080);
-		
 	}
 	
 	

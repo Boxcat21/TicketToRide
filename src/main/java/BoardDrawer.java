@@ -168,23 +168,30 @@ public class BoardDrawer {
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
 	}
-	public static Edge edgeClick(MouseEvent e) {
+	public static int edgeClick(MouseEvent e) {
 		Point p = e.getPoint();
+		String c1 = null, c2 = null;
 		for(int i = 0; i < rotatedRects.size(); i++) {
 			if(rotatedRects.get(i).contains(e.getPoint())) {
 				int i1 = connectedData[i][0];
 				int i2 = connectedData[i][1];
 				
-				ArrayList<City> temp = new ArrayList<City>();
-				//temp.add(citys[i1]);
-				//temp.add(citys[i2]);
-				
-				String color = colors[i];
-				int length = lengths[i];
-				
-				return new Edge(length, color, temp);
+				c1 = citys[i1];
+				c2 = citys[i2];
 			}
 		}
-		return null;
+		for(int i = 0; i < GameState.edges.size(); i++) {
+			Edge ed = GameState.edges.get(i);
+			
+			String cc1 = ed.getCities().get(0).getName();
+			String cc2 = ed.getCities().get(1).getName();
+			
+			ArrayList<String> test = new ArrayList<String>();
+			test.add(cc1);test.add(cc2);
+			
+			if(test.contains(c1) && test.contains(c2))
+				return i;
+		}
+		return -1;
 	}
 }
