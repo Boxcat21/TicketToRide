@@ -154,7 +154,15 @@ public class GameState {
 		tempEdges = new ArrayList<Edge>();
 		tempCity = null;
 	}
-	
+	for(City c:cities)
+	{
+		edges.add(c.getAllEdges().get(0));
+		if(c.getAllEdges().size()>1)
+		{
+		edges.add(c.getAllEdges().get(1));
+
+		}
+	}
 	for(int i = cities.size()-1; i>=0;i--)
 	{
 		ArrayList<Edge> edgeTemps = new ArrayList<>();
@@ -170,16 +178,11 @@ public class GameState {
 		cities.add(i, new City(oldCity.getPoint(),oldCity.getName(),edgeTemps)); 
 		edgeTemps = new ArrayList<>();
 	}
-	for(City c:cities)
-	{
-		edges.add(c.getAllEdges().get(0));
-		if(c.getAllEdges().size()>1)
-		{
-		edges.add(c.getAllEdges().get(1));
-
-		}
-	}
-	System.out.println(this.getEdges());
+	System.out.println(edges.size());
+	
+	
+	
+	
 
 	
 	
