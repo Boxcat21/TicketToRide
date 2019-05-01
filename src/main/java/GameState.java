@@ -13,6 +13,9 @@ import java.util.Scanner;
 import java.util.Stack;
 
 public class GameState {
+	//i made this public, neccessary for graphics so the whole datastructure doesnt need to be remade, can just refer to the index
+	public static ArrayList<Edge> edges;
+	
 	private Queue<ContractCard> contractList;
 	private Stack<TrainCard> trainCardDeck;
 	private ArrayList<TrainCard> discardTrainCard;
@@ -20,7 +23,6 @@ public class GameState {
 	private Queue<Player> players;
 	private Player curPlayer;
 	private int turnCounter;
-	private ArrayList<Edge> edges;
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
 			"Green", "Rainbow"};
