@@ -116,7 +116,16 @@ public class GameState {
 			}
 		else
 		cityConnections.put(key, new ArrayList<String>());
+		
+		
 	}
+//	for(String s: cityConnections.keySet())
+//	{
+//		for(cityConnections.get(s))
+//		{
+//			
+//		}
+//	}
 	
 
 	
@@ -140,11 +149,15 @@ public class GameState {
 				if(c.getName().equals(key))
 				{
 					tempCities.add(c);
+//					tempCities.add(cityConnections.get(c).get())
 					tempCity = c;
 				}		
+			
+			
 			tempEdges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
 			
 		}
+		System.out.println(tempCities.size());
 		if(tempCity!=null) 
 		{
 		cities.remove(tempCity);
@@ -178,6 +191,13 @@ public class GameState {
 		cities.add(i, new City(oldCity.getPoint(),oldCity.getName(),edgeTemps)); 
 		edgeTemps = new ArrayList<>();
 	}
+
+	
+	for(Edge e:edges)
+		for(City c: e.getCities())
+		{
+			System.out.println(c.getName());
+		}
 	System.out.println(edges.size());
 	
 	
