@@ -32,19 +32,7 @@ public class GamePanel extends JPanel implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		for (Rectangle rec : HandDrawer.clickableAdd) {
-
-			if (rec.contains(e.getPoint()))
-				System.out.println(1); // adds 1 train card
-		}
-		for (Rectangle rec : HandDrawer.clickableSub) {
-
-			if (rec.contains(e.getPoint()))
-				System.out.println(-1); // subtracts 1 card
-		}
 		
-		if ( HandDrawer.clickableArrow.get(0).contains(e.getPoint()))
-			HandDrawer.advanceCard(p, -1);
 		
 		repaint();
 	}
@@ -58,6 +46,30 @@ public class GamePanel extends JPanel implements MouseListener{
 		if(edgeIndex != -1) {
 			clickedEdgeIndecies.add(edgeIndex);
 			this.repaint();
+		}
+		
+		for (Rectangle rec : HandDrawer.clickableAdd) {
+
+			if (rec.contains(e.getPoint()))
+				System.out.println(1); // adds 1 train card
+			repaint();
+		}
+		for (Rectangle rec : HandDrawer.clickableSub) {
+
+			if (rec.contains(e.getPoint()))
+				System.out.println(-1); // subtracts 1 card
+			repaint();
+		}
+		
+		if ( HandDrawer.clickableArrow.get(0).contains(e.getPoint())) {
+			HandDrawer.advanceCard(p, -1);
+			System.out.println(-2);
+			repaint();
+		}
+		if ( HandDrawer.clickableArrow.get(1).contains(e.getPoint())) { 
+			HandDrawer.advanceCard(p, 1);
+			System.out.println(2);
+			repaint();
 		}
 	}
 	@Override
@@ -75,7 +87,7 @@ public class GamePanel extends JPanel implements MouseListener{
 		HandDrawer.drawHand(g, p);
 		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());
 		HandDrawer.drawContractCards(g, p.getContracts());
-		HandDrawer.advanceCard(p,1); // changes top contract card
+		
 		g.setColor(new Color(184, 134,11));
 		g.fillRect(1535, 0, 1920-1535, 1080);
 		g.setColor(Color.BLACK);
