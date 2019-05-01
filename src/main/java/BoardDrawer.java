@@ -89,6 +89,10 @@ public class BoardDrawer {
 	}
 	public static void drawBoard(Graphics g, ArrayList<Edge> edges) {
 		init();
+		//find edges indecies
+		for(int i = 0; i < citys.length; i++) {
+			//String ct1 = edges.get(arg0)
+		}
 		//
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, 1535, 755);

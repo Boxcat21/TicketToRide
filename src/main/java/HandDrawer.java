@@ -123,7 +123,7 @@ public class HandDrawer {
 			Collections.rotate(p.getContracts(), 1);
 		else if (direction > 0 )
 			Collections.rotate(p.getContracts(), -1);
-		drawContractCards(g, p.getContracts());
+		//drawContractCards(g, p.getContracts());
 	}
 
 	private static String getCount(String string, ArrayList<TrainCard> list) {

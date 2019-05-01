@@ -52,7 +52,8 @@ public class GamePanel extends JPanel implements MouseListener{
 	public void mouseExited(MouseEvent e) {}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		BoardDrawer.edgeClick(e);
+		Edge edge = BoardDrawer.edgeClick(e);
+		
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {}
