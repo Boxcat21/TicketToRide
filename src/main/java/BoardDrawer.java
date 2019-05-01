@@ -188,7 +188,7 @@ public class BoardDrawer {
 		}
 		System.out.println(game.getEdges());
 		for(int i = 0; i < game.getEdges().size(); i++) {
-			Edge ed = GameState.edges.get(i);
+			Edge ed = game.getEdges().get(i);
 			
 			String cc1 = ed.getCities().get(0).getName();
 			String cc2 = ed.getCities().get(1).getName();
