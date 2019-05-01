@@ -13,11 +13,10 @@ public class GamePanel extends JPanel implements MouseListener{
 	private GameState game;
 	private boolean fullscreen;
 	Player p; // temporary
-	
-	
+	private ArrayList<Integer> clickedEdgeIndecies;
 	public GamePanel() throws IOException{ 
-		//game = new GameState();
-		 p = new Player("Yeet"); // temporary testing player
+		game = new GameState();
+		p = new Player("Yeet"); // temporary testing player
 		p.addContractCard(new ContractCard(new City(null, "Elleh1", null), new City(null, "Elleh2", null), 20));
 		p.addContractCard(new ContractCard(new City(null, "Elleh2", null), new City(null, "Elleh3", null), 20));
 		p.addContractCard(new ContractCard(new City(null, "Elleh3", null), new City(null, "Elleh4", null), 20));
@@ -25,6 +24,8 @@ public class GamePanel extends JPanel implements MouseListener{
 		setVisible(true);
 		addMouseListener(this);
 		HandDrawer hd = new HandDrawer();
+		
+		clickedEdgeIndecies = new ArrayList<Integer>();
 		
 		
 	}
@@ -41,10 +42,10 @@ public class GamePanel extends JPanel implements MouseListener{
 	public void mouseExited(MouseEvent e) {}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int edgeIndex = BoardDrawer.edgeClick(e);
+		int edgeIndex = BoardDrawer.edgeClick(e, game);
 		if(edgeIndex != -1) {
+			clickedEdgeIndecies.add(edgeIndex);
 			this.repaint();
-			//do thing with BoardDrawer.drawBoard();
 		}
 		
 		for (Rectangle rec : HandDrawer.clickableAdd) {
@@ -81,7 +82,8 @@ public class GamePanel extends JPanel implements MouseListener{
 		//g2.setColor(Color.ORANGE);
 		//g2.fillRect(1441, 0, 480, 1080);
 		//g2.fillRect(0, 721, 1920, 360);
-		BoardDrawer.drawBoard(g, new ArrayList<Edge>());
+//		System.out.println(clickedEdgeIndecies);
+		BoardDrawer.drawBoard(g, this.clickedEdgeIndecies);
 		HandDrawer.drawHand(g, p);
 		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());
 		HandDrawer.drawContractCards(g, p.getContracts());
