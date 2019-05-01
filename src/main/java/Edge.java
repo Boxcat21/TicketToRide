@@ -51,8 +51,12 @@ public class Edge {
 			return null;
 	}
 	public boolean equals(Edge other) {
-		if(this.cities.equals(other.cities))
-			return true;
-		return false;
+		for(int i = 0; i < this.cities.size(); i++) {
+			if(!(other.cities.contains(cities.get(i))))
+				return false;
+		}
+		if(!(this.color.equals(other.color)))
+			return false;
+		return true;
 	}
 }

@@ -13,6 +13,9 @@ import java.util.Scanner;
 import java.util.Stack;
 
 public class GameState {
+	//i made this public, neccessary for graphics so the whole datastructure doesnt need to be remade, can just refer to the index
+	public static ArrayList<Edge> edges;
+	
 	private Queue<ContractCard> contractList;
 	private Stack<TrainCard> trainCardDeck;
 	private ArrayList<TrainCard> discardTrainCard;
@@ -20,7 +23,6 @@ public class GameState {
 	private Queue<Player> players;
 	private Player curPlayer;
 	private int turnCounter;
-	private ArrayList<Edge> edges;
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
 			"Green", "Rainbow"};
@@ -250,18 +252,17 @@ public class GameState {
 
 	public boolean chooseTrainCard(int choice) {
 		TrainCard t = displayCards.remove(choice);
-
-		if (t.getColor().equals("Rainbow")) {
+		if(turnCounter <= 0) {
+			System.out.println("Doh! That's a no-go, bro!");
+			}
+		else if (t.getColor().equals("Rainbow")) {
 			turnCounter -= 2;
-			if (turnCounter < 0)
-				return false;
 		} else
 			turnCounter--;
 
 		curPlayer.addTrainCard(t);
 		displayCards.add(trainCardDeck.pop());
 		checkTurn();
-
 		return true;
 	}
 
@@ -394,10 +395,10 @@ public class GameState {
 				break;
 			}
 		
-		if (this.turnCounter == 0 && !lastRound) {
-			endTurn(); 
+		/*if (turnCounter <= 0 && !lastRound) {
+			endTurn();
 			return;
-		}
+		}*/
 		if ( lastRound ) //still need to fix to run one more round before ending 
 			endGame();
 		checkContracts();

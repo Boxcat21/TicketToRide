@@ -27,11 +27,11 @@ public class BoardDrawer {
 	 * */
 	private static String[] citys;//35
 	private static Point[] points;//35
+	
 	private static int[][] connectedData; //201 indecies of points
 	private static int[] lengths; //201
 	private static String[] colors; //201
 	private static ArrayList<Shape> rotatedRects; //201
-	private static ArrayList<Edge> edges;
 	private static void init() {
 		//rotato bato
 		rotatedRects = new ArrayList<Shape>();
@@ -89,6 +89,10 @@ public class BoardDrawer {
 	}
 	public static void drawBoard(Graphics g, ArrayList<Edge> edges) {
 		init();
+		//find edges indecies
+		for(int i = 0; i < citys.length; i++) {
+			//String ct1 = edges.get(arg0)
+		}
 		//
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, 1535, 755);
@@ -164,12 +168,30 @@ public class BoardDrawer {
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
 	}
-	public static void edgeClick(MouseEvent e) {
+	public static int edgeClick(MouseEvent e) {
 		Point p = e.getPoint();
+		String c1 = null, c2 = null;
 		for(int i = 0; i < rotatedRects.size(); i++) {
 			if(rotatedRects.get(i).contains(e.getPoint())) {
+				int i1 = connectedData[i][0];
+				int i2 = connectedData[i][1];
 				
+				c1 = citys[i1];
+				c2 = citys[i2];
 			}
 		}
+		for(int i = 0; i < GameState.edges.size(); i++) {
+			Edge ed = GameState.edges.get(i);
+			
+			String cc1 = ed.getCities().get(0).getName();
+			String cc2 = ed.getCities().get(1).getName();
+			
+			ArrayList<String> test = new ArrayList<String>();
+			test.add(cc1);test.add(cc2);
+			
+			if(test.contains(c1) && test.contains(c2))
+				return i;
+		}
+		return -1;
 	}
 }
