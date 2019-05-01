@@ -35,20 +35,24 @@ public class GamePanel extends JPanel implements MouseListener{
 
 			if (rec.contains(e.getPoint()))
 				System.out.println(1); // adds 1 train card
+			repaint();
 		}
 		for (Rectangle rec : HandDrawer.clickableSub) {
 
 			if (rec.contains(e.getPoint()))
 				System.out.println(-1); // subtracts 1 card
+			repaint();
 		}
 		
 		if ( HandDrawer.clickableArrow.get(0).contains(e.getPoint())) {
 			HandDrawer.advanceCard(p, -1);
 			System.out.println(-2);
+			repaint();
 		}
 		if ( HandDrawer.clickableArrow.get(1).contains(e.getPoint())) { 
 			HandDrawer.advanceCard(p, 1);
 			System.out.println(2);
+			repaint();
 		}
 		
 		repaint();
