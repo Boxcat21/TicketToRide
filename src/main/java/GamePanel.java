@@ -31,6 +31,22 @@ public class GamePanel extends JPanel implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		
+		
+		repaint();
+	}
+	@Override
+	public void mouseEntered(MouseEvent e) {	}
+	@Override
+	public void mouseExited(MouseEvent e) {}
+	@Override
+	public void mousePressed(MouseEvent e) {
+		int edgeIndex = BoardDrawer.edgeClick(e);
+		if(edgeIndex != -1) {
+			this.repaint();
+			//do thing with BoardDrawer.drawBoard();
+		}
+		
 		for (Rectangle rec : HandDrawer.clickableAdd) {
 
 			if (rec.contains(e.getPoint()))
@@ -54,20 +70,6 @@ public class GamePanel extends JPanel implements MouseListener{
 			System.out.println(2);
 			repaint();
 		}
-		
-		repaint();
-	}
-	@Override
-	public void mouseEntered(MouseEvent e) {	}
-	@Override
-	public void mouseExited(MouseEvent e) {}
-	@Override
-	public void mousePressed(MouseEvent e) {
-		int edgeIndex = BoardDrawer.edgeClick(e);
-		if(edgeIndex != -1) {
-			this.repaint();
-			//do thing with BoardDrawer.drawBoard();
-		}
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {}
@@ -83,7 +85,7 @@ public class GamePanel extends JPanel implements MouseListener{
 		HandDrawer.drawHand(g, p);
 		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());
 		HandDrawer.drawContractCards(g, p.getContracts());
-		HandDrawer.advanceCard(p,1); // changes top contract card
+		
 		g.setColor(new Color(184, 134,11));
 		g.fillRect(1535, 0, 1920-1535, 1080);
 		g.setColor(Color.BLACK);
