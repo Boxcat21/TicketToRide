@@ -208,8 +208,6 @@ public class GameState {
 		cities.add(i, new City(oldCity.getPoint(),oldCity.getName(),edgeTemps)); 
 		edgeTemps = new ArrayList<>();
 	}
-	
-	System.out.println( cities.get(10).getAllEdges().get(2).getColor());
 	for(City c:cities)
 	{
 		ArrayList<Edge> edgeTemps = new ArrayList<>();

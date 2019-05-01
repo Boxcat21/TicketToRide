@@ -87,7 +87,7 @@ public class BoardDrawer {
 		}
 		return -1;
 	}
-	public static void drawBoard(Graphics g, ArrayList<Edge> edges) {
+	public static void drawBoard(Graphics g, ArrayList<Integer> eds) {
 		init();
 		//find edges indecies
 		for(int i = 0; i < citys.length; i++) {
@@ -119,7 +119,12 @@ public class BoardDrawer {
 			    color = (Color)field.get(null);
 			} catch (Exception e) { color = null;}
 			
-			drawRotatedRect(g, x1, y1, angle, distance, 10, color);
+			if(!eds.contains(i))
+				drawRotatedRect(g, x1, y1, angle, distance, 10, color);
+			else {
+				g.setColor(Color.BLACK);
+				g.drawLine(x1, y1, x2, y2);
+			}
 		}
 		//City points from text file (prob in constructor)
 		//Cities NEED TO LABEL THE CITIES
@@ -168,7 +173,7 @@ public class BoardDrawer {
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
 	}
-	public static int edgeClick(MouseEvent e) {
+	public static int edgeClick(MouseEvent e, GameState game) {
 		Point p = e.getPoint();
 		String c1 = null, c2 = null;
 		for(int i = 0; i < rotatedRects.size(); i++) {
@@ -178,13 +183,17 @@ public class BoardDrawer {
 				
 				c1 = citys[i1];
 				c2 = citys[i2];
+				break;
 			}
 		}
-		for(int i = 0; i < GameState.edges.size(); i++) {
+		System.out.println(game.getEdges());
+		for(int i = 0; i < game.getEdges().size(); i++) {
 			Edge ed = GameState.edges.get(i);
 			
 			String cc1 = ed.getCities().get(0).getName();
 			String cc2 = ed.getCities().get(1).getName();
+			
+			System.out.println("Stuff: " + cc1 + " | " + cc2);
 			
 			ArrayList<String> test = new ArrayList<String>();
 			test.add(cc1);test.add(cc2);
