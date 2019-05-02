@@ -23,7 +23,7 @@ public class GameState {
 	private ArrayList<Edge> edges;
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
-			"Green", "Rainbow"};
+			"Green", "Wild"};
 	public static final String[] PLAYER_COLORS = {"Red", "Green", "Yellow", "Blue"};
 	private String longestPath;
 	private String mostContracts;
@@ -207,7 +207,7 @@ public class GameState {
 		edgeTemps = new ArrayList<>();
 	}
 	
-	System.out.println( cities.get(10).getAllEdges().get(2).getColor());
+	//System.out.println( cities.get(10).getAllEdges().get(2).getColor());
 	for(City c:cities)
 	{
 		ArrayList<Edge> edgeTemps = new ArrayList<>();
@@ -309,18 +309,24 @@ public class GameState {
 	}
 
 	public boolean chooseTrainCard(int choice) {
-		TrainCard t = displayCards.remove(choice);
-		if(turnCounter <= 0) {
-			System.out.println("Doh! That's a no-go, bro!");
-			}
-		else if (t.getColor().equals("Rainbow")) {
+		TrainCard t = displayCards.get(choice);
+		 if (t.getColor().equals("Wild") && turnCounter != 1) {
+			 t = displayCards.remove(choice);
+			curPlayer.addTrainCard(t);
+			displayCards.add(trainCardDeck.pop());
 			turnCounter -= 2;
-		} else
+		} else if(!t.getColor().equals("Wild")) {
+			 t = displayCards.remove(choice);
+			curPlayer.addTrainCard(t);
+			displayCards.add(trainCardDeck.pop());
 			turnCounter--;
-
-		curPlayer.addTrainCard(t);
-		displayCards.add(trainCardDeck.pop());
+			}
+		else {
+			System.out.println("Stop right there, criminal scum!");
+		}
 		checkTurn();
+		System.out.println(turnCounter);
+		System.out.println(curPlayer.getTrainCards());
 		return true;
 	}
 
@@ -453,10 +459,10 @@ public class GameState {
 				break;
 			}
 		
-		/*if (turnCounter <= 0 && !lastRound) {
+		if (turnCounter <= 0 && !lastRound) {
 			endTurn();
 			return;
-		}*/
+		}
 		if ( lastRound ) //still need to fix to run one more round before ending 
 			endGame();
 		checkContracts();
@@ -466,7 +472,7 @@ public class GameState {
 	private boolean checkWilds() {
 		int count = 0;
 		for ( TrainCard t : displayCards) {
-			if ( t.getColor().equals("Rainbow"))
+			if ( t.getColor().equals("Wild"))
 				count++;
 			if ( count == 3) 
 				return true;
