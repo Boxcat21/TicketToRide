@@ -17,8 +17,12 @@ import java.util.TreeMap;
 public class GameState {
 	// i made this public, neccessary for graphics so the whole datastructure doesnt
 	// need to be remade, can just refer to the index
+<<<<<<< HEAD
 	public static ArrayList<Edge> edges;
 
+=======
+	private ArrayList<Edge> edges;
+>>>>>>> c7aaf2f9d3d20928be3e9daa7ca224be1a77729f
 	private Queue<ContractCard> contractList;
 	private Stack<TrainCard> trainCardDeck;
 	private ArrayList<TrainCard> discardTrainCard;
@@ -28,7 +32,11 @@ public class GameState {
 	private int turnCounter;
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
+<<<<<<< HEAD
 			"Green", "Rainbow" };
+=======
+			"Green"};
+>>>>>>> c7aaf2f9d3d20928be3e9daa7ca224be1a77729f
 	public static final String[] PLAYER_COLORS = { "Red", "Green", "Yellow", "Blue" };
 	private String longestPath;
 	private String mostContracts;
@@ -36,19 +44,32 @@ public class GameState {
 	private ArrayList<City> passedCities;
 
 	public GameState() throws FileNotFoundException {
+<<<<<<< HEAD
 		// Reading in contracts
 
+=======
+		//init datastructures
+>>>>>>> c7aaf2f9d3d20928be3e9daa7ca224be1a77729f
 		cities = new ArrayList<>();
 		contractList = new LinkedList<>();
+		passedCities = new ArrayList<>();
+		trainCardDeck = new Stack<>();
+		discardTrainCard = new ArrayList<>();
+		displayCards = new ArrayList<>();
+		players = new LinkedList<>();
+		cities = new ArrayList<>();
+		edges = new ArrayList<>();
+		//init superlatives
 		longestPath = "";
 		mostContracts = "";
-		this.passedCities = new ArrayList<City>();
-		Scanner scan = new Scanner(new File("tickets.txt"));
-		int counter = Integer.parseInt(scan.nextLine());
-		for (int i = 0; i < counter; i++) {
-			String[] temp = scan.nextLine().split("|");
-			City one = null;
-			City two = null;
+		
+		//scan tickets/contracts
+		Scanner sc = new Scanner(new File("tickets.txt"));
+		int cnt = Integer.parseInt(sc.nextLine());
+		
+		for (int i = 0; i < cnt; i++) {
+			String[] temp = sc.nextLine().split("|");
+			City one = null, two = null;
 			for (City c : cities) {
 				if (c.getName().equals(temp[1]))
 					one = c;
@@ -58,30 +79,37 @@ public class GameState {
 			contractList.add(new ContractCard(one, two, Integer.parseInt(temp[0])));
 		}
 
+<<<<<<< HEAD
 		// Adding train cards
+=======
+		// Adding train cards - deck
+>>>>>>> c7aaf2f9d3d20928be3e9daa7ca224be1a77729f
 		ArrayList<TrainCard> list = new ArrayList<TrainCard>();
-		trainCardDeck = new Stack();
 		for (int j = 0; j < 8; j++)
-			for (int i = 0; i < 12; i++)
+			for (int i = 0; i < 11; i++)
 				trainCardDeck.add(new TrainCard(this.TRAIN_COLORS[j]));
-
 		for (int i = 0; i < 14; i++)
 			trainCardDeck.add(new TrainCard("Wild"));
 		Collections.shuffle(trainCardDeck);
-		// discard list
-		discardTrainCard = new ArrayList<>();
-		// display cards
-		displayCards = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
+		// Adding train cards - display
+		for (int i = 0; i < 5; i++)
 			displayCards.add(trainCardDeck.pop());
+<<<<<<< HEAD
 		}
 
 		// adding players, cur player and turncounter
 		players = new LinkedList<>();
 		for (int i = 0; i < this.PLAYER_COLORS.length; i++)
+=======
+		
+		//init players
+		for (int i = 0; i < PLAYER_COLORS.length; i++)
+>>>>>>> c7aaf2f9d3d20928be3e9daa7ca224be1a77729f
 			players.add(new Player(PLAYER_COLORS[i]));
+		//setup
 		curPlayer = players.poll();
 		turnCounter = 2;
+<<<<<<< HEAD
 		/*
 		 * 
 		 * 
@@ -253,6 +281,70 @@ public class GameState {
 
 //			}
 //		}
+=======
+
+		// adds all the cities with null edge arraylist
+		sc = new Scanner(new File("Cities"));
+		while (sc.hasNextLine()) {
+			String[] temp1 = sc.nextLine().split(",");
+			cities.add(new City(new Point(Integer.parseInt(temp1[1]), Integer.parseInt(temp1[2])), temp1[0], new ArrayList<Edge>()));
+		}
+
+		// Puts all the cities and their connections in a hashmap of string, list
+		HashMap<String, ArrayList<String>> cityConnections = new HashMap<>();
+		sc = new Scanner(new File("ConnectedCities.txt"));
+		while (sc.hasNextLine()) {
+			String ln1 = sc.nextLine();
+			String[] tempFirstTwo = ln1.substring(0, ln1.indexOf('|') + 1).split(",");
+			String[] tempLastTwo = ln1.substring(ln1.indexOf('|') + 1, ln1.length()).split(",");
+			String key = tempFirstTwo[0];
+			if (cityConnections.containsKey(key)) {
+				ArrayList<String> temp = cityConnections.get(key);
+				temp.add(tempFirstTwo[1]); //you need to add it back to the hash map, temp isnt stored anywhere
+				//(I have commented on the line below what i think should be added) 
+				//cityConnections.put(temp);
+			} else
+				cityConnections.put(key, new ArrayList<String>());
+		}
+		sc = new Scanner(new File("ConnectedCities.txt"));
+		while (sc.hasNextLine()) {
+			String ln1 = sc.nextLine();
+			String[] tempFirstTwo = ln1.substring(0, ln1.indexOf('|') + 1).split(",");
+			String[] tempLastTwo = ln1.substring(ln1.indexOf('|') + 1, ln1.length()).split(",");
+			String key = tempFirstTwo[0];
+			String value = tempFirstTwo[1];
+			ArrayList<Edge> tempEdges = new ArrayList<Edge>();
+			ArrayList<City> tempCities = new ArrayList<City>();
+			City tempCity = null;
+
+			if (cityConnections.get(key).contains(value)) {
+				for (City c : cities)
+					if (c.getName().equals(key)) {
+						tempCities.add(c);
+//					tempCities.add(cityConnections.get(c).get())
+						tempCity = c;
+					}
+
+				tempEdges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
+
+			}
+			System.out.println(tempCities.size());
+			if (tempCity != null) {
+				cities.remove(tempCity);
+				cities.add(new City(tempCity.getPoint(), tempCity.getName(), tempEdges));
+			}
+
+			tempEdges = new ArrayList<Edge>();
+			tempCity = null;
+		}
+		for (City c : cities) {
+			edges.add(c.getAllEdges().get(0));
+			if (c.getAllEdges().size() > 1) {
+				edges.add(c.getAllEdges().get(1));
+
+			}
+		}
+>>>>>>> c7aaf2f9d3d20928be3e9daa7ca224be1a77729f
 		for (int i = cities.size() - 1; i >= 0; i--) {
 			ArrayList<Edge> edgeTemps = new ArrayList<>();
 			for (Edge e : edges) {
@@ -261,6 +353,7 @@ public class GameState {
 				{
 					edgeTemps.add(e);
 				}
+<<<<<<< HEAD
 
 			}
 			City oldCity = cities.remove(i);
@@ -275,6 +368,21 @@ public class GameState {
 			if (c.getName().equals(name))
 				return c;
 		return null;
+=======
+
+			}
+			City oldCity = cities.remove(i);
+			cities.add(i, new City(oldCity.getPoint(), oldCity.getName(), edgeTemps));
+			edgeTemps = new ArrayList<>();
+		}
+
+		for (Edge e : edges)
+			for (City c : e.getCities()) {
+				System.out.println(c.getName());
+			}
+		System.out.println(edges.size());
+
+>>>>>>> c7aaf2f9d3d20928be3e9daa7ca224be1a77729f
 	}
 
 	public Player getCurPlayer() {
