@@ -141,12 +141,17 @@ public class GameState {
 			{
 				City c = cityHelper(s);
 				City orig = cityHelper(key);
-				if (value.equals(s) && !previous.containsKey(orig))// if the second city is the same as the city that is													// currently "s", one of the cities connected to c
-				{
+				for(City ci: previous.keySet())
+					System.out.print(ci.getName()+" ");
+				System.out.println();
+				if (value.equals(s) && !previous.containsKey(orig))//This isnt working its not checking the stuff right
+			{
+//					System.out.println(s+" "+key);
 					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
 					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
 					previous.put(orig, c);
 					previous.put(c, orig);
+		
 
 					edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
 				}
@@ -156,7 +161,15 @@ public class GameState {
 
 		}
 		
-		scan = new Scanner(new File("Doubles.txt"));
+		System.out.println(edges.size());
+		for(Edge e: edges)
+		{
+			for(City c:e.getCities())
+				System.out.print(c.getName()+" ");
+			System.out.println();
+		}
+	
+		/*scan = new Scanner(new File("Doubles.txt"));
 		previous = new HashMap<>();
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
@@ -183,7 +196,16 @@ public class GameState {
 
 			tempCities = new ArrayList<>();
 
-		}
+		}*/
+		
+		
+//		for(City c:cities)
+//		for(Edge e: edges)
+//		{
+//			ArrayList<City> temp = e.getCities();
+//			if(temp.contains(c))
+//				
+//		}
 
 		
 
