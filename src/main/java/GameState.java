@@ -125,14 +125,6 @@ public class GameState {
 
 		}
 
-		int counter1 = 0;
-		for (String s : cityConnections.keySet()) {
-			for (String cityName : cityConnections.get(s)) {
-				counter1++;
-			}
-		}
-		System.out.println(counter1);
-		counter1 = 0;
 
 		// Make the list of edges
 		ArrayList<String> strings = new ArrayList<>();
@@ -151,7 +143,6 @@ public class GameState {
 				City orig = cityHelper(key);
 				if (value.equals(s) && !previous.containsKey(orig))// if the second city is the same as the city that is													// currently "s", one of the cities connected to c
 				{
-					counter1++;
 					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
 					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
 					previous.put(orig, c);
@@ -181,7 +172,6 @@ public class GameState {
 				City orig = cityHelper(key);
 				if (value.equals(s)&& !previous.containsKey(orig))// if the second city is the same as the city that is													// currently "s", one of the cities connected to c
 				{
-					counter1++;
 					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
 					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
 
@@ -196,12 +186,6 @@ public class GameState {
 		}
 
 		
-		System.out.println(counter1);
-		for (Edge e : edges) {
-			for (int i = 0; i < e.getCities().size(); i++)
-				System.out.print(e.getCities().get(i).getName() + " ");
-			System.out.println();
-		}
 
 
 		for (int i = cities.size() - 1; i >= 0; i--) {
@@ -220,7 +204,6 @@ public class GameState {
 		}
 
 	}
-
 	private City cityHelper(String name) {
 		for (City c : cities)
 			if (c.getName().equals(name))
@@ -307,17 +290,24 @@ public class GameState {
 	}
 
 	public boolean chooseTrainCard(int choice) {
-		TrainCard t = displayCards.remove(choice);
-		if (turnCounter <= 0) {
-			System.out.println("Doh! That's a no-go, bro!");
-		} else if (t.getColor().equals("Rainbow")) {
+		TrainCard t = displayCards.get(choice);
+		 if (t.getColor().equals("Wild") && turnCounter != 1) {
+			 t = displayCards.remove(choice);
+			curPlayer.addTrainCard(t);
+			displayCards.add(trainCardDeck.pop());
 			turnCounter -= 2;
-		} else
+		} else if(!t.getColor().equals("Wild")) {
+			 t = displayCards.remove(choice);
+			curPlayer.addTrainCard(t);
+			displayCards.add(trainCardDeck.pop());
 			turnCounter--;
-
-		curPlayer.addTrainCard(t);
-		displayCards.add(trainCardDeck.pop());
+			}
+		else {
+			System.out.println("Stop right there, criminal scum!");
+		}
 		checkTurn();
+		System.out.println(turnCounter);
+		System.out.println(curPlayer.getTrainCards());
 		return true;
 	}
 
@@ -431,25 +421,25 @@ public class GameState {
 		return p.toString();
 	}
 
-	public void checkTurn() {
+	public void checkTurn() {//does not continue to next round, due to the turn counter
 		if (checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
 			Collections.shuffle(trainCardDeck);
-			for (int i = 0; i < 5; i++)
+for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
 		}
 		boolean lastRound = false;
-		for (Player p : players)
+for (Player p : players)
 			if (p.getTrains() < 3) {
 				lastRound = true;
 				break;
 			}
 
-		/*
-		 * if (turnCounter <= 0 && !lastRound) { endTurn(); return; }
-		 */
-		if (lastRound) // still need to fix to run one more round before ending
+		
+		 if (turnCounter <= 0 && !lastRound) { endTurn(); return; }
+		 
+		if (lastRound) // still need to fix to run one more round before endin
 			endGame();
 		checkContracts();
 		return;
