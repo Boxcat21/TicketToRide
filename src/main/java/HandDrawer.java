@@ -116,6 +116,7 @@ public class HandDrawer {
 		drawArrow(g, 1315, 807, 1350, 807);
 		
 		
+		
 	}
 	
 	public static void advanceCard(Player p, int direction) {

@@ -92,6 +92,10 @@ public class GamePanel extends JPanel implements MouseListener{
 		g.fillRect(1535, 0, 1920-1535, 1080);
 		g.setColor(Color.BLACK);
 		g.drawRect(1535, 0, 1920-1535, 1080);
+		
+		ArrayList<Player> temp = new ArrayList<>();
+		temp.add(p);
+		DataDrawer.drawData(g, temp);
 	}
 	
 	
