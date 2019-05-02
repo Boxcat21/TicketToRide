@@ -1,4 +1,6 @@
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 
 import javax.imageio.*;
 import java.awt.Graphics;
@@ -87,7 +89,7 @@ public class BoardDrawer {
 		}
 		return -1;
 	}
-	public static void drawBoard(Graphics g, ArrayList<Edge> edges) {
+	public static void drawBoard(Graphics g, ArrayList<Integer> eds) {
 		init();
 		//find edges indecies
 		for(int i = 0; i < citys.length; i++) {
@@ -119,7 +121,12 @@ public class BoardDrawer {
 			    color = (Color)field.get(null);
 			} catch (Exception e) { color = null;}
 			
-			drawRotatedRect(g, x1, y1, angle, distance, 10, color);
+			if(!eds.contains(i))
+				drawRotatedRect(g, x1, y1, angle, distance, 10, color);
+			else {
+				g.setColor(Color.BLACK);
+				g.drawLine(x1, y1, x2, y2);
+			}
 		}
 		//City points from text file (prob in constructor)
 		//Cities NEED TO LABEL THE CITIES
@@ -159,8 +166,11 @@ public class BoardDrawer {
 		Shape rotatedRect = tran.createTransformedShape(rect);
 		
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(color);
+		Composite a = g2d.getComposite();
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 9 * 0.1f));
+		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),30));
 		g2d.fill(rotatedRect);
+		g2d.setComposite(a);
 		g.setColor(Color.BLACK);
 		g2d.draw(rotatedRect);
 		rotatedRects.add(rotatedRect);
@@ -168,23 +178,36 @@ public class BoardDrawer {
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
 	}
-	public static Edge edgeClick(MouseEvent e) {
+	public static int edgeClick(MouseEvent e, GameState game) {
 		Point p = e.getPoint();
+		String c1 = null, c2 = null;
 		for(int i = 0; i < rotatedRects.size(); i++) {
 			if(rotatedRects.get(i).contains(e.getPoint())) {
 				int i1 = connectedData[i][0];
 				int i2 = connectedData[i][1];
 				
-				ArrayList<City> temp = new ArrayList<City>();
-				//temp.add(citys[i1]);
-				//temp.add(citys[i2]);
-				
-				String color = colors[i];
-				int length = lengths[i];
-				
-				return new Edge(length, color, temp);
+				c1 = citys[i1];
+				c2 = citys[i2];
+				break;
 			}
 		}
-		return null;
+		if(c1 == null && c2 == null)
+			return -1;
+		System.out.println(game.getEdges());
+		for(int i = 0; i < game.getEdges().size(); i++) {
+			Edge ed = game.getEdges().get(i);
+			
+			String cc1 = ed.getCities().get(0).getName();
+			String cc2 = ed.getCities().get(1).getName();
+			
+			System.out.println("Stuff: " + cc1 + " | " + cc2);
+			
+			ArrayList<String> test = new ArrayList<String>();
+			test.add(cc1);test.add(cc2);
+			
+			if(test.contains(c1) && test.contains(c2))
+				return i;
+		}
+		return -1;
 	}
 }

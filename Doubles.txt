@@ -1,0 +1,22 @@
+Montreal,Boston|2,gray
+New York,Pittsburgh|2,green
+New York,Washington|2,black
+New York,Boston|2,red
+Duluth,Omaha|2,gray
+Chicago,Saint Louis|2,white
+Chicago,Pittsburgh|3,black
+Washington,Raleigh|2,gray
+Omaha,Kansas City|1,gray
+Saint Louis,Kansas City|2,pink
+Raleigh,Atlanta|2,gray
+Vancouver,Seattle|1,gray
+Seattle,Portland|1,gray
+Portland,San Francisco|5,pink
+Salt Lake City,San Francisco|5,white
+Salt Lake City,Denver|3,red
+Denver,Kansas City|4,black
+Oklahoma City,Dallas|2,gray
+Oklahoma City,Kansas City|2,gray
+Atlanta,New Orleans|4,orange
+San Francisco,Los Angeles|3,yellow
+Dallas,Houston|1,gray
