@@ -27,7 +27,7 @@ public class GameState {
 	private int turnCounter;
 	private ArrayList<City> cities;
 	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
-			"Green"};
+			"Green" };
 	public static final String[] PLAYER_COLORS = { "Red", "Green", "Yellow", "Blue" };
 	private String longestPath;
 	private String mostContracts;
@@ -35,27 +35,19 @@ public class GameState {
 	private ArrayList<City> passedCities;
 
 	public GameState() throws FileNotFoundException {
-		//init datastructures
+		// Reading in contracts
+
 		cities = new ArrayList<>();
 		contractList = new LinkedList<>();
-		passedCities = new ArrayList<>();
-		trainCardDeck = new Stack<>();
-		discardTrainCard = new ArrayList<>();
-		displayCards = new ArrayList<>();
-		players = new LinkedList<>();
-		cities = new ArrayList<>();
-		edges = new ArrayList<>();
-		//init superlatives
 		longestPath = "";
 		mostContracts = "";
-		
-		//scan tickets/contracts
-		Scanner sc = new Scanner(new File("tickets.txt"));
-		int cnt = Integer.parseInt(sc.nextLine());
-		
-		for (int i = 0; i < cnt; i++) {
-			String[] temp = sc.nextLine().split("|");
-			City one = null, two = null;
+		this.passedCities = new ArrayList<City>();
+		Scanner scan = new Scanner(new File("tickets.txt"));
+		int counter = Integer.parseInt(scan.nextLine());
+		for (int i = 0; i < counter; i++) {
+			String[] temp = scan.nextLine().split("|");
+			City one = null;
+			City two = null;
 			for (City c : cities) {
 				if (c.getName().equals(temp[1]))
 					one = c;
@@ -65,84 +57,153 @@ public class GameState {
 			contractList.add(new ContractCard(one, two, Integer.parseInt(temp[0])));
 		}
 
-		// Adding train cards - deck
+		// Adding train cards
 		ArrayList<TrainCard> list = new ArrayList<TrainCard>();
+		trainCardDeck = new Stack();
 		for (int j = 0; j < 8; j++)
-			for (int i = 0; i < 11; i++)
+			for (int i = 0; i < 12; i++)
 				trainCardDeck.add(new TrainCard(this.TRAIN_COLORS[j]));
+
 		for (int i = 0; i < 14; i++)
 			trainCardDeck.add(new TrainCard("Wild"));
 		Collections.shuffle(trainCardDeck);
-		// Adding train cards - display
-		for (int i = 0; i < 5; i++)
-			displayCards.add(trainCardDeck.pop());	
-		//init players
-		for (int i = 0; i < PLAYER_COLORS.length; i++)
-			players.add(new Player(PLAYER_COLORS[i]));
-		//setup
-		curPlayer = players.poll();
-
-		// adds all the cities with null edge arraylist
-		sc = new Scanner(new File("Cities"));
-		while (sc.hasNextLine()) {
-			String[] temp1 = sc.nextLine().split(",");
-			cities.add(new City(new Point(Integer.parseInt(temp1[1]), Integer.parseInt(temp1[2])), temp1[0], new ArrayList<Edge>()));
+		// discard list
+		discardTrainCard = new ArrayList<>();
+		// display cards
+		displayCards = new ArrayList<>();
+		for (int i = 0; i < 5; i++) {
+			displayCards.add(trainCardDeck.pop());
 		}
+
+		// adding players, cur player and turncounter
+		players = new LinkedList<>();
+		for (int i = 0; i < this.PLAYER_COLORS.length; i++)
+			players.add(new Player(PLAYER_COLORS[i]));
+		curPlayer = players.poll();
+		turnCounter = 2;
+		/*
+		 * 
+		 * 
+		 * Cities and Edges
+		 * 
+		 * 
+		 * 
+		 */
+
+		// edges and cities
+		cities = new ArrayList<>();
+		edges = new ArrayList<>();
+		// adds all the cities with null edge arraylist
+		scan = new Scanner(new File("Cities"));
+		while (scan.hasNextLine()) {
+			String[] temp1 = scan.nextLine().split(",");
+			cities.add(new City(new Point(Integer.parseInt(temp1[1]), Integer.parseInt(temp1[2])), temp1[0],
+					new ArrayList<Edge>()));
+
+		}
+
+		// At this point each city is initialized with the correct name and point of the
+		// city.
+		// The only thing empty for each city is the arraylist inside; it's initialized
+		// but it is empty
 
 		// Puts all the cities and their connections in a hashmap of string, list
 		HashMap<String, ArrayList<String>> cityConnections = new HashMap<>();
-		sc = new Scanner(new File("ConnectedCities.txt"));
-		while (sc.hasNextLine()) {
-			String ln1 = sc.nextLine();
-			String[] tempFirstTwo = ln1.substring(0, ln1.indexOf('|') + 1).split(",");
-			String[] tempLastTwo = ln1.substring(ln1.indexOf('|') + 1, ln1.length()).split(",");
+		scan = new Scanner(new File("ConnectedCities.txt"));
+		while (scan.hasNextLine()) {
+			String line1 = scan.nextLine();
+			String[] tempFirstTwo = line1.substring(0, line1.indexOf('|')).split(",");
 			String key = tempFirstTwo[0];
 			if (cityConnections.containsKey(key)) {
 				ArrayList<String> temp = cityConnections.get(key);
-				temp.add(tempFirstTwo[1]); //you need to add it back to the hash map, temp isnt stored anywhere
-				//(I have commented on the line below what i think should be added) 
-				//cityConnections.put(temp);
-			} else
-				cityConnections.put(key, new ArrayList<String>());
+				temp.add(tempFirstTwo[1]);
+			} else {
+				ArrayList<String> temp = new ArrayList<>();
+				temp.add(tempFirstTwo[1]);
+				cityConnections.put(key, temp);
+			}
+
 		}
-		sc = new Scanner(new File("ConnectedCities.txt"));
-		while (sc.hasNextLine()) {
-			String ln1 = sc.nextLine();
-			String[] tempFirstTwo = ln1.substring(0, ln1.indexOf('|') + 1).split(",");
-			String[] tempLastTwo = ln1.substring(ln1.indexOf('|') + 1, ln1.length()).split(",");
+
+		int counter1 = 0;
+		for (String s : cityConnections.keySet()) {
+			for (String cityName : cityConnections.get(s)) {
+				counter1++;
+			}
+		}
+		System.out.println(counter1);
+		counter1 = 0;
+
+		// Make the list of edges
+		ArrayList<String> strings = new ArrayList<>();
+		HashMap<City, City> previous = new HashMap<>();
+		scan = new Scanner(new File("ConnectedCities.txt"));
+		while (scan.hasNextLine()) {
+			String line = scan.nextLine();
+			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");
+			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.length()).split(",");
+			ArrayList<City> tempCities = new ArrayList<>();
 			String key = tempFirstTwo[0];
 			String value = tempFirstTwo[1];
-			ArrayList<Edge> tempEdges = new ArrayList<Edge>();
-			ArrayList<City> tempCities = new ArrayList<City>();
-			City tempCity = null;
+			for (String s : cityConnections.get(key))// for every city that is connected to the city called "key"
+			{
+				City c = cityHelper(s);
+				City orig = cityHelper(key);
+				if (value.equals(s) && !previous.containsKey(orig))// if the second city is the same as the city that is													// currently "s", one of the cities connected to c
+				{
+					counter1++;
+					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
+					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
+					previous.put(orig, c);
+					previous.put(c, orig);
 
-			if (cityConnections.get(key).contains(value)) {
-				for (City c : cities)
-					if (c.getName().equals(key)) {
-						tempCities.add(c);
-//					tempCities.add(cityConnections.get(c).get())
-						tempCity = c;
-					}
-
-				tempEdges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
-
-			}
-			System.out.println(tempCities.size());
-			if (tempCity != null) {
-				cities.remove(tempCity);
-				cities.add(new City(tempCity.getPoint(), tempCity.getName(), tempEdges));
+					edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
+				}
 			}
 
-			tempEdges = new ArrayList<Edge>();
-			tempCity = null;
+			tempCities = new ArrayList<>();
+
 		}
-		for (City c : cities) {
-			edges.add(c.getAllEdges().get(0));
-			if (c.getAllEdges().size() > 1) {
-				edges.add(c.getAllEdges().get(1));
+		
+		scan = new Scanner(new File("Doubles.txt"));
+		previous = new HashMap<>();
+		while (scan.hasNextLine()) {
+			String line = scan.nextLine();
+			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");
+			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.length()).split(",");
+			ArrayList<City> tempCities = new ArrayList<>();
+			String key = tempFirstTwo[0];
+//			ArrayList<Edge> tempEdges = new ArrayList<Edge>();
+			String value = tempFirstTwo[1];
+			for (String s : cityConnections.get(key))// for every city that is connected to the city called "key"
+			{
+				City c = cityHelper(s);
+				City orig = cityHelper(key);
+				if (value.equals(s)&& !previous.containsKey(orig))// if the second city is the same as the city that is													// currently "s", one of the cities connected to c
+				{
+					counter1++;
+					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
+					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
 
+					previous.put(orig, c);
+					previous.put(c, orig);
+					edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
+				}
 			}
+
+			tempCities = new ArrayList<>();
+
 		}
+
+		
+		System.out.println(counter1);
+		for (Edge e : edges) {
+			for (int i = 0; i < e.getCities().size(); i++)
+				System.out.print(e.getCities().get(i).getName() + " ");
+			System.out.println();
+		}
+
+
 		for (int i = cities.size() - 1; i >= 0; i--) {
 			ArrayList<Edge> edgeTemps = new ArrayList<>();
 			for (Edge e : edges) {
@@ -151,18 +212,23 @@ public class GameState {
 				{
 					edgeTemps.add(e);
 				}
+
 			}
 			City oldCity = cities.remove(i);
 			cities.add(i, new City(oldCity.getPoint(), oldCity.getName(), edgeTemps));
 			edgeTemps = new ArrayList<>();
 		}
 
-		for (Edge e : edges)
-			for (City c : e.getCities()) {
-				System.out.println(c.getName());
-			}
-		System.out.println(edges.size());
 	}
+
+	private City cityHelper(String name) {
+		for (City c : cities)
+			if (c.getName().equals(name))
+				return c;
+		return null;
+	}
+
+
 
 	public Player getCurPlayer() {
 		return curPlayer;
