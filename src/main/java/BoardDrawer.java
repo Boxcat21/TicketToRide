@@ -122,10 +122,9 @@ public class BoardDrawer {
 			} catch (Exception e) { color = null;}
 			
 			if(!eds.contains(i))
-				drawRotatedRect(g, x1, y1, angle, distance, 10, color);
+				drawRotatedRect(g, x1, y1, angle, distance, 10, color, false);
 			else {
-				g.setColor(Color.BLACK);
-				g.drawLine(x1, y1, x2, y2);
+				drawRotatedRect(g, x1, y1, angle, distance, 10, color, true);
 			}
 		}
 		//City points from text file (prob in constructor)
@@ -149,7 +148,7 @@ public class BoardDrawer {
 		//g.fillOval(1535, 755, 10, 10);
 		
 	}
-	private static void drawRotatedRect(Graphics g, int x, int y, double angle, int length, int width, Color color) {
+	private static void drawRotatedRect(Graphics g, int x, int y, double angle, int length, int width, Color color, boolean check) {
 		double theta = Math.toRadians(angle);
 		Rectangle2D rect = new Rectangle2D.Double(-length/2.,-width/2.,length, width);
 		
@@ -167,8 +166,14 @@ public class BoardDrawer {
 		
 		Graphics2D g2d = (Graphics2D) g;
 		Composite a = g2d.getComposite();
-		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 9 * 0.1f));
-		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),30));
+		
+		if(check) {
+			g2d.setColor(color);
+		}
+		else {
+			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 9 * 0.1f));
+			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),30));
+		}
 		g2d.fill(rotatedRect);
 		g2d.setComposite(a);
 		g.setColor(Color.BLACK);
@@ -193,20 +198,22 @@ public class BoardDrawer {
 		}
 		if(c1 == null && c2 == null)
 			return -1;
-		System.out.println(game.getEdges());
 		for(int i = 0; i < game.getEdges().size(); i++) {
 			Edge ed = game.getEdges().get(i);
 			
 			String cc1 = ed.getCities().get(0).getName();
 			String cc2 = ed.getCities().get(1).getName();
 			
-			System.out.println("Stuff: " + cc1 + " | " + cc2);
+			//System.out.println(game.getEdges().size());
+			//System.out.println("Stuff1: " + c1 + " | " + c2);
+			//System.out.println("Stuff2: " + cc1 + " | " + cc2);
 			
 			ArrayList<String> test = new ArrayList<String>();
 			test.add(cc1);test.add(cc2);
 			
-			if(test.contains(c1) && test.contains(c2))
+			if(test.contains(c1) && test.contains(c2)) {
 				return i;
+			}
 		}
 		return -1;
 	}
