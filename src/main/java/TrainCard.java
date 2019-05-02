@@ -10,4 +10,9 @@ public class TrainCard {
 	public String getColor() {
 		return color;
 	}
+	
+	public String toString()
+	{
+		return "[" + color + "]";
+	}
 }
