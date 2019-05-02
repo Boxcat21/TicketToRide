@@ -60,6 +60,7 @@ public class Edge {
 		return true;
 	}
 	public String toString() {
-		return cities.get(0) + " to " + cities.get(1) + " | " + length + " | " + color;
+		//return cities.get(0) + " to " + cities.get(1) + " | " + length + " | " + color;
+		return "";
 	}
 }

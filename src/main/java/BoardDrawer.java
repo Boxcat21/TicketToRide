@@ -1,4 +1,6 @@
+import java.awt.AlphaComposite;
 import java.awt.Color;
+import java.awt.Composite;
 
 import javax.imageio.*;
 import java.awt.Graphics;
@@ -164,8 +166,11 @@ public class BoardDrawer {
 		Shape rotatedRect = tran.createTransformedShape(rect);
 		
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.setColor(color);
+		Composite a = g2d.getComposite();
+		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 9 * 0.1f));
+		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),60));
 		g2d.fill(rotatedRect);
+		g2d.setComposite(a);
 		g.setColor(Color.BLACK);
 		g2d.draw(rotatedRect);
 		rotatedRects.add(rotatedRect);
@@ -186,6 +191,8 @@ public class BoardDrawer {
 				break;
 			}
 		}
+		if(c1 == null && c2 == null)
+			return -1;
 		System.out.println(game.getEdges());
 		for(int i = 0; i < game.getEdges().size(); i++) {
 			Edge ed = game.getEdges().get(i);
