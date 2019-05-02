@@ -125,14 +125,6 @@ public class GameState {
 
 		}
 
-		int counter1 = 0;
-		for (String s : cityConnections.keySet()) {
-			for (String cityName : cityConnections.get(s)) {
-				counter1++;
-			}
-		}
-		System.out.println(counter1);
-		counter1 = 0;
 
 		// Make the list of edges
 		ArrayList<String> strings = new ArrayList<>();
@@ -151,7 +143,6 @@ public class GameState {
 				City orig = cityHelper(key);
 				if (value.equals(s) && !previous.containsKey(orig))// if the second city is the same as the city that is													// currently "s", one of the cities connected to c
 				{
-					counter1++;
 					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
 					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
 					previous.put(orig, c);
@@ -181,7 +172,6 @@ public class GameState {
 				City orig = cityHelper(key);
 				if (value.equals(s)&& !previous.containsKey(orig))// if the second city is the same as the city that is													// currently "s", one of the cities connected to c
 				{
-					counter1++;
 					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
 					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
 
@@ -196,12 +186,6 @@ public class GameState {
 		}
 
 		
-		System.out.println(counter1);
-		for (Edge e : edges) {
-			for (int i = 0; i < e.getCities().size(); i++)
-				System.out.print(e.getCities().get(i).getName() + " ");
-			System.out.println();
-		}
 
 
 		for (int i = cities.size() - 1; i >= 0; i--) {
