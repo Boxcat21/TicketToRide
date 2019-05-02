@@ -168,7 +168,7 @@ public class BoardDrawer {
 		Graphics2D g2d = (Graphics2D) g;
 		Composite a = g2d.getComposite();
 		g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 9 * 0.1f));
-		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),60));
+		g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),30));
 		g2d.fill(rotatedRect);
 		g2d.setComposite(a);
 		g.setColor(Color.BLACK);
