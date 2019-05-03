@@ -82,14 +82,9 @@ public class GameState {
 		curPlayer = players.poll();
 		turnCounter = 2;
 		/*
-		 * 
-		 * 
 		 * Cities and Edges
 		 * 
-		 * 
-		 * 
 		 */
-
 		// edges and cities
 		cities = new ArrayList<>();
 		edges = new ArrayList<>();
@@ -99,35 +94,7 @@ public class GameState {
 			String[] temp1 = scan.nextLine().split(",");
 			cities.add(new City(new Point(Integer.parseInt(temp1[1]), Integer.parseInt(temp1[2])), temp1[0],
 					new ArrayList<Edge>()));
-
 		}
-
-		// At this point each city is initialized with the correct name and point of the
-		// city.
-		// The only thing empty for each city is the arraylist inside; it's initialized
-		// but it is empty
-
-		// Puts all the cities and their connections in a hashmap of string, list
-		HashMap<String, ArrayList<String>> cityConnections = new HashMap<>();
-		scan = new Scanner(new File("ConnectedCities.txt"));
-		while (scan.hasNextLine()) {
-			String line1 = scan.nextLine();
-			String[] tempFirstTwo = line1.substring(0, line1.indexOf('|')).split(",");
-			String key = tempFirstTwo[0];
-			if (cityConnections.containsKey(key)) {
-				ArrayList<String> temp = cityConnections.get(key);
-				temp.add(tempFirstTwo[1]);
-			} else {
-				ArrayList<String> temp = new ArrayList<>();
-				temp.add(tempFirstTwo[1]);
-				cityConnections.put(key, temp);
-			}
-
-		}
-
-
-		
-
 		scan = new Scanner(new File("FixedCon"));
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
@@ -142,12 +109,25 @@ public class GameState {
 			tempCities.add(two);
 			edges.add(new Edge(Integer.parseInt(tempLastTwo[0]),tempLastTwo[1],tempCities));
 		}
-		System.out.println(edges.size());
-		for (Edge e : edges) {
-			for (City c : e.getCities())
-				System.out.print(c.getName() + " ");
-			System.out.println();
+//		System.out.println(edges.size());
+////		for (Edge e : edges) {
+//			for (City c : e.getCities())
+//				System.out.print(c.getName() + " ");
+//			System.out.println();
+//		}	
+		for(int i = cities.size()-1; i>=0;i--)
+		{
+			ArrayList<Edge> temps = new ArrayList<>();
+			for(Edge e:edges)
+			{
+				if(e.getCities().contains(cities.get(i)))
+					temps.add(e);
+			}
+			cities.add(new City(cities.get(i).getPoint(),cities.get(i).getName(),temps));
 		}
+		
+
+			
 
 
 	}
