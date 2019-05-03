@@ -59,12 +59,12 @@ public class BoardDrawer {
 		
 		//connected cities
 		try {
-			sc = new Scanner(new File("ConnectedCities.txt"));
+			sc = new Scanner(new File("FixedCon"));
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
-		connectedData = new int[201][2];
-		lengths = new int[201];
-		colors = new String[201];
+		connectedData = new int[100][2];
+		lengths = new int[100];
+		colors = new String[100];
 		
 		cnt = 0;
 		while(sc.hasNextLine()) {
@@ -78,9 +78,15 @@ public class BoardDrawer {
 			
 			lengths[cnt] = Integer.parseInt(line.substring(line.indexOf("|")+1,line.lastIndexOf(",")));
 			colors[cnt] = line.substring(line.lastIndexOf(",")+1);
+			System.out.println(colors[cnt]);
 			cnt++;
 		}
-		
+		try {
+			sc = new Scanner(new File("Double"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	private static int findCitysIndex(String name) {
 		for(int i = 0; i < citys.length; i++) {
@@ -107,26 +113,45 @@ public class BoardDrawer {
 
 			int x2 = (int) points[connectedData[i][1]].getX();
 			int y2 = (int) points[connectedData[i][1]].getY();
-
-			int distance = (int) Math.round(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
-			// oppositeRectPoint(x1, x2, distance, 20, )
-			double angle = (double) Math.toDegrees(Math.atan2(y2 - y1, x2 - x1));
-
-			if (angle < 0)
-				angle += 360;
-			Color color;
-			try 
-			{
-			    Field field = Class.forName("java.awt.Color").getField(colors[i]);
-			    color = (Color)field.get(null);
-			} catch (Exception e) { color = null;}
 			
-			if(!eds.contains(i))
-				drawRotatedRect(g, x1, y1, angle, distance, 10, color, false);
+			int nx1, nx2, ny1, ny2;
+			if(i+1 < connectedData.length) {
+				nx1 = (int) points[connectedData[i+1][0]].getX();
+				ny1 = (int) points[connectedData[i+1][0]].getY();
+				
+				nx2 = (int) points[connectedData[i+1][1]].getX();
+				ny2 = (int) points[connectedData[i+1][1]].getY();
+			}
 			else {
-				drawRotatedRect(g, x1, y1, angle, distance, 10, color, true);
+				nx1 = -1; ny1 = -1; nx2 = -1; ny2 = -1;
+			}
+			if(x1 == nx1 && y1 == ny1 && x2 == nx2 && y2 == ny2) {
+				i++;
+			}
+			else {
+				int distance = (int) Math.round(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
+				// oppositeRectPoint(x1, x2, distance, 20, )
+				double angle = (double) Math.toDegrees(Math.atan2(y2 - y1, x2 - x1));
+
+				if (angle < 0)
+					angle += 360;
+				Color color;
+				try 
+				{
+					Field field = Class.forName("java.awt.Color").getField(colors[i]);
+					color = (Color)field.get(null);
+				} catch (Exception e) { color = null;}
+				
+				if(!eds.contains(i))
+					drawRotatedRect(g, x1, y1, angle, distance, 10, color, false);
+				else {
+					drawRotatedRect(g, x1, y1, angle, distance, 10, color, true);
+				}
 			}
 		}
+		//Double Edges
+		
+		
 		//City points from text file (prob in constructor)
 		//Cities NEED TO LABEL THE CITIES
 		int r = 20;
@@ -172,7 +197,7 @@ public class BoardDrawer {
 		}
 		else {
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 9 * 0.1f));
-			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),30));
+			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),40));
 		}
 		g2d.fill(rotatedRect);
 		g2d.setComposite(a);
