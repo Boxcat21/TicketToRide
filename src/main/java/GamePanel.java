@@ -27,7 +27,8 @@ public class GamePanel extends JPanel implements MouseListener{
 		
 		clickedEdgeIndecies = new ArrayList<Integer>();
 		
-		
+		//for(Edge e : game.getEdges())
+		//	System.out.println(e.getCities().get(0).getName() + " " + e.getCities().get(1).getName());
 	}
 
 	@Override
@@ -42,33 +43,34 @@ public class GamePanel extends JPanel implements MouseListener{
 	public void mouseExited(MouseEvent e) {}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int edgeIndex = BoardDrawer.edgeClick(e, game);
-		if(edgeIndex != -1) {
-			clickedEdgeIndecies.add(edgeIndex);
+		String indecies = BoardDrawer.edgeClick(e, game);
+		if(indecies != "") {
+			//clickedEdgeIndecies.add(edgeIndex);
+			System.out.println(indecies);
 			this.repaint();
 		}
 		
 		for (Rectangle rec : HandDrawer.clickableAdd) {
 
 			if (rec.contains(e.getPoint()))
-				System.out.println(1); // adds 1 train card
+				//System.out.println(1); // adds 1 train card
 			repaint();
 		}
 		for (Rectangle rec : HandDrawer.clickableSub) {
 
 			if (rec.contains(e.getPoint()))
-				System.out.println(-1); // subtracts 1 card
+				//System.out.println(-1); // subtracts 1 card
 			repaint();
 		}
 		
 		if ( HandDrawer.clickableArrow.get(0).contains(e.getPoint())) {
 			HandDrawer.advanceCard(p, -1);
-			System.out.println(-2);
+			//System.out.println(-2);
 			repaint();
 		}
 		if ( HandDrawer.clickableArrow.get(1).contains(e.getPoint())) { 
 			HandDrawer.advanceCard(p, 1);
-			System.out.println(2);
+			//System.out.println(2);
 			repaint();
 		}
 	}

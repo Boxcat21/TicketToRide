@@ -183,7 +183,8 @@ public class BoardDrawer {
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
 	}
-	public static int edgeClick(MouseEvent e, GameState game) {
+	public static String edgeClick(MouseEvent e, GameState game) {
+		String str = "";
 		Point p = e.getPoint();
 		String c1 = null, c2 = null;
 		for(int i = 0; i < rotatedRects.size(); i++) {
@@ -193,11 +194,12 @@ public class BoardDrawer {
 				
 				c1 = citys[i1];
 				c2 = citys[i2];
+				str += "" + i;
 				break;
 			}
 		}
 		if(c1 == null && c2 == null)
-			return -1;
+			return str;
 		for(int i = 0; i < game.getEdges().size(); i++) {
 			Edge ed = game.getEdges().get(i);
 			
@@ -212,9 +214,9 @@ public class BoardDrawer {
 			test.add(cc1);test.add(cc2);
 			
 			if(test.contains(c1) && test.contains(c2)) {
-				return i;
+				str += " " + i;
 			}
 		}
-		return -1;
+		return str;
 	}
 }
