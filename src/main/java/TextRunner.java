@@ -10,14 +10,21 @@ public class TextRunner {
 		//Instantiating the game
 		 g = new GameState();
 		//Going through the game
-		 scan = new Scanner(System.in);
-		 
-		 //Starting each turn
+		 doTurn();
+		
+		
+	}
+	
+	public static void doTurn()
+	{
+		scan = new Scanner(System.in);
+		
+		//Starting each turn
 		System.out.println(g.getCurPlayer().toString() + ", enter d to draw cards, enter c to draw contracts, enter p to place train");
 		//Drawing cards
 		if(scan.nextLine().equals("d"))
 			testDrawTrainCards();
-
+		
 		//Drawing contracts
 		else if(scan.nextLine().equals("c"))
 		{
@@ -28,7 +35,6 @@ public class TextRunner {
 		{
 			testPlaceTrains();
 		}
-		
 		
 	}
 	public static void testDrawTrainCards()
