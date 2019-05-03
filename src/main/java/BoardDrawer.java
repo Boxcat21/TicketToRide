@@ -162,12 +162,14 @@ public class BoardDrawer {
 			g.setColor(Color.BLACK);
 			g.drawOval((int)points[i].getX()-r/2, (int)points[i].getY()-r/2, r, r);
 		}
-		
+		BufferedImage numbers = null;
 		BufferedImage label = null;
 		try {
+			numbers = ImageIO.read(new File("numbers.png"));
 			label = ImageIO.read(new File("CityLabels.png"));
 		}catch(IOException e) {}
 		
+		g.drawImage(numbers, 0, 0, null);
 		g.drawImage(label, 0, 0, null);
 		
 		//g.fillOval(1535, 755, 10, 10);
