@@ -125,10 +125,9 @@ public class GameState {
 
 		}
 
-
 		// Make the list of edges
 		ArrayList<String> strings = new ArrayList<>();
-		HashMap<City, City> previous = new HashMap<>();
+		HashMap<String, ArrayList<String>> previous = new HashMap<>();
 		scan = new Scanner(new File("ConnectedCities.txt"));
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
@@ -141,35 +140,65 @@ public class GameState {
 			{
 				City c = cityHelper(s);
 				City orig = cityHelper(key);
-				for(City ci: previous.keySet())
-					System.out.print(ci.getName()+" ");
-				System.out.println();
-				if (value.equals(s) && !previous.containsKey(orig))//This isnt working its not checking the stuff right
-			{
-//					System.out.println(s+" "+key);
+				if (previous.containsKey(key)) {
+					if (!previous.get(key).contains(s)) {
+						if (value.equals(s)) {
+							ArrayList<String> tempList = previous.get(key);
+							tempList.add(c.getName());
+							previous.put(orig.getName(), tempList);
+							if (previous.containsKey(c.getName())) {
+								if (!previous.get(c.getName()).contains(key)) {
+									ArrayList<String> someList = previous.get(key);
+									someList.add(orig.getName());
+									previous.put(c.getName(), someList);
+								}
+							} else {
+								ArrayList<String> tempList2 = new ArrayList<>();
+								tempList2.add(orig.getName());
+								previous.put(c.getName(), tempList2);
+							}
+							tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
+							tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
+							edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
+						}
+					}
+				}
+
+				else if (value.equals(s))// This isnt working its not checking the stuff right
+				{
+					if (!previous.containsKey(key)) {
+						ArrayList<String> tempList = new ArrayList<>();
+						tempList.add(c.getName());
+						previous.put(orig.getName(), tempList);
+					} else {
+						ArrayList<String> tempList = previous.get(key);
+						tempList.add(c.getName());
+						previous.put(orig.getName(), tempList);
+					}
+					if (previous.containsKey(c.getName())) {
+						if (!previous.get(c.getName()).contains(key)) {
+							ArrayList<String> someList = previous.get(key);
+							someList.add(orig.getName());
+							previous.put(c.getName(), someList);
+						}
+
+					} else {
+						ArrayList<String> tempList2 = new ArrayList<>();
+						tempList2.add(orig.getName());
+						previous.put(c.getName(), tempList2);
+					}
 					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
 					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
-					previous.put(orig, c);
-					previous.put(c, orig);
-		
-
 					edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
 				}
+				System.out.println();
 			}
-
 			tempCities = new ArrayList<>();
+		}
 
-		}
 		
-		System.out.println(edges.size());
-		for(Edge e: edges)
-		{
-			for(City c:e.getCities())
-				System.out.print(c.getName()+" ");
-			System.out.println();
-		}
-	
-		/*scan = new Scanner(new File("Doubles.txt"));
+
+		scan = new Scanner(new File("Doubles.txt"));
 		previous = new HashMap<>();
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
@@ -177,38 +206,19 @@ public class GameState {
 			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.length()).split(",");
 			ArrayList<City> tempCities = new ArrayList<>();
 			String key = tempFirstTwo[0];
-//			ArrayList<Edge> tempEdges = new ArrayList<Edge>();
 			String value = tempFirstTwo[1];
-			for (String s : cityConnections.get(key))// for every city that is connected to the city called "key"
-			{
-				City c = cityHelper(s);
-				City orig = cityHelper(key);
-				if (value.equals(s)&& !previous.containsKey(orig))// if the second city is the same as the city that is													// currently "s", one of the cities connected to c
-				{
-					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
-					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
-
-					previous.put(orig, c);
-					previous.put(c, orig);
-					edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
-				}
-			}
-
-			tempCities = new ArrayList<>();
-
-		}*/
-		
-		
-//		for(City c:cities)
-//		for(Edge e: edges)
-//		{
-//			ArrayList<City> temp = e.getCities();
-//			if(temp.contains(c))
-//				
-//		}
-
-		
-
+			City one = cityHelper(key);
+			City two = cityHelper(value);
+			tempCities.add(one);
+			tempCities.add(two);
+			edges.add(new Edge(Integer.parseInt(tempLastTwo[0]),tempLastTwo[1],tempCities));
+		}
+		System.out.println(edges.size());
+		for (Edge e : edges) {
+			for (City c : e.getCities())
+				System.out.print(c.getName() + " ");
+			System.out.println();
+		}
 
 		for (int i = cities.size() - 1; i >= 0; i--) {
 			ArrayList<Edge> edgeTemps = new ArrayList<>();
@@ -226,14 +236,13 @@ public class GameState {
 		}
 
 	}
+
 	private City cityHelper(String name) {
 		for (City c : cities)
 			if (c.getName().equals(name))
 				return c;
 		return null;
 	}
-
-
 
 	public Player getCurPlayer() {
 		return curPlayer;
@@ -313,18 +322,17 @@ public class GameState {
 
 	public boolean chooseTrainCard(int choice) {
 		TrainCard t = displayCards.get(choice);
-		 if (t.getColor().equals("Wild") && turnCounter != 1) {
-			 t = displayCards.remove(choice);
+		if (t.getColor().equals("Wild") && turnCounter != 1) {
+			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
 			displayCards.add(trainCardDeck.pop());
 			turnCounter -= 2;
-		} else if(!t.getColor().equals("Wild")) {
-			 t = displayCards.remove(choice);
+		} else if (!t.getColor().equals("Wild")) {
+			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
 			displayCards.add(trainCardDeck.pop());
 			turnCounter--;
-			}
-		else {
+		} else {
 			System.out.println("Stop right there, criminal scum!");
 		}
 		checkTurn();
@@ -443,24 +451,26 @@ public class GameState {
 		return p.toString();
 	}
 
-	public void checkTurn() {//does not continue to next round, due to the turn counter
+	public void checkTurn() {// does not continue to next round, due to the turn counter
 		if (checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
 			Collections.shuffle(trainCardDeck);
-for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
 		}
 		boolean lastRound = false;
-for (Player p : players)
+		for (Player p : players)
 			if (p.getTrains() < 3) {
 				lastRound = true;
 				break;
 			}
 
-		
-		 if (turnCounter <= 0 && !lastRound) { endTurn(); return; }
-		 
+		if (turnCounter <= 0 && !lastRound) {
+			endTurn();
+			return;
+		}
+
 		if (lastRound) // still need to fix to run one more round before endin
 			endGame();
 		checkContracts();
