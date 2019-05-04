@@ -29,6 +29,10 @@ public class GamePanel extends JPanel implements MouseListener{
 		
 		//for(Edge e : game.getEdges())
 		//	System.out.println(e.getCities().get(0).getName() + " " + e.getCities().get(1).getName());
+		for(int i = 0; i < game.getEdges().size();i++) {
+			System.out.println(game.getEdges().get(i).getCities().get(0).getName()
+					+ " "  + game.getEdges().get(i).getCities().get(1).getName());
+		}
 	}
 
 	@Override
@@ -43,10 +47,9 @@ public class GamePanel extends JPanel implements MouseListener{
 	public void mouseExited(MouseEvent e) {}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		String indecies = BoardDrawer.edgeClick(e, game);
-		if(indecies != "") {
-			//clickedEdgeIndecies.add(edgeIndex);
-			System.out.println(indecies);
+		int index = BoardDrawer.edgeClick(e, game);
+		if(index != -1) {
+			clickedEdgeIndecies.add(index);
 			this.repaint();
 		}
 		

@@ -34,7 +34,10 @@ public class BoardDrawer {
 	private static int[] lengths; //201
 	private static String[] colors; //201
 	private static ArrayList<Shape> rotatedRects; //201
+	private static int doubleEdgeCheck;
 	private static void init() {
+		//thing
+		doubleEdgeCheck = 0;
 		//rotato bato
 		rotatedRects = new ArrayList<Shape>();
 		//city points
@@ -78,11 +81,10 @@ public class BoardDrawer {
 			
 			lengths[cnt] = Integer.parseInt(line.substring(line.indexOf("|")+1,line.lastIndexOf(",")));
 			colors[cnt] = line.substring(line.lastIndexOf(",")+1);
-			System.out.println(colors[cnt]);
 			cnt++;
 		}
 		try {
-			sc = new Scanner(new File("Double"));
+			sc = new Scanner(new File("Doubles.txt"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -96,6 +98,9 @@ public class BoardDrawer {
 		return -1;
 	}
 	public static void drawBoard(Graphics g, ArrayList<Integer> eds) {
+		//temporary
+		Color playerColor = Color.BLUE;
+		
 		init();
 		//find edges indecies
 		for(int i = 0; i < citys.length; i++) {
@@ -126,7 +131,35 @@ public class BoardDrawer {
 				nx1 = -1; ny1 = -1; nx2 = -1; ny2 = -1;
 			}
 			if(x1 == nx1 && y1 == ny1 && x2 == nx2 && y2 == ny2) {
+				int distance = (int) Math.round(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
+				double angle = (double) Math.toDegrees(Math.atan2(y2 - y1, x2 - x1));
+				if (angle < 0)
+					angle += 360;
+				Color color;
+				try {
+					Field field = Class.forName("java.awt.Color").getField(colors[i]);
+					color = (Color)field.get(null);
+				} catch (Exception e) { color = null;}
+				
+				doubleEdgeCheck = 1;
+				
+				if(!eds.contains(i))
+					drawRotatedRect(g, x1, y1, angle, distance, 5, color, false);
+				else 
+					drawRotatedRect(g, x1, y1, angle, distance, 5, playerColor, true);
 				i++;
+				
+				try {
+					Field field = Class.forName("java.awt.Color").getField(colors[i]);
+					color = (Color)field.get(null);
+				} catch (Exception e) { color = null;}
+				
+				doubleEdgeCheck = 2;
+				if(!eds.contains(i))
+					drawRotatedRect(g, x1, y1, angle, distance, 5, color, false);
+				else 
+					drawRotatedRect(g, x1, y1, angle, distance, 5, playerColor, true);
+				doubleEdgeCheck = 0;
 			}
 			else {
 				int distance = (int) Math.round(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
@@ -145,7 +178,7 @@ public class BoardDrawer {
 				if(!eds.contains(i))
 					drawRotatedRect(g, x1, y1, angle, distance, 10, color, false);
 				else {
-					drawRotatedRect(g, x1, y1, angle, distance, 10, color, true);
+					drawRotatedRect(g, x1, y1, angle, distance, 10, playerColor, true);
 				}
 			}
 		}
@@ -185,7 +218,15 @@ public class BoardDrawer {
 		int trigX = (int) (Math.round(Math.cos(alpha)*(width/2)));
 		int trigY = (int) (Math.round(Math.sin(alpha)*(width/2)));
 		
-		tran.translate(trigX+x,-trigY+y);
+		if(doubleEdgeCheck == 2) {
+			trigX = (int) (Math.round(Math.cos(alpha)*(width)));
+			trigY = (int) (Math.round(Math.sin(alpha)*(width)));
+			tran.translate(trigX+x,-trigY+y);
+		}
+		else if(doubleEdgeCheck == 1) 
+			tran.translate(x, y);
+		else 
+			tran.translate(trigX+x,-trigY+y);
 		tran.rotate(theta);
 		tran.translate(length/2, width/2);
 		
@@ -210,10 +251,9 @@ public class BoardDrawer {
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
 	}
-	public static String edgeClick(MouseEvent e, GameState game) {
-		String str = "";
+	public static int edgeClick(MouseEvent e, GameState game) {
 		Point p = e.getPoint();
-		String c1 = null, c2 = null;
+		String c1 = null, c2 = null,color = null;
 		for(int i = 0; i < rotatedRects.size(); i++) {
 			if(rotatedRects.get(i).contains(e.getPoint())) {
 				int i1 = connectedData[i][0];
@@ -221,29 +261,10 @@ public class BoardDrawer {
 				
 				c1 = citys[i1];
 				c2 = citys[i2];
-				str += "" + i;
-				break;
+				
+				return i;
 			}
 		}
-		if(c1 == null && c2 == null)
-			return str;
-		for(int i = 0; i < game.getEdges().size(); i++) {
-			Edge ed = game.getEdges().get(i);
-			
-			String cc1 = ed.getCities().get(0).getName();
-			String cc2 = ed.getCities().get(1).getName();
-			
-			//System.out.println(game.getEdges().size());
-			//System.out.println("Stuff1: " + c1 + " | " + c2);
-			//System.out.println("Stuff2: " + cc1 + " | " + cc2);
-			
-			ArrayList<String> test = new ArrayList<String>();
-			test.add(cc1);test.add(cc2);
-			
-			if(test.contains(c1) && test.contains(c2)) {
-				str += " " + i;
-			}
-		}
-		return str;
+		return -1;
 	}
 }
