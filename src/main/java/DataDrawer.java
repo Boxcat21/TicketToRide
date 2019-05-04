@@ -18,7 +18,7 @@ public class DataDrawer {
 		g2.drawLine(1535, 360, 1920, 360);
 		g2.drawLine(1535, 540, 1920, 540);
 		g2.drawLine(1535, 720, 1920, 720);
-		System.out.println(1);
+		//System.out.println(1);
 	}
 	
 	public static void drawDisplayCards(Graphics g, ArrayList<TrainCard> display) {
