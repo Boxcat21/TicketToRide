@@ -107,7 +107,7 @@ public class GameState {
 			City two = cityHelper(value);
 			tempCities.add(one);
 			tempCities.add(two);
-			edges.add(new Edge(Integer.parseInt(tempLastTwo[0]),tempLastTwo[1],tempCities));
+			edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
 		}
 //		System.out.println(edges.size());
 ////		for (Edge e : edges) {
@@ -115,20 +115,14 @@ public class GameState {
 //				System.out.print(c.getName() + " ");
 //			System.out.println();
 //		}	
-		for(int i = cities.size()-1; i>=0;i--)
-		{
+		for (int i = cities.size() - 1; i >= 0; i--) {
 			ArrayList<Edge> temps = new ArrayList<>();
-			for(Edge e:edges)
-			{
-				if(e.getCities().contains(cities.get(i)))
+			for (Edge e : edges) {
+				if (e.getCities().contains(cities.get(i)))
 					temps.add(e);
 			}
-			cities.add(new City(cities.get(i).getPoint(),cities.get(i).getName(),temps));
+			cities.add(new City(cities.get(i).getPoint(), cities.get(i).getName(), temps));
 		}
-		
-
-			
-
 
 	}
 
@@ -167,6 +161,7 @@ public class GameState {
 			e.setHasTrains();
 			e.setPlayer(curPlayer);
 			turnCounter -= 2;
+			curPlayer.reduceTrains(e.getLength());
 		}
 
 		checkTurn();
@@ -248,7 +243,6 @@ public class GameState {
 				this.contractList.offer(this.getDisplayContracts().get(i));
 		turnCounter -= 2;
 		return "Successful";
-
 	}
 
 	public ArrayList<Player> endGame() {

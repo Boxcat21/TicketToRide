@@ -49,10 +49,6 @@ public class TextRunner {
 		else 
 			g.drawTrainCard();
 		}
-		
-			
-		
-		
 	}
 
 	public static void testDrawContract()
@@ -80,7 +76,6 @@ public class TextRunner {
 			list.add(e.getCities().get(1).getName());
 			if(list.contains(arr[0])&&list.contains(arr[1]))
 				g.placeTrain(e);
-
 		}
 
 	}
