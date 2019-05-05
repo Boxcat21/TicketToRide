@@ -31,7 +31,6 @@ public class GameState {
 	public static final String[] PLAYER_COLORS = { "Red", "Green", "Yellow", "Blue" };
 	private String longestPath;
 	private String mostContracts;
-	// for longest path
 	private ArrayList<City> passedCities;
 
 	public GameState() throws FileNotFoundException {

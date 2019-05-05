@@ -15,16 +15,17 @@ public class TextRunner {
 		 //Starting each turn
 		System.out.println(g.getCurPlayer().toString() + ", enter d to draw cards, enter c to draw contracts, enter p to place train");
 		//Drawing cards
-		if(scan.nextLine().equals("d"))
+		String s = scan.nextLine();
+		if(s.equals("d"))
 			testDrawTrainCards();
 
 		//Drawing contracts
-		else if(scan.nextLine().equals("c"))
+		else if(s.equals("c"))
 		{
 			testDrawContract();
 		}
 		//Placing trains
-		else if(scan.nextLine().equals("p"))
+		else if(s.equals("p"))
 		{
 			testPlaceTrains();
 		}
