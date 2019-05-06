@@ -214,8 +214,7 @@ public class GameState {
 		if (choices.size() < 1)
 			return "Invalid. You must choose at least one contract.";
 		for (int i = 0; i < 3; i++)
-			if (i == choices.get(i))
-				this.contractList.offer(this.getDisplayContracts().get(i));
+				curPlayer.addContractCard(this.getDisplayContracts().get(i));
 		turnCounter -= 2;
 		
 		checkTurn();
