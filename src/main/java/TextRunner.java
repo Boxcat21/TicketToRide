@@ -16,7 +16,7 @@ public class TextRunner {
 		// Starting each turn
 		while (!g.isEnded()) {
 			System.out.println(g.getCurPlayer().toString()
-					+ ", enter d to draw cards, enter c to draw contracts, enter p to place train");
+					+ ",\nenter d to draw cards, enter c to draw contracts, enter p to place train");
 			// Drawing cards
 			String s = scan.nextLine();
 			if (s.equals("d"))
@@ -30,6 +30,7 @@ public class TextRunner {
 			else if (s.equals("p")) {
 				testPlaceTrains();
 			}
+
 		}
 
 	}
@@ -65,6 +66,15 @@ public class TextRunner {
 	}
 
 	public static void testPlaceTrains() {
+
+		ArrayList<TrainCard> trains = g.getCurPlayer().getTrainCards();
+		System.out.println("These are your available trains; enter the indexes of the ones you want starting from 0");
+		for (TrainCard t : trains)
+			System.out.println(t);
+		String[] input = scan.nextLine().split(",");
+		ArrayList<TrainCard> choices = new ArrayList<>();
+		for (String str : input)
+			choices.add(trains.get(Integer.parseInt(str)));
 		System.out
 				.println("Enter the two cities with commas that you want to place your train on - any order is fine.");
 		String[] arr = scan.nextLine().split(",");
@@ -74,7 +84,7 @@ public class TextRunner {
 			list.add(e.getCities().get(0).getName());
 			list.add(e.getCities().get(1).getName());
 			if (list.contains(arr[0]) && list.contains(arr[1]))
-				g.placeTrain(e, null);
+				g.placeTrain(e, choices);
 		}
 
 	}
