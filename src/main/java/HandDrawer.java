@@ -152,5 +152,12 @@ public class HandDrawer {
                       new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 3);
     }
 
+	public static void drawPlayer(Graphics g, Player p) {
+		
+		Graphics2D g2 = (Graphics2D) g;
+
+		
+	}
+
 
 }
