@@ -1,5 +1,6 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -10,6 +11,8 @@ public class DataDrawer {
 	
 	public static ArrayList<Rectangle> clickableTrainCard;
 	public static ArrayList<Rectangle> clickableContract;
+	
+	private final static Color[] playerColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE};
 	
 	public DataDrawer() {
 		clickableTrainCard = new ArrayList<>();
@@ -32,20 +35,35 @@ public class DataDrawer {
 	
 	public static void drawData(Graphics g, ArrayList<Player> data) {
 		Graphics2D g2 = (Graphics2D) g;
+		
+		// add image for contract
+		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 24)); 
+		
+		
+		int x = 1545, y = 40;
+		int xAdd = 150;
+		for ( int i = 0; i < 4; i++) {		
+			g2.setColor(playerColors[i]);
+			g2.drawString("Trains: " + data.get(i).getTrains()+"", x, y);
+			g2.drawString("Points: " + data.get(i).getPoints()+"", x+215, y);
+			g2.drawString("#Contracts: " + data.get(i).getContracts().size()+"", x, y+50);
+			g2.drawString("#TrainCards: " + data.get(i).getTrainCards().size()+"", x+215, y+50);
+			g2.setColor(Color.BLACK);
+			g2.drawLine(1535, xAdd, 1920, xAdd);
+			xAdd += 150;
+			y += 150;
+		}
+		
+		
+	}
+	
+	public static void drawDisplayCards(Graphics g, ArrayList<TrainCard> display) {
+		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(4));
 		g2.drawRect(1615, 650, 200, 100);
 		g2.setColor(Color.WHITE);
 		g2.fillRect(1615, 650, 200, 100);
-		// add image for contract
-		
-		g2.setColor(Color.BLACK);
-		g2.drawLine(1535, 150, 1920, 150);
-		g2.drawLine(1535, 300, 1920, 300);
-		g2.drawLine(1535, 450, 1920, 450);
-		g2.drawLine(1535, 600, 1920, 600);
-		g2.setStroke(new BasicStroke(4));
-		
 		int temp = 1575;
 		for ( int i = 0; i < 3; i++) {  // 5 display and one deck
 			g2.setColor(Color.BLACK);
@@ -55,17 +73,13 @@ public class DataDrawer {
 			temp += 110;
 		}
 		temp = 1575;
-		for ( int i = 0; i < 3; i++) {  // 5 display and one deck
+		for ( int i = 0; i < 3; i++) { 
 			g2.setColor(Color.BLACK);
 			g2.drawRect(temp, 925, 70, 120);
 			g2.setColor(Color.WHITE);
 			g2.fillRect(temp, 925, 70, 120);
 			temp += 110;
 		}
-	}
-	
-	public static void drawDisplayCards(Graphics g, ArrayList<TrainCard> display) {
-		Graphics2D g2 = (Graphics2D) g;
 			
 	}
 
