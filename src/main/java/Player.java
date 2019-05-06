@@ -73,11 +73,6 @@ public class Player {
 	
 	public String toString()
 	{
-		return "| " + trainColor + ": " + points + " |";
-	}
-	
-	
-	
-	
-	
+		return "| " + trainColor + ": " + points + " |" + trains  + "|" + "\n" + this.trainCards + "\n" + this.contracts;
+	}	
 }

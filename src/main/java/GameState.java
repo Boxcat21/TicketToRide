@@ -33,8 +33,10 @@ public class GameState {
 	private String mostContracts;
 	private ArrayList<City> passedCities;
 	private boolean lastRound;
+	private boolean isEnded;
 
 	public GameState() throws FileNotFoundException {
+		isEnded = false;
 		//Datastructures init
 		cities = new ArrayList<>();
 		contractList = new LinkedList<>();
@@ -222,6 +224,7 @@ public class GameState {
 	}
 
 	public ArrayList<Player> endGame() {
+		isEnded = true;
 		turnCounter = 0;
 		longestPath = longestPath();
 		mostContracts = mostContractCards();
@@ -351,6 +354,10 @@ public class GameState {
 	public ArrayList<TrainCard> getDisplayCards() {return displayCards;}
 	
 	public String getMostContracts() {return mostContracts;}
+	
+	public boolean isEnded() {
+		return this.isEnded;
+	}
 	
 	public ArrayList<ContractCard> getDisplayContracts() {
 		ArrayList<ContractCard> temps = new ArrayList<>();
