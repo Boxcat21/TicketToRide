@@ -13,21 +13,25 @@ public class TextRunner {
 		 scan = new Scanner(System.in);
 		 
 		 //Starting each turn
-		System.out.println(g.getCurPlayer().toString() + ", enter d to draw cards, enter c to draw contracts, enter p to place train");
+//		 while(g.hasEnded())
+//		 {
+			 System.out.println(g.getCurPlayer().toString() + ", enter d to draw cards, enter c to draw contracts, enter p to place train");
 		//Drawing cards
-		if(scan.nextLine().equals("d"))
+		String s = scan.nextLine();
+		if(s.equals("d"))
 			testDrawTrainCards();
-
+		
 		//Drawing contracts
-		else if(scan.nextLine().equals("c"))
+		else if(s.equals("c"))
 		{
 			testDrawContract();
 		}
 		//Placing trains
-		else if(scan.nextLine().equals("p"))
+		else if(s.equals("p"))
 		{
 			testPlaceTrains();
 		}
+//		 }
 		
 		
 	}
@@ -49,10 +53,6 @@ public class TextRunner {
 		else 
 			g.drawTrainCard();
 		}
-		
-			
-		
-		
 	}
 
 	public static void testDrawContract()
@@ -79,8 +79,7 @@ public class TextRunner {
 			list.add(e.getCities().get(0).getName());
 			list.add(e.getCities().get(1).getName());
 			if(list.contains(arr[0])&&list.contains(arr[1]))
-				g.placeTrain(e);
-
+				g.placeTrain(e, null);
 		}
 
 	}

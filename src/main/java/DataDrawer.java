@@ -33,9 +33,6 @@ public class DataDrawer {
 	public static void drawData(Graphics g, ArrayList<Player> data) {
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLACK);
-		
-		
-		
 		g2.setStroke(new BasicStroke(4));
 		g2.drawRect(1615, 650, 200, 100);
 		g2.setColor(Color.WHITE);

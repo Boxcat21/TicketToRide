@@ -27,14 +27,10 @@ public class GamePanel extends JPanel implements MouseListener{
 		
 		clickedEdgeIndecies = new ArrayList<Integer>();
 		
-		//for(Edge e : game.getEdges())
-		//	System.out.println(e.getCities().get(0).getName() + " " + e.getCities().get(1).getName());
 	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		
-		
 		repaint();
 	}
 	@Override
@@ -43,10 +39,9 @@ public class GamePanel extends JPanel implements MouseListener{
 	public void mouseExited(MouseEvent e) {}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		String indecies = BoardDrawer.edgeClick(e, game);
-		if(indecies != "") {
-			//clickedEdgeIndecies.add(edgeIndex);
-			System.out.println(indecies);
+		int index = BoardDrawer.edgeClick(e, game);
+		if(index != -1) {
+			clickedEdgeIndecies.add(index);
 			this.repaint();
 		}
 		
@@ -79,12 +74,6 @@ public class GamePanel extends JPanel implements MouseListener{
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		//Graphics2D g2 = (Graphics2D) g;
-		//g2.drawRect(0, 0, 1440, 720);
-		//g2.setColor(Color.ORANGE);
-		//g2.fillRect(1441, 0, 480, 1080);
-		//g2.fillRect(0, 721, 1920, 360);
-//		System.out.println(clickedEdgeIndecies);
 		BoardDrawer.drawBoard(g, this.clickedEdgeIndecies);
 		HandDrawer.drawHand(g, p);
 		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());

@@ -34,7 +34,10 @@ public class BoardDrawer {
 	private static int[] lengths; //201
 	private static String[] colors; //201
 	private static ArrayList<Shape> rotatedRects; //201
+	private static int doubleEdgeCheck;
 	private static void init() {
+		//thing
+		doubleEdgeCheck = 0;
 		//rotato bato
 		rotatedRects = new ArrayList<Shape>();
 		//city points
@@ -59,12 +62,12 @@ public class BoardDrawer {
 		
 		//connected cities
 		try {
-			sc = new Scanner(new File("ConnectedCities.txt"));
+			sc = new Scanner(new File("FixedCon"));
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
-		connectedData = new int[201][2];
-		lengths = new int[201];
-		colors = new String[201];
+		connectedData = new int[100][2];
+		lengths = new int[100];
+		colors = new String[100];
 		
 		cnt = 0;
 		while(sc.hasNextLine()) {
@@ -80,7 +83,12 @@ public class BoardDrawer {
 			colors[cnt] = line.substring(line.lastIndexOf(",")+1);
 			cnt++;
 		}
-		
+		try {
+			sc = new Scanner(new File("Doubles.txt"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	private static int findCitysIndex(String name) {
 		for(int i = 0; i < citys.length; i++) {
@@ -90,6 +98,9 @@ public class BoardDrawer {
 		return -1;
 	}
 	public static void drawBoard(Graphics g, ArrayList<Integer> eds) {
+		//temporary
+		Color playerColor = Color.BLUE;
+		
 		init();
 		//find edges indecies
 		for(int i = 0; i < citys.length; i++) {
@@ -107,28 +118,70 @@ public class BoardDrawer {
 
 			int x2 = (int) points[connectedData[i][1]].getX();
 			int y2 = (int) points[connectedData[i][1]].getY();
-
-			int distance = (int) Math.round(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
-			// oppositeRectPoint(x1, x2, distance, 20, )
-			double angle = (double) Math.toDegrees(Math.atan2(y2 - y1, x2 - x1));
-
-			if (angle < 0)
-				angle += 360;
-			Color color;
-			try 
-			{
-			    Field field = Class.forName("java.awt.Color").getField(colors[i]);
-			    color = (Color)field.get(null);
-			} catch (Exception e) { color = null;}
 			
-			if(!eds.contains(i))
-				drawRotatedRect(g, x1, y1, angle, distance, 10, color, false);
+			int nx1, nx2, ny1, ny2;
+			if(i+1 < connectedData.length) {
+				nx1 = (int) points[connectedData[i+1][0]].getX();
+				ny1 = (int) points[connectedData[i+1][0]].getY();
+				
+				nx2 = (int) points[connectedData[i+1][1]].getX();
+				ny2 = (int) points[connectedData[i+1][1]].getY();
+			}
 			else {
-				drawRotatedRect(g, x1, y1, angle, distance, 10, color, true);
+				nx1 = -1; ny1 = -1; nx2 = -1; ny2 = -1;
+			}
+			if(x1 == nx1 && y1 == ny1 && x2 == nx2 && y2 == ny2) {
+				int distance = (int) Math.round(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
+				double angle = (double) Math.toDegrees(Math.atan2(y2 - y1, x2 - x1));
+				if (angle < 0)
+					angle += 360;
+				Color color;
+				try {
+					Field field = Class.forName("java.awt.Color").getField(colors[i]);
+					color = (Color)field.get(null);
+				} catch (Exception e) { color = null;}
+				
+				doubleEdgeCheck = 1;
+				
+				if(!eds.contains(i))
+					drawRotatedRect(g, x1, y1, angle, distance, 5, color, false);
+				else 
+					drawRotatedRect(g, x1, y1, angle, distance, 5, playerColor, true);
+				i++;
+				
+				try {
+					Field field = Class.forName("java.awt.Color").getField(colors[i]);
+					color = (Color)field.get(null);
+				} catch (Exception e) { color = null;}
+				
+				doubleEdgeCheck = 2;
+				if(!eds.contains(i))
+					drawRotatedRect(g, x1, y1, angle, distance, 5, color, false);
+				else 
+					drawRotatedRect(g, x1, y1, angle, distance, 5, playerColor, true);
+				doubleEdgeCheck = 0;
+			}
+			else {
+				int distance = (int) Math.round(Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2)));
+				// oppositeRectPoint(x1, x2, distance, 20, )
+				double angle = (double) Math.toDegrees(Math.atan2(y2 - y1, x2 - x1));
+
+				if (angle < 0)
+					angle += 360;
+				Color color;
+				try 
+				{
+					Field field = Class.forName("java.awt.Color").getField(colors[i]);
+					color = (Color)field.get(null);
+				} catch (Exception e) { color = null;}
+				
+				if(!eds.contains(i))
+					drawRotatedRect(g, x1, y1, angle, distance, 5, color, false);
+				else {
+					drawRotatedRect(g, x1, y1, angle, distance, 5, playerColor, true);
+				}
 			}
 		}
-		//City points from text file (prob in constructor)
-		//Cities NEED TO LABEL THE CITIES
 		int r = 20;
 		for(int i = 0; i < citys.length; i++) {
 			g.setColor(new Color(153, 76, 0)); //dark orange
@@ -137,12 +190,14 @@ public class BoardDrawer {
 			g.setColor(Color.BLACK);
 			g.drawOval((int)points[i].getX()-r/2, (int)points[i].getY()-r/2, r, r);
 		}
-		
+		BufferedImage numbers = null;
 		BufferedImage label = null;
 		try {
+			numbers = ImageIO.read(new File("numbers.png"));
 			label = ImageIO.read(new File("CityLabels.png"));
 		}catch(IOException e) {}
 		
+		g.drawImage(numbers, 0, 0, null);
 		g.drawImage(label, 0, 0, null);
 		
 		//g.fillOval(1535, 755, 10, 10);
@@ -158,7 +213,15 @@ public class BoardDrawer {
 		int trigX = (int) (Math.round(Math.cos(alpha)*(width/2)));
 		int trigY = (int) (Math.round(Math.sin(alpha)*(width/2)));
 		
-		tran.translate(trigX+x,-trigY+y);
+		if(doubleEdgeCheck == 2) {
+			trigX = (int) (Math.round(Math.cos(alpha)*(width)));
+			trigY = (int) (Math.round(Math.sin(alpha)*(width)));
+			tran.translate(trigX+x,-trigY+y);
+		}
+		else if(doubleEdgeCheck == 1) 
+			tran.translate(x, y);
+		else 
+			tran.translate(trigX+x,-trigY+y);
 		tran.rotate(theta);
 		tran.translate(length/2, width/2);
 		
@@ -172,7 +235,7 @@ public class BoardDrawer {
 		}
 		else {
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 9 * 0.1f));
-			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),30));
+			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),40));
 		}
 		g2d.fill(rotatedRect);
 		g2d.setComposite(a);
@@ -183,10 +246,9 @@ public class BoardDrawer {
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		
 	}
-	public static String edgeClick(MouseEvent e, GameState game) {
-		String str = "";
+	public static int edgeClick(MouseEvent e, GameState game) {
 		Point p = e.getPoint();
-		String c1 = null, c2 = null;
+		String c1 = null, c2 = null,color = null;
 		for(int i = 0; i < rotatedRects.size(); i++) {
 			if(rotatedRects.get(i).contains(e.getPoint())) {
 				int i1 = connectedData[i][0];
@@ -194,29 +256,10 @@ public class BoardDrawer {
 				
 				c1 = citys[i1];
 				c2 = citys[i2];
-				str += "" + i;
-				break;
+				
+				return i;
 			}
 		}
-		if(c1 == null && c2 == null)
-			return str;
-		for(int i = 0; i < game.getEdges().size(); i++) {
-			Edge ed = game.getEdges().get(i);
-			
-			String cc1 = ed.getCities().get(0).getName();
-			String cc2 = ed.getCities().get(1).getName();
-			
-			//System.out.println(game.getEdges().size());
-			//System.out.println("Stuff1: " + c1 + " | " + c2);
-			//System.out.println("Stuff2: " + cc1 + " | " + cc2);
-			
-			ArrayList<String> test = new ArrayList<String>();
-			test.add(cc1);test.add(cc2);
-			
-			if(test.contains(c1) && test.contains(c2)) {
-				str += " " + i;
-			}
-		}
-		return str;
+		return -1;
 	}
 }

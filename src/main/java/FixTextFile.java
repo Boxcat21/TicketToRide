@@ -29,6 +29,7 @@ public class FixTextFile {
 			added.add(s);
 		}
 		*/
+		/*
 		Scanner sc = new Scanner(new File("FixedCon"));
 		
 		ArrayList<String> added = new ArrayList<String>();
@@ -38,6 +39,20 @@ public class FixTextFile {
 				System.out.println(s);
 				added.add(s);
 			}
+		}
+		*/
+		Scanner sc = new Scanner(new File("FixedCon"));
+		
+		String prev = sc.nextLine();
+		while(sc.hasNextLine()) {
+			String cur = sc.nextLine();
+			
+			if(cur.substring(0, cur.indexOf("|")).equals(prev.substring(0, prev.indexOf("|")))) {
+				System.out.println(prev);
+				System.out.println(cur);
+			}
+			
+			prev = cur;
 		}
 	}
 }

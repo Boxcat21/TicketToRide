@@ -31,23 +31,29 @@ public class GameState {
 	public static final String[] PLAYER_COLORS = { "Red", "Green", "Yellow", "Blue" };
 	private String longestPath;
 	private String mostContracts;
-	// for longest path
 	private ArrayList<City> passedCities;
+	private boolean lastRound;
 
 	public GameState() throws FileNotFoundException {
-		// Reading in contracts
-
+		//Datastructures init
 		cities = new ArrayList<>();
 		contractList = new LinkedList<>();
 		longestPath = "";
 		mostContracts = "";
-		this.passedCities = new ArrayList<City>();
+		cities = new ArrayList<>();
+		edges = new ArrayList<>();
+		trainCardDeck = new Stack();
+		displayCards = new ArrayList<>();
+		players = new LinkedList<>();
+		passedCities = new ArrayList<>();
+		discardTrainCard = new ArrayList<>();
+		lastRound = false;
+		//Adding contract cards
 		Scanner scan = new Scanner(new File("tickets.txt"));
 		int counter = Integer.parseInt(scan.nextLine());
 		for (int i = 0; i < counter; i++) {
 			String[] temp = scan.nextLine().split("|");
-			City one = null;
-			City two = null;
+			City one = null, two = null;
 			for (City c : cities) {
 				if (c.getName().equals(temp[1]))
 					one = c;
@@ -57,78 +63,36 @@ public class GameState {
 			contractList.add(new ContractCard(one, two, Integer.parseInt(temp[0])));
 		}
 
-		// Adding train cards
-		ArrayList<TrainCard> list = new ArrayList<TrainCard>();
-		trainCardDeck = new Stack();
+		//Adding train cards
 		for (int j = 0; j < 8; j++)
 			for (int i = 0; i < 12; i++)
 				trainCardDeck.add(new TrainCard(this.TRAIN_COLORS[j]));
-
 		for (int i = 0; i < 14; i++)
 			trainCardDeck.add(new TrainCard("Wild"));
 		Collections.shuffle(trainCardDeck);
-		// discard list
-		discardTrainCard = new ArrayList<>();
-		// display cards
-		displayCards = new ArrayList<>();
-		for (int i = 0; i < 5; i++) {
-			displayCards.add(trainCardDeck.pop());
-		}
 
-		// adding players, cur player and turncounter
-		players = new LinkedList<>();
-		for (int i = 0; i < this.PLAYER_COLORS.length; i++)
-			players.add(new Player(PLAYER_COLORS[i]));
+		//Adding display cards
+		for (int i = 0; i < 5; i++)
+			displayCards.add(trainCardDeck.pop());
+
+		//Adding players, cur player and turncounter
+		for (int i = 0; i < this.PLAYER_COLORS.length; i++) {
+			Player p = new Player(PLAYER_COLORS[i]);
+			for(int j = 0; j < 4; j++)
+				p.addTrainCard(trainCardDeck.pop());
+			players.add(p);
+		}
 		curPlayer = players.poll();
 		turnCounter = 2;
-		/*
-		 * 
-		 * 
-		 * Cities and Edges
-		 * 
-		 * 
-		 * 
-		 */
 
-		// edges and cities
-		cities = new ArrayList<>();
-		edges = new ArrayList<>();
-		// adds all the cities with null edge arraylist
+		//Edges and Cities
 		scan = new Scanner(new File("Cities"));
 		while (scan.hasNextLine()) {
 			String[] temp1 = scan.nextLine().split(",");
 			cities.add(new City(new Point(Integer.parseInt(temp1[1]), Integer.parseInt(temp1[2])), temp1[0],
 					new ArrayList<Edge>()));
-
 		}
-
-		// At this point each city is initialized with the correct name and point of the
-		// city.
-		// The only thing empty for each city is the arraylist inside; it's initialized
-		// but it is empty
-
-		// Puts all the cities and their connections in a hashmap of string, list
-		HashMap<String, ArrayList<String>> cityConnections = new HashMap<>();
-		scan = new Scanner(new File("ConnectedCities.txt"));
-		while (scan.hasNextLine()) {
-			String line1 = scan.nextLine();
-			String[] tempFirstTwo = line1.substring(0, line1.indexOf('|')).split(",");
-			String key = tempFirstTwo[0];
-			if (cityConnections.containsKey(key)) {
-				ArrayList<String> temp = cityConnections.get(key);
-				temp.add(tempFirstTwo[1]);
-			} else {
-				ArrayList<String> temp = new ArrayList<>();
-				temp.add(tempFirstTwo[1]);
-				cityConnections.put(key, temp);
-			}
-
-		}
-
-		// Make the list of edges
-		ArrayList<String> strings = new ArrayList<>();
-		HashMap<String, ArrayList<String>> previous = new HashMap<>();
-		scan = new Scanner(new File("ConnectedCities.txt"));
+		scan = new Scanner(new File("FixedCon"));
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
 			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");
@@ -136,146 +100,44 @@ public class GameState {
 			ArrayList<City> tempCities = new ArrayList<>();
 			String key = tempFirstTwo[0];
 			String value = tempFirstTwo[1];
-			for (String s : cityConnections.get(key))// for every city that is connected to the city called "key"
-			{
-				City c = cityHelper(s);
-				City orig = cityHelper(key);
-				if (previous.containsKey(key)) {
-					if (!previous.get(key).contains(s)) {
-						if (value.equals(s)) {
-							ArrayList<String> tempList = previous.get(key);
-							tempList.add(c.getName());
-							previous.put(orig.getName(), tempList);
-							if (previous.containsKey(c.getName())) {
-								if (!previous.get(c.getName()).contains(key)) {
-									ArrayList<String> someList = previous.get(key);
-									someList.add(orig.getName());
-									previous.put(c.getName(), someList);
-								}
-							} else {
-								ArrayList<String> tempList2 = new ArrayList<>();
-								tempList2.add(orig.getName());
-								previous.put(c.getName(), tempList2);
-							}
-							tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
-							tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
-							edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
-						}
-					}
-				}
-
-				else if (value.equals(s))// This isnt working its not checking the stuff right
-				{
-					if (!previous.containsKey(key)) {
-						ArrayList<String> tempList = new ArrayList<>();
-						tempList.add(c.getName());
-						previous.put(orig.getName(), tempList);
-					} else {
-						ArrayList<String> tempList = previous.get(key);
-						tempList.add(c.getName());
-						previous.put(orig.getName(), tempList);
-					}
-					if (previous.containsKey(c.getName())) {
-						if (!previous.get(c.getName()).contains(key)) {
-							ArrayList<String> someList = previous.get(key);
-							someList.add(orig.getName());
-							previous.put(c.getName(), someList);
-						}
-
-					} else {
-						ArrayList<String> tempList2 = new ArrayList<>();
-						tempList2.add(orig.getName());
-						previous.put(c.getName(), tempList2);
-					}
-					tempCities.add(new City(c.getPoint(), s, new ArrayList<Edge>()));
-					tempCities.add(new City(orig.getPoint(), key, new ArrayList<Edge>()));
-					edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
-				}
-				System.out.println();
-			}
-			tempCities = new ArrayList<>();
+			tempCities.add(cityHelper(key));
+			tempCities.add(cityHelper(value));
+			edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
 		}
-
-		
-
-		scan = new Scanner(new File("Doubles.txt"));
-		previous = new HashMap<>();
-		while (scan.hasNextLine()) {
-			String line = scan.nextLine();
-			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");
-			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.length()).split(",");
-			ArrayList<City> tempCities = new ArrayList<>();
-			String key = tempFirstTwo[0];
-			String value = tempFirstTwo[1];
-			City one = cityHelper(key);
-			City two = cityHelper(value);
-			tempCities.add(one);
-			tempCities.add(two);
-			edges.add(new Edge(Integer.parseInt(tempLastTwo[0]),tempLastTwo[1],tempCities));
-		}
-		System.out.println(edges.size());
-		for (Edge e : edges) {
-			for (City c : e.getCities())
-				System.out.print(c.getName() + " ");
-			System.out.println();
-		}
-
 		for (int i = cities.size() - 1; i >= 0; i--) {
-			ArrayList<Edge> edgeTemps = new ArrayList<>();
+			ArrayList<Edge> temps = new ArrayList<>();
 			for (Edge e : edges) {
 				if (e.getCities().contains(cities.get(i)))
-					;
-				{
-					edgeTemps.add(e);
-				}
-
+					temps.add(e);
 			}
-			City oldCity = cities.remove(i);
-			cities.add(i, new City(oldCity.getPoint(), oldCity.getName(), edgeTemps));
-			edgeTemps = new ArrayList<>();
+			cities.add(new City(cities.get(i).getPoint(), cities.get(i).getName(), temps));
 		}
-
 	}
-
 	private City cityHelper(String name) {
 		for (City c : cities)
 			if (c.getName().equals(name))
 				return c;
 		return null;
 	}
-
-	public Player getCurPlayer() {
-		return curPlayer;
-	}
-
-	public ArrayList<Edge> getEdges() {
-		return this.edges;
-	}
-
-	public Queue<Player> getPlayerList() {
-		return players;
-	}
-
-	public ArrayList<TrainCard> getDisplayCards() {
-		return displayCards;
-	}
-
-	public ArrayList<ContractCard> getDisplayContracts() {
-		ArrayList<ContractCard> temps = new ArrayList<>();
-		for (int i = 0; i < 3; i++)
-			temps.add(this.contractList.poll());
-		return temps;
-	}
-
-	public void placeTrain(Edge e) {
+	public void placeTrain(Edge e, ArrayList<TrainCard> input) { //player action
 		if (!e.getHasTrains()) {
-			e.setHasTrains();
-			e.setPlayer(curPlayer);
-			turnCounter -= 2;
+			
+			for(int i = 0; i < input.size(); i++) {
+				if(input.get(i).getColor().equals(e.getColor()) || input.get(i).getColor().equals("wild")) {
+					input.remove(i);
+					i--;
+				}
+			}
+			if(!(input.size() > 0)) {
+				e.setHasTrains();
+				e.setPlayer(curPlayer);
+				turnCounter -= 2;
+				curPlayer.reduceTrains(e.getLength());
+			}
 		}
 
-		checkTurn();
 		checkContracts();
+		checkTurn();
 	}
 
 	private void checkContracts() {
@@ -320,7 +182,7 @@ public class GameState {
 		}
 	}
 
-	public boolean chooseTrainCard(int choice) {
+	public boolean chooseTrainCard(int choice) { //player action
 		TrainCard t = displayCards.get(choice);
 		if (t.getColor().equals("Wild") && turnCounter != 1) {
 			t = displayCards.remove(choice);
@@ -341,19 +203,22 @@ public class GameState {
 		return true;
 	}
 
-	public void drawTrainCard() {
+	public void drawTrainCard() { //player action
 		curPlayer.addTrainCard(trainCardDeck.pop());
+		turnCounter--;
+		checkTurn();
 	}
-
-	public String chooseContractCard(ArrayList<Integer> choices) {
+	public String chooseContractCard(ArrayList<Integer> choices) { //player action
 		if (choices.size() < 1)
 			return "Invalid. You must choose at least one contract.";
 		for (int i = 0; i < 3; i++)
 			if (i == choices.get(i))
 				this.contractList.offer(this.getDisplayContracts().get(i));
 		turnCounter -= 2;
+		
+		checkTurn();
+		
 		return "Successful";
-
 	}
 
 	public ArrayList<Player> endGame() {
@@ -377,11 +242,6 @@ public class GameState {
 		turnCounter = 2;
 
 	}
-
-	public String getMostContracts() {
-		return mostContracts;
-	}
-
 	public String longestPath() { // THINGS TO DO: Check for sketchy case, do the recursion
 		ArrayList<City> startCities = this.cities;
 
@@ -459,32 +319,43 @@ public class GameState {
 			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
 		}
-		boolean lastRound = false;
+		if (lastRound)
+			endGame();
+		lastRound = false;
 		for (Player p : players)
 			if (p.getTrains() < 3) {
 				lastRound = true;
 				break;
 			}
 
-		if (turnCounter <= 0 && !lastRound) {
+		if (turnCounter == 0 && !lastRound) {
 			endTurn();
 			return;
 		}
-
-		if (lastRound) // still need to fix to run one more round before endin
-			endGame();
-		checkContracts();
 		return;
 	}
-
 	private boolean checkWilds() {
 		int count = 0;
-		for (TrainCard t : displayCards) {
+		for (TrainCard t : displayCards)
 			if (t.getColor().equals("Rainbow"))
 				count++;
-			if (count == 3)
-				return true;
-		}
-		return false;
+		
+		return count >= 3;
+	}
+	public Player getCurPlayer() {return curPlayer;}
+	
+	public ArrayList<Edge> getEdges() {return this.edges;}
+	
+	public Queue<Player> getPlayerList() {return players;}
+	
+	public ArrayList<TrainCard> getDisplayCards() {return displayCards;}
+	
+	public String getMostContracts() {return mostContracts;}
+	
+	public ArrayList<ContractCard> getDisplayContracts() {
+		ArrayList<ContractCard> temps = new ArrayList<>();
+		for (int i = 0; i < 3; i++)
+			temps.add(this.contractList.poll());
+		return temps;
 	}
 }
