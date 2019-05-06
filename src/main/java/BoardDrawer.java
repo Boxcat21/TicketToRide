@@ -176,17 +176,12 @@ public class BoardDrawer {
 				} catch (Exception e) { color = null;}
 				
 				if(!eds.contains(i))
-					drawRotatedRect(g, x1, y1, angle, distance, 10, color, false);
+					drawRotatedRect(g, x1, y1, angle, distance, 5, color, false);
 				else {
-					drawRotatedRect(g, x1, y1, angle, distance, 10, playerColor, true);
+					drawRotatedRect(g, x1, y1, angle, distance, 5, playerColor, true);
 				}
 			}
 		}
-		//Double Edges
-		
-		
-		//City points from text file (prob in constructor)
-		//Cities NEED TO LABEL THE CITIES
 		int r = 20;
 		for(int i = 0; i < citys.length; i++) {
 			g.setColor(new Color(153, 76, 0)); //dark orange

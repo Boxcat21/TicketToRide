@@ -8,10 +8,7 @@ public class Player {
 	private ArrayList<TrainCard> trainCards;
 	private int trains; // number of trains
 	private String trainColor; // color of player
-	
-	
-	
-	
+
 	public Player(String trainColor) {
 		super();
 		this.points = 0;
