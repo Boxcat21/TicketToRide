@@ -119,7 +119,7 @@ public class GameState {
 				return c;
 		return null;
 	}
-	public void placeTrain(Edge e, ArrayList<TrainCard> input) {
+	public void placeTrain(Edge e, ArrayList<TrainCard> input) { //player action
 		if (!e.getHasTrains()) {
 			
 			for(int i = 0; i < input.size(); i++) {
@@ -182,7 +182,7 @@ public class GameState {
 		}
 	}
 
-	public boolean chooseTrainCard(int choice) {
+	public boolean chooseTrainCard(int choice) { //player action
 		TrainCard t = displayCards.get(choice);
 		if (t.getColor().equals("Wild") && turnCounter != 1) {
 			t = displayCards.remove(choice);
@@ -203,17 +203,21 @@ public class GameState {
 		return true;
 	}
 
-	public void drawTrainCard() {
+	public void drawTrainCard() { //player action
 		curPlayer.addTrainCard(trainCardDeck.pop());
+		turnCounter--;
+		checkTurn();
 	}
-
-	public String chooseContractCard(ArrayList<Integer> choices) {
+	public String chooseContractCard(ArrayList<Integer> choices) { //player action
 		if (choices.size() < 1)
 			return "Invalid. You must choose at least one contract.";
 		for (int i = 0; i < 3; i++)
 			if (i == choices.get(i))
 				this.contractList.offer(this.getDisplayContracts().get(i));
 		turnCounter -= 2;
+		
+		checkTurn();
+		
 		return "Successful";
 	}
 
