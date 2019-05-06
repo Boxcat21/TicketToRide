@@ -13,10 +13,17 @@ public class TextRunner {
 		// Going through the game
 		scan = new Scanner(System.in);
 
+		int cnt = 0;
 		// Starting each turn
 		while (!g.isEnded()) {
-			System.out.println(g.getCurPlayer().toString()
-					+ ", enter d to draw cards, enter c to draw contracts, enter p to place train");
+			System.out.println(g.getCurPlayer().toString());
+			if(cnt == 0) {
+				System.out.println("Enter your choice of contracts: ");
+				
+				
+				
+			}
+			System.out.println(", enter d to draw cards, enter c to draw contracts, enter p to place train");
 			// Drawing cards
 			String s = scan.nextLine();
 			if (s.equals("d"))

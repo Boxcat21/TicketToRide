@@ -35,7 +35,9 @@ public class BoardDrawer {
 	private static String[] colors; //201
 	private static ArrayList<Shape> rotatedRects; //201
 	private static int doubleEdgeCheck;
+	private static int size;
 	private static void init() {
+		size = 12;
 		//thing
 		doubleEdgeCheck = 0;
 		//rotato bato
@@ -144,9 +146,9 @@ public class BoardDrawer {
 				doubleEdgeCheck = 1;
 				
 				if(!eds.contains(i))
-					drawRotatedRect(g, x1, y1, angle, distance, 5, color, false);
+					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
 				else 
-					drawRotatedRect(g, x1, y1, angle, distance, 5, playerColor, true);
+					drawRotatedRect(g, x1, y1, angle, distance, size, color, true);
 				i++;
 				
 				try {
@@ -156,9 +158,9 @@ public class BoardDrawer {
 				
 				doubleEdgeCheck = 2;
 				if(!eds.contains(i))
-					drawRotatedRect(g, x1, y1, angle, distance, 5, color, false);
+					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
 				else 
-					drawRotatedRect(g, x1, y1, angle, distance, 5, playerColor, true);
+					drawRotatedRect(g, x1, y1, angle, distance, size, color, true);
 				doubleEdgeCheck = 0;
 			}
 			else {
@@ -176,9 +178,9 @@ public class BoardDrawer {
 				} catch (Exception e) { color = null;}
 				
 				if(!eds.contains(i))
-					drawRotatedRect(g, x1, y1, angle, distance, 5, color, false);
+					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
 				else {
-					drawRotatedRect(g, x1, y1, angle, distance, 5, playerColor, true);
+					drawRotatedRect(g, x1, y1, angle, distance, size, color, true);
 				}
 			}
 		}

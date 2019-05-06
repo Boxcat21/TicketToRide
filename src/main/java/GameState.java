@@ -34,7 +34,7 @@ public class GameState {
 	private ArrayList<City> passedCities;
 	private boolean lastRound;
 	private boolean isEnded;
-
+	private ArrayList<ContractCard> displayContracts;
 	public GameState() throws FileNotFoundException {
 		isEnded = false;
 		//Datastructures init
@@ -183,7 +183,12 @@ public class GameState {
 			return checkContractsHelper(shared, cityEdges, current.getOtherCity(start));
 		}
 	}
-
+	public String initChoiceContract() {
+		String str = null;
+		for(int i = 0; i < 5; i++)
+			str = "" + this.contractList.poll();
+		return str;
+	}
 	public boolean chooseTrainCard(int choice) { //player action
 		TrainCard t = displayCards.get(choice);
 		if (t.getColor().equals("Wild") && turnCounter != 1) {
@@ -210,12 +215,13 @@ public class GameState {
 		turnCounter--;
 		checkTurn();
 	}
-	public String chooseContractCard(ArrayList<Integer> choices) { //player action
+	public String chooseContractCard(ArrayList<Integer> choices, int amnt) { //player action
 		if (choices.size() < 1)
 			return "Invalid. You must choose at least one contract.";
-		for (int i = 0; i < 3; i++)
-			if (i == choices.get(i))
-				this.contractList.offer(this.getDisplayContracts().get(i));
+		for (int i = 0; i < amnt; i++)
+			if (choices.contains(i)) {
+				this.contractList.offer(this.displayContracts.get(i));
+			}
 		turnCounter -= 2;
 		
 		checkTurn();
@@ -359,10 +365,11 @@ public class GameState {
 		return this.isEnded;
 	}
 	
-	public ArrayList<ContractCard> getDisplayContracts() {
+	public ArrayList<ContractCard> getDisplayContracts(int amnt) {
 		ArrayList<ContractCard> temps = new ArrayList<>();
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < amnt; i++)
 			temps.add(this.contractList.poll());
+		displayContracts = temps;
 		return temps;
 	}
 }
