@@ -19,6 +19,7 @@ public class GamePanel extends JPanel implements MouseListener{
 		
 		game = new GameState();
 		clickedEdgeIndecies = new ArrayList<Integer>();
+		
 	}
 
 	@Override
@@ -66,9 +67,16 @@ public class GamePanel extends JPanel implements MouseListener{
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		BoardDrawer.drawBoard(g, this.clickedEdgeIndecies);
+		
+		if(!game.isEnded()) {
+			BoardDrawer.drawBoard(g, clickedEdgeIndecies);
+			HandDrawer.drawHand(g, game.getCurPlayer());
+			//HandDrawer.drawContractSelection(g, );
+		}
+
+		/*BoardDrawer.drawBoard(g, this.clickedEdgeIndecies);
 		HandDrawer.drawHand(g, p);
-		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());
+		HandDrawer.drawContractSelection(g, game.getDisplayContracts() new ArrayList<ContractCard>());
 		HandDrawer.drawContractCards(g, p.getContracts());
 		
 		g.setColor(new Color(184, 134,11));
@@ -86,7 +94,7 @@ public class GamePanel extends JPanel implements MouseListener{
 		DataDrawer.drawData(g, temp);
 		
 		DataDrawer.drawDisplayCards(g, p.getTrainCards());
-		DataDrawer.drawCurPlayer(g, p);
+		DataDrawer.drawCurPlayer(g, p);*/
 	}
 	
 	

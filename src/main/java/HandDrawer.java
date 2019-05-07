@@ -47,7 +47,6 @@ public class HandDrawer {
 		for (int i = 0; i < COLOR_NAMES.length; i++) {
 			g2.setColor(Color.WHITE);
 			g2.fillRect(x, 910, 50, 170);
-			// g2.setColor(Color.WHITE);
 			g2.fillRect(x + 50, 910, 50, 170);
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6));
