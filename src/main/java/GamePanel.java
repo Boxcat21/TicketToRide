@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements MouseListener{
 		repaint();
 	}
 	@Override
-	public void mouseEntered(MouseEvent e) {	}
+	public void mouseEntered(MouseEvent e) {}
 	@Override
 	public void mouseExited(MouseEvent e) {}
 	@Override
@@ -66,15 +66,22 @@ public class GamePanel extends JPanel implements MouseListener{
 			if(game.getDisplayContracts() != null)
 				HandDrawer.drawContractCards(g, game.getDisplayContracts());
 			HandDrawer.drawContractCards(g, game.getCurPlayer().getContracts());
+			
+			if ( game.isChoosingContracts() )
+				HandDrawer.drawContractSelection(g, game.getDisplayContracts());
 		}
 		g.setColor(new Color(184, 134,11));
 		g.fillRect(1535, 0, 1920-1535, 1080);
 		g.setColor(Color.BLACK);
 		g.drawRect(1535, 0, 1920-1535, 1080);
 		
-		HandDrawer.drawPlayer(g, game.getCurPlayer());
+		
 		DataDrawer.drawDisplayCards(g, game.getCurPlayer().getTrainCards());
 		DataDrawer.drawCurPlayer(g, game.getCurPlayer());
+		ArrayList<Player> temp = new ArrayList<>();
+		temp.addAll(game.getPlayerList());
+		temp.add(game.getCurPlayer());
+		DataDrawer.drawData(g, temp);
 		/*BoardDrawer.drawBoard(g, this.clickedEdgeIndecies);
 		HandDrawer.drawHand(g, p);
 		HandDrawer.drawContractSelection(g, game.getDisplayContracts() new ArrayList<ContractCard>());
