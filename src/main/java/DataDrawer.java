@@ -9,15 +9,14 @@ import java.util.ArrayList;
 
 public class DataDrawer {
 	
-	public static ArrayList<Rectangle> clickableTrainCard;
-	public static ArrayList<Rectangle> clickableContract;
+	public static ArrayList<Rectangle> clickableTrainCard = new ArrayList<>();
+	public static ArrayList<Rectangle> clickableContract = new ArrayList<>();
 	
 	private final static Color[] playerColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE};
-	private static ArrayList<String> colors;
-	public DataDrawer() {
-		clickableTrainCard = new ArrayList<>();
-		clickableContract = new ArrayList<>();
-		colors = new ArrayList<>();
+	private static ArrayList<String> colors = new ArrayList<>();
+	public static void init() {
+	
+		
 		colors.add("Red");
 		colors.add("Green");
 		colors.add("Yellow");
@@ -38,6 +37,7 @@ public class DataDrawer {
 	}
 	
 	public static void drawData(Graphics g, ArrayList<Player> data) {
+		 init();
 		Graphics2D g2 = (Graphics2D) g;
 		
 		// add image for contract
@@ -62,6 +62,7 @@ public class DataDrawer {
 	}
 	
 	public static void drawDisplayCards(Graphics g, ArrayList<TrainCard> display) {
+		 init();
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(4));
@@ -88,6 +89,7 @@ public class DataDrawer {
 	}
 	
 	public static void drawCurPlayer(Graphics g, Player p) {
+		 init();
 		System.out.println(p.getTrainColor());
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(playerColors[colors.indexOf(p.getTrainColor())]);

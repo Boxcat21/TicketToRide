@@ -17,7 +17,7 @@ public class HandDrawer {
 	public static ArrayList<Rectangle> clickableAdd = new ArrayList<Rectangle>();
 	public static ArrayList<Rectangle> clickableSub = new ArrayList<Rectangle>();
 	public static ArrayList<Rectangle> clickableArrow = new ArrayList<Rectangle>();
-	
+	public static ArrayList<Rectangle> clickableContracts = new ArrayList<Rectangle>();
 	public static void init() {
 			int x = 90;
 			for ( int i = 0 ; i < 9; i++ ) { 
@@ -29,6 +29,11 @@ public class HandDrawer {
 			// adds the turn arrows for contract viewing 
 			clickableArrow.add(new Rectangle(1050, 790, 35, 35));
 			clickableArrow.add(new Rectangle(1315,790,35,35));
+			
+			clickableContracts.add(new Rectangle(600, 760, 320, 33));
+			clickableContracts.add(new Rectangle(600, 793, 320, 33));
+			clickableContracts.add(new Rectangle(600, 826, 320, 33));
+			clickableContracts.add(new Rectangle(920, 760, 60, 100)); // this one is the "done" button
 	}
 
 	public static void drawHand(Graphics g, Player p) {
