@@ -84,6 +84,9 @@ public class GamePanel extends JPanel implements MouseListener{
 		temp.add(p);
 		temp.add(p);
 		DataDrawer.drawData(g, temp);
+		
+		DataDrawer.drawDisplayCards(g, p.getTrainCards());
+		DataDrawer.drawCurPlayer(g, p);
 	}
 	
 	
