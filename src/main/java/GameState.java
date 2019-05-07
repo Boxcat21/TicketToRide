@@ -158,10 +158,10 @@ public class GameState {
 			displayCards.add(trainCardDeck.pop());
 			turnCounter--;
 		} else {
-			System.out.println("Stop right there, criminal scum!");
+			//ystem.out.println("Stop right there, criminal scum!");
 		}
-		System.out.println(turnCounter);
-		System.out.println(curPlayer.getTrainCards());
+		//System.out.println(turnCounter);
+		//System.out.println(curPlayer.getTrainCards());
 		checkTurn();
 		return true;
 	}
@@ -182,7 +182,7 @@ public class GameState {
 		for (int i = 0; i < amnt; i++)
 			if (choices.contains(i))
 				curPlayer.addContractCard(displayContracts.get(i));
-		System.out.println(curPlayer.getContracts());
+		//System.out.println(curPlayer.getContracts());
 		turnCounter -= 2;
 		choosingContracts = false;
 		displayContracts = null;

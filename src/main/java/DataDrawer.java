@@ -89,11 +89,11 @@ public class DataDrawer {
 	}
 	
 	public static void drawCurPlayer(Graphics g, Player p) {
-		 init();
-		System.out.println(p.getTrainColor());
+		init();
+		//System.out.println(p.getTrainColor());
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(playerColors[colors.indexOf(p.getTrainColor())]);
-		g2.drawString("123", 350, 780);
+		g2.drawString(GameState.PLAYER_COLORS[colors.indexOf(p.getTrainColor())], 350, 780);
 	}
 
 }
