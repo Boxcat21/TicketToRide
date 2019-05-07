@@ -25,7 +25,33 @@ public class TestGame {
 		}
 		while(!g.isEnded()) {
 			System.out.println("\n" + g.getCurPlayer());
-			System.out.println("What would you like to do?");
+			System.out.println("What would you like to do? (placeTrains, drawContracts, chooseContracts,"
+					+ " drawTrainCard, chooseTrainCard, )");
+			String s = sc.nextLine();
+			
+			if(s.equals("placeTrains")) {
+				System.out.println(g.getCurPlayer().getTrainCards());
+				System.out.println("Choose the cards desired (indecies):: ");
+				String temp[] = sc.nextLine().split(" ");
+				ArrayList<Integer> choices = new ArrayList<Integer>();
+				
+				for(int i = 0; i < temp.length; i++)
+					choices.add(Integer.parseInt(temp[i]));
+			}
+			else if(s.equals("drawContracts")) {
+				
+			}
+			else if(s.equals("chooseContracts")) {
+				
+			}
+			else if(s.equals("chooseTrainCard")) {
+				
+			}
+			else if(s.equals("drawTrainCard")) {
+				
+			}
+			else
+				System.out.println("TRY AGAIN");
 		}
 	}
 }

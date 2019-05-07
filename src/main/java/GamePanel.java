@@ -11,22 +11,14 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel implements MouseListener{
 	
 	private GameState game;
-	private boolean fullscreen;
-	Player p; // temporary
 	private ArrayList<Integer> clickedEdgeIndecies;
 	public GamePanel() throws IOException{ 
-		game = new GameState();
-		p = new Player("Yeet"); // temporary testing player
-		p.addContractCard(new ContractCard(new City(null, "Elleh1", null), new City(null, "Elleh2", null), 20));
-		p.addContractCard(new ContractCard(new City(null, "Elleh2", null), new City(null, "Elleh3", null), 20));
-		p.addContractCard(new ContractCard(new City(null, "Elleh3", null), new City(null, "Elleh4", null), 20));
 		setSize(1920,1080);
 		setVisible(true);
 		addMouseListener(this);
-		HandDrawer hd = new HandDrawer();
 		
+		game = new GameState();
 		clickedEdgeIndecies = new ArrayList<Integer>();
-		
 	}
 
 	@Override

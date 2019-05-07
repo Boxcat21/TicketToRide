@@ -122,7 +122,6 @@ public class GameState {
 			contractDeck.add(tempCards.get(i));
 		scan.close();
 	}
-
 	public void placeTrain(Edge e, ArrayList<TrainCard> input) { //player action
 		if(choosingContracts)
 			return;
