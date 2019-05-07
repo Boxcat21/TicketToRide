@@ -106,14 +106,13 @@ public class HandDrawer {
 		// draw contents here
 		g2.setColor(Color.BLACK);
 		
-		g2.drawString(cards.get(0).toString(), 1125, 800);
+		//g2.drawString(cards.get(0).toString(), 1125, 800);
 		g2.setColor(Color.BLACK);
 		
 		g2.drawRect(1050, 790, 35, 35);
 		g2.drawRect(1315, 790, 35, 35);
 		drawArrow(g, 1085, 807, 1050, 807 );
-		drawArrow(g, 1315, 807, 1350, 807);
-		
+		drawArrow(g, 1315, 807, 1350, 807);		
 		
 		
 	}

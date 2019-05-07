@@ -52,12 +52,12 @@ public class GamePanel extends JPanel implements MouseListener{
 		}
 		
 		if ( HandDrawer.clickableArrow.get(0).contains(e.getPoint())) {
-			HandDrawer.advanceCard(p, -1);
+			HandDrawer.advanceCard(game.getCurPlayer(), -1);
 			//System.out.println(-2);
 			repaint();
 		}
 		if ( HandDrawer.clickableArrow.get(1).contains(e.getPoint())) { 
-			HandDrawer.advanceCard(p, 1);
+			HandDrawer.advanceCard(game.getCurPlayer(), 1);
 			//System.out.println(2);
 			repaint();
 		}
@@ -67,13 +67,21 @@ public class GamePanel extends JPanel implements MouseListener{
 	
 	@Override
 	public void paintComponent(Graphics g) {
-		
 		if(!game.isEnded()) {
 			BoardDrawer.drawBoard(g, clickedEdgeIndecies);
 			HandDrawer.drawHand(g, game.getCurPlayer());
-			//HandDrawer.drawContractSelection(g, );
+			if(game.getDisplayContracts() != null)
+				HandDrawer.drawContractCards(g, game.getDisplayContracts());
+			HandDrawer.drawContractCards(g, game.getCurPlayer().getContracts());
 		}
-
+		g.setColor(new Color(184, 134,11));
+		g.fillRect(1535, 0, 1920-1535, 1080);
+		g.setColor(Color.BLACK);
+		g.drawRect(1535, 0, 1920-1535, 1080);
+		
+		HandDrawer.drawPlayer(g, game.getCurPlayer());
+		DataDrawer.drawDisplayCards(g, game.getCurPlayer().getTrainCards());
+		DataDrawer.drawCurPlayer(g, game.getCurPlayer());
 		/*BoardDrawer.drawBoard(g, this.clickedEdgeIndecies);
 		HandDrawer.drawHand(g, p);
 		HandDrawer.drawContractSelection(g, game.getDisplayContracts() new ArrayList<ContractCard>());

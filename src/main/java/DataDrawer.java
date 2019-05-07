@@ -15,7 +15,7 @@ public class DataDrawer {
 	private final static Color[] playerColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE};
 	private static ArrayList<String> colors = new ArrayList<>();
 	public static void init() {
-	
+		
 		
 		colors.add("Red");
 		colors.add("Green");
@@ -37,7 +37,7 @@ public class DataDrawer {
 	}
 	
 	public static void drawData(Graphics g, ArrayList<Player> data) {
-		 init();
+		init();
 		Graphics2D g2 = (Graphics2D) g;
 		
 		// add image for contract

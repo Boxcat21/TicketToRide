@@ -185,7 +185,7 @@ public class GameState {
 		System.out.println(curPlayer.getContracts());
 		turnCounter -= 2;
 		choosingContracts = false;
-		
+		displayContracts = null;
 		checkTurn();
 		return "Successful";
 	}
@@ -309,6 +309,8 @@ public class GameState {
 	public Queue<Player> getPlayerList() {return players;}
 	
 	public ArrayList<TrainCard> getDisplayCards() {return displayCards;}
+	
+	public ArrayList<ContractCard> getDisplayContracts() {return displayContracts;}
 	
 	public String getMostContracts() {return mostContracts;}
 	
