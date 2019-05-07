@@ -5,6 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 
 public class DataDrawer {
@@ -37,9 +39,14 @@ public class DataDrawer {
 	}
 	
 	public static void drawData(Graphics g, ArrayList<Player> data) {
-		init();
-		Graphics2D g2 = (Graphics2D) g;
 		
+		Graphics2D g2 = (Graphics2D) g;
+		Collections.sort(data, new Comparator<Player>() {
+			@Override
+			public int compare(Player arg0, Player arg1) {
+				return arg0.getTrainColor().compareTo(arg1.getTrainColor());
+			}
+		});
 		// add image for contract
 		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 24)); 
 		
@@ -62,7 +69,7 @@ public class DataDrawer {
 	}
 	
 	public static void drawDisplayCards(Graphics g, ArrayList<TrainCard> display) {
-		 init();
+	
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(4));
@@ -89,11 +96,12 @@ public class DataDrawer {
 	}
 	
 	public static void drawCurPlayer(Graphics g, Player p) {
-		init();
+		
 		//System.out.println(p.getTrainColor());
 		Graphics2D g2 = (Graphics2D) g;
+		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 24)); 
 		g2.setColor(playerColors[colors.indexOf(p.getTrainColor())]);
-		g2.drawString(GameState.PLAYER_COLORS[colors.indexOf(p.getTrainColor())], 350, 780);
+		g2.drawString(GameState.PLAYER_COLORS[colors.indexOf(p.getTrainColor())] + " Turn", 200, 780);
 	}
 
 }

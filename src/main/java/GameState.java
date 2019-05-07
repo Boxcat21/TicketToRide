@@ -370,4 +370,8 @@ public class GameState {
 			return checkContractsHelper(shared, cityEdges, current.getOtherCity(start));
 		}
 	}
+	
+	public boolean isChoosingContracts() {
+		return choosingContracts;
+	}
 }

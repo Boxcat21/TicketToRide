@@ -37,7 +37,6 @@ public class HandDrawer {
 	}
 
 	public static void drawHand(Graphics g, Player p) {
-		init();
 		Graphics2D g2 = (Graphics2D) g;
 		//g2.setColor(new Color(255, 105, 180));
 		
@@ -79,7 +78,7 @@ public class HandDrawer {
 	}
 
 	public static void drawContractSelection(Graphics g, ArrayList<ContractCard> selection) {
-		init();
+
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(6));
 		g2.drawRect(600, 760, 380, 100);
@@ -96,7 +95,7 @@ public class HandDrawer {
 	}
 	
 	public static void drawContractCards(Graphics g, ArrayList<ContractCard> cards) {
-		init();
+
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(4));
 		g2.setColor(Color.BLACK);
@@ -118,7 +117,7 @@ public class HandDrawer {
 	}
 	
 	public static void advanceCard(Player p, int direction) {
-		init();
+
 		if ( direction < 0 ) 
 			Collections.rotate(p.getContracts(), 1);
 		else if (direction > 0 )
@@ -135,7 +134,7 @@ public class HandDrawer {
 	}
 	
 	public static  void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
-		init();
+
         Graphics2D g = (Graphics2D) g1.create();
         g.setStroke(new BasicStroke(3));
         double dx = x2 - x1, dy = y2 - y1;
