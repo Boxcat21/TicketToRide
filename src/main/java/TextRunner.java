@@ -15,7 +15,7 @@ public class TextRunner {
 
 		int cnt = 0;
 		//Each player gets to choose their contracts from five at the beginning of the round
-		for(int i=0; i<5;i++)
+		for(int i=0; i<4;i++)
 		{
 			System.out.println(g.getCurPlayer().toString());
 			testDrawContract(true);
@@ -63,7 +63,6 @@ public class TextRunner {
 			} else
 				g.drawTrainCard();
 		}
-		System.out.println(current.get);
 	}
 
 	public static void testDrawContract(boolean b) 
@@ -100,10 +99,7 @@ public class TextRunner {
 		System.out.println(arr.toString());
 		ArrayList<Edge> edges = g.getEdges();
 		for (Edge e : edges) {
-			ArrayList<String> list = new ArrayList<>();
-			list.add(e.getCities().get(0).getName());
-			list.add(e.getCities().get(1).getName());
-			if (list.contains(arr[0]) && list.contains(arr[1]))
+			if(e.getCities().contains(arr[0])&&e.getCities().contains(arr[1]))
 				g.placeTrain(e, choices);
 		}
 
