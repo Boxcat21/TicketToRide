@@ -49,14 +49,13 @@ public class HandDrawer {
 		g2.setColor(Color.BLACK);
 		int x = 90;
 		for (int i = 0; i < COLOR_NAMES.length; i++) {
-			g2.setColor(Color.WHITE);
-			g2.fillRect(x, 910, 50, 170);
-			g2.fillRect(x + 50, 910, 50, 170);
+
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6));
 			g2.drawRect(x, 870, 50, 210);
+			drawArrow(g, x+25, 870+35, x+25, 870);
 			g2.drawRect(x + 50, 870, 50, 210);
-			
+			drawArrow(g, x+75, 870, x+75, 870+35);
 			g2.setStroke(new BasicStroke(1)); // replace these with images Cole made
 			
 			g2.setColor(COLOR_NAMES[i]);
@@ -150,12 +149,7 @@ public class HandDrawer {
                       new int[] {0, -ARR_SIZE, ARR_SIZE, 0}, 3);
     }
 
-	public static void drawPlayer(Graphics g, Player p) {
-		init();
-		Graphics2D g2 = (Graphics2D) g;
 
-		
-	}
 
 
 }

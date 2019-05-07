@@ -29,7 +29,7 @@ public class GamePanel extends JPanel implements MouseListener{
 		repaint();
 	}
 	@Override
-	public void mouseEntered(MouseEvent e) {	}
+	public void mouseEntered(MouseEvent e) {}
 	@Override
 	public void mouseExited(MouseEvent e) {}
 	@Override
