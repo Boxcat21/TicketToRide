@@ -16,7 +16,7 @@ public class GamePanel extends JPanel implements MouseListener{
 	private ArrayList<Integer> clickedEdgeIndecies;
 	public GamePanel() throws IOException{ 
 		game = new GameState();
-		p = new Player("Yeet"); // temporary testing player
+		p = new Player("Red"); // temporary testing player
 		p.addContractCard(new ContractCard(new City(null, "Elleh1", null), new City(null, "Elleh2", null), 20));
 		p.addContractCard(new ContractCard(new City(null, "Elleh2", null), new City(null, "Elleh3", null), 20));
 		p.addContractCard(new ContractCard(new City(null, "Elleh3", null), new City(null, "Elleh4", null), 20));
@@ -24,7 +24,7 @@ public class GamePanel extends JPanel implements MouseListener{
 		setVisible(true);
 		addMouseListener(this);
 		HandDrawer hd = new HandDrawer();
-		
+		DataDrawer d = new DataDrawer();
 		clickedEdgeIndecies = new ArrayList<Integer>();
 		
 	}
@@ -92,6 +92,9 @@ public class GamePanel extends JPanel implements MouseListener{
 		temp.add(p);
 		temp.add(p);
 		DataDrawer.drawData(g, temp);
+		
+		DataDrawer.drawDisplayCards(g, p.getTrainCards());
+		DataDrawer.drawCurPlayer(g, p);
 	}
 	
 	

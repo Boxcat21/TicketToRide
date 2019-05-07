@@ -170,13 +170,14 @@ public class BoardDrawer {
 
 				if (angle < 0)
 					angle += 360;
+				//
 				Color color;
 				try 
 				{
 					Field field = Class.forName("java.awt.Color").getField(colors[i]);
 					color = (Color)field.get(null);
 				} catch (Exception e) { color = null;}
-				
+				//
 				if(!eds.contains(i))
 					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
 				else {
