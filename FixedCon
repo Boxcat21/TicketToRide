@@ -6,7 +6,7 @@ Montreal,Boston|2,gray
 Sault St. Marie,Winnipeg|6,gray
 Sault St. Marie,Duluth|3,gray
 Sault St. Marie,Toronto|2,gray
-Toronto,Duluth|6,pink
+Toronto,Duluth|6,magenta
 Toronto,Chicago|4,white
 Toronto,Pittsburgh|2,gray
 New York,Pittsburgh|2,white
@@ -37,14 +37,14 @@ Calgary,Vancouver|3,gray
 Calgary,Seattle|4,gray
 Calgary,Helena|4,gray
 Helena,Seattle|6,yellow
-Helena,Salt Lake City|3,pink
+Helena,Salt Lake City|3,magenta
 Helena,Denver|4,green
 Helena,Omaha|5,red
-Omaha,Denver|4,pink
+Omaha,Denver|4,magenta
 Omaha,Kansas City|1,gray
 Omaha,Kansas City|1,gray
 Saint Louis,Kansas City|2,blue
-Saint Louis,Kansas City|2,pink
+Saint Louis,Kansas City|2,magenta
 Saint Louis,Little Rock|2,gray
 Saint Louis,Nashville|2,gray
 Nashville,Little Rock|3,white
@@ -59,7 +59,7 @@ Seattle,Portland|1,gray
 Seattle,Portland|1,gray
 Portland,Salt Lake City|6,blue
 Portland,San Francisco|5,green
-Portland,San Francisco|5,pink
+Portland,San Francisco|5,magenta
 Salt Lake City,San Francisco|5,orange
 Salt Lake City,San Francisco|5,white
 Salt Lake City,Las Vegas|3,orange
@@ -83,8 +83,8 @@ Atlanta,New Orleans|4,yellow
 Atlanta,New Orleans|4,orange
 Atlanta,Miami|5,blue
 Atlanta,Charleston|2,gray
-Charleston,Miami|4,pink
-San Francisco,Los Angeles|3,pink
+Charleston,Miami|4,magenta
+San Francisco,Los Angeles|3,magenta
 San Francisco,Los Angeles|3,yellow
 Las Vegas,Los Angeles|2,gray
 Santa Fe,El Paso|2,gray
