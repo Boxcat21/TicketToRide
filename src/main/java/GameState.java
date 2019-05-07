@@ -122,13 +122,13 @@ public class GameState {
 			contractDeck.add(tempCards.get(i));
 		scan.close();
 	}
-	public void placeTrain(Edge e, ArrayList<TrainCard> input) { //player action
+	public void placeTrain(Edge e, ArrayList<String> input) { //player action
 		if(choosingContracts)
 			return;
 		if (!e.getHasTrains() && input.size() == e.getLength()) {
 			
 			for(int i = 0; i < input.size(); i++) {
-				if(input.get(i).getColor().equals(e.getColor()) || input.get(i).getColor().equals("wild")) {
+				if(input.get(i).equals(e.getColor()) || input.get(i).equals("wild")) {
 					input.remove(i);
 					i--;
 				}

@@ -12,6 +12,7 @@ public class GamePanel extends JPanel implements MouseListener{
 	
 	private GameState game;
 	private ArrayList<Integer> clickedEdgeIndecies;
+	private ArrayList<String> chosenTrainCards;
 	public GamePanel() throws IOException{ 
 		setSize(1920,1080);
 		setVisible(true);
@@ -19,7 +20,7 @@ public class GamePanel extends JPanel implements MouseListener{
 		
 		game = new GameState();
 		clickedEdgeIndecies = new ArrayList<Integer>();
-		
+		chosenTrainCards= new ArrayList<>();
 	}
 
 	@Override
@@ -32,35 +33,27 @@ public class GamePanel extends JPanel implements MouseListener{
 	public void mouseExited(MouseEvent e) {}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		int index = BoardDrawer.edgeClick(e, game);
-		if(index != -1) {
-			clickedEdgeIndecies.add(index);
-			this.repaint();
+		if(chosenTrainCards.size() > 0) {
+			return;
 		}
+		int index = BoardDrawer.edgeClick(e, game);
+		if(index != -1)
+			clickedEdgeIndecies.add(index);
 		
 		for (Rectangle rec : HandDrawer.clickableAdd) {
-
 			if (rec.contains(e.getPoint()))
-				//System.out.println(1); // adds 1 train card
-			repaint();
+				System.out.println(1); // adds 1 train card
 		}
-		for (Rectangle rec : HandDrawer.clickableSub) {
-
+		for (Rectangle rec : HandDrawer.clickableSub)
 			if (rec.contains(e.getPoint()))
-				//System.out.println(-1); // subtracts 1 card
-			repaint();
-		}
-		
-		if ( HandDrawer.clickableArrow.get(0).contains(e.getPoint())) {
+				System.out.println(-1); // subtracts 1 card
+
+		if ( HandDrawer.clickableArrow.get(0).contains(e.getPoint()))
 			HandDrawer.advanceCard(game.getCurPlayer(), -1);
-			//System.out.println(-2);
-			repaint();
-		}
-		if ( HandDrawer.clickableArrow.get(1).contains(e.getPoint())) { 
+		if ( HandDrawer.clickableArrow.get(1).contains(e.getPoint()))
 			HandDrawer.advanceCard(game.getCurPlayer(), 1);
-			//System.out.println(2);
-			repaint();
-		}
+		
+		repaint();
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {}
@@ -68,7 +61,7 @@ public class GamePanel extends JPanel implements MouseListener{
 	@Override
 	public void paintComponent(Graphics g) {
 		if(!game.isEnded()) {
-			BoardDrawer.drawBoard(g, clickedEdgeIndecies);
+			BoardDrawer.drawBoard(g, clickedEdgeIndecies, game.getCurPlayer());
 			HandDrawer.drawHand(g, game.getCurPlayer());
 			if(game.getDisplayContracts() != null)
 				HandDrawer.drawContractCards(g, game.getDisplayContracts());
