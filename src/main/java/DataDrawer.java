@@ -13,11 +13,15 @@ public class DataDrawer {
 	public static ArrayList<Rectangle> clickableContract;
 	
 	private final static Color[] playerColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE};
-	
+	private static ArrayList<String> colors;
 	public DataDrawer() {
 		clickableTrainCard = new ArrayList<>();
 		clickableContract = new ArrayList<>();
-		
+		colors = new ArrayList<>();
+		colors.add("Red");
+		colors.add("Green");
+		colors.add("Yellow");
+		colors.add("Blue");
 		int temp = 1575;
 		for ( int i = 0; i < 3; i++) {  // 5 display and one deck
 			clickableTrainCard.add(new Rectangle(temp, 775, 70, 120));
@@ -45,9 +49,9 @@ public class DataDrawer {
 		for ( int i = 0; i < 4; i++) {		
 			g2.setColor(playerColors[i]);
 			g2.drawString("Trains: " + data.get(i).getTrains()+"", x, y);
-			g2.drawString("Points: " + data.get(i).getPoints()+"", x+215, y);
+			g2.drawString("Points: " + data.get(i).getPoints()+"", x+190, y);
 			g2.drawString("#Contracts: " + data.get(i).getContracts().size()+"", x, y+50);
-			g2.drawString("#TrainCards: " + data.get(i).getTrainCards().size()+"", x+215, y+50);
+			g2.drawString("#TrainCards: " + data.get(i).getTrainCards().size()+"", x+190, y+50);
 			g2.setColor(Color.BLACK);
 			g2.drawLine(1535, xAdd, 1920, xAdd);
 			xAdd += 150;
@@ -81,6 +85,13 @@ public class DataDrawer {
 			temp += 110;
 		}
 			
+	}
+	
+	public static void drawCurPlayer(Graphics g, Player p) {
+		System.out.println(p.getTrainColor());
+		Graphics2D g2 = (Graphics2D) g;
+		g2.setColor(playerColors[colors.indexOf(p.getTrainColor())]);
+		g2.drawString("123", 350, 780);
 	}
 
 }
