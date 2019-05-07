@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Scanner;
@@ -17,58 +18,45 @@ import java.util.TreeMap;
 public class GameState {
 	// i made this public, neccessary for graphics so the whole datastructure doesnt
 	// need to be remade, can just refer to the index
-	private ArrayList<Edge> edges;
-	private Queue<ContractCard> contractList;
+	public static final String[] TRAIN_COLORS = {"Purple","White","Blue","Yellow","Orange","Black","Red","Green"};
+	public static final String[] PLAYER_COLORS = {"Red","Green","Yellow","Blue"};
+	private Queue<Player> players;
+	private Queue<ContractCard> contractDeck;
 	private Stack<TrainCard> trainCardDeck;
 	private ArrayList<TrainCard> discardTrainCard;
 	private ArrayList<TrainCard> displayCards;
-	private Queue<Player> players;
+	private ArrayList<City> cities;
+	private ArrayList<City> passedCities;
+	private ArrayList<ContractCard> displayContracts;
+	private ArrayList<Edge> edges;
+	private Player lastPlayer;
 	private Player curPlayer;
 	private int turnCounter;
-	private ArrayList<City> cities;
-	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
-			"Green" };
-	public static final String[] PLAYER_COLORS = { "Red", "Green", "Yellow", "Blue" };
-	private String longestPath;
-	private String mostContracts;
-	private ArrayList<City> passedCities;
 	private boolean lastRound;
 	private boolean isEnded;
-	private ArrayList<ContractCard> displayContracts;
+	private boolean choosingContracts;
+	private String longestPath;
+	private String mostContracts;
 	public GameState() throws FileNotFoundException {
 		isEnded = false;
+		lastPlayer = null;
 		//Datastructures init
 		cities = new ArrayList<>();
-		contractList = new LinkedList<>();
+		contractDeck = new LinkedList<>();
 		longestPath = "";
 		mostContracts = "";
 		cities = new ArrayList<>();
 		edges = new ArrayList<>();
-		trainCardDeck = new Stack();
+		trainCardDeck = new Stack<>();
 		displayCards = new ArrayList<>();
 		players = new LinkedList<>();
 		passedCities = new ArrayList<>();
 		discardTrainCard = new ArrayList<>();
 		lastRound = false;
-		//Adding contract cards
-		Scanner scan = new Scanner(new File("tickets.txt"));
-		int counter = Integer.parseInt(scan.nextLine());
-		for (int i = 0; i < counter; i++) {
-			String[] temp = scan.nextLine().split("|");
-			City one = null, two = null;
-			for (City c : cities) {
-				if (c.getName().equals(temp[1]))
-					one = c;
-				if (c.getName().equals(temp[2]))
-					two = c;
-			}
-			contractList.add(new ContractCard(one, two, Integer.parseInt(temp[0])));
-		}
-
 		//Adding train cards
 		for (int j = 0; j < 8; j++)
 			for (int i = 0; i < 12; i++)
-				trainCardDeck.add(new TrainCard(this.TRAIN_COLORS[j]));
+				trainCardDeck.add(new TrainCard(TRAIN_COLORS[j]));
 		for (int i = 0; i < 14; i++)
 			trainCardDeck.add(new TrainCard("Wild"));
 		Collections.shuffle(trainCardDeck);
@@ -78,7 +66,7 @@ public class GameState {
 			displayCards.add(trainCardDeck.pop());
 
 		//Adding players, cur player and turncounter
-		for (int i = 0; i < this.PLAYER_COLORS.length; i++) {
+		for (int i = 0; i < PLAYER_COLORS.length; i++) {
 			Player p = new Player(PLAYER_COLORS[i]);
 			for(int j = 0; j < 4; j++)
 				p.addTrainCard(trainCardDeck.pop());
@@ -88,7 +76,7 @@ public class GameState {
 		turnCounter = 2;
 
 		//Edges and Cities
-		scan = new Scanner(new File("Cities"));
+		Scanner scan = new Scanner(new File("Cities"));
 		while (scan.hasNextLine()) {
 			String[] temp1 = scan.nextLine().split(",");
 			cities.add(new City(new Point(Integer.parseInt(temp1[1]), Integer.parseInt(temp1[2])), temp1[0],
@@ -114,15 +102,31 @@ public class GameState {
 			}
 			cities.add(new City(cities.get(i).getPoint(), cities.get(i).getName(), temps));
 		}
+		//adding contracts
+		ArrayList<ContractCard> tempCards = new ArrayList<ContractCard>();
+		scan = new Scanner(new File("tickets.txt"));
+		int counter = Integer.parseInt(scan.nextLine());
+		for (int i = 0; i < counter; i++) {
+			String[] temp = scan.nextLine().split(",");
+			City one = null, two = null;
+			for (City c : cities) {
+				if (c.getName().equals(temp[1]))
+					one = c;
+				if (c.getName().equals(temp[2]))
+					two = c;
+			}
+			tempCards.add(new ContractCard(one, two, Integer.parseInt(temp[0])));
+		}
+		Collections.shuffle(tempCards);
+		for(int i = 0; i < tempCards.size(); i++)
+			contractDeck.add(tempCards.get(i));
+		scan.close();
 	}
-	private City cityHelper(String name) {
-		for (City c : cities)
-			if (c.getName().equals(name))
-				return c;
-		return null;
-	}
+
 	public void placeTrain(Edge e, ArrayList<TrainCard> input) { //player action
-		if (!e.getHasTrains()) {
+		if(choosingContracts)
+			return;
+		if (!e.getHasTrains() && input.size() == e.getLength()) {
 			
 			for(int i = 0; i < input.size(); i++) {
 				if(input.get(i).getColor().equals(e.getColor()) || input.get(i).getColor().equals("wild")) {
@@ -137,61 +141,14 @@ public class GameState {
 				curPlayer.reduceTrains(e.getLength());
 			}
 		}
-
 		checkContracts();
 		checkTurn();
 	}
-
-	private void checkContracts() {
-		ArrayList<ContractCard> contracts = curPlayer.getContracts();
-		for (ContractCard c : contracts) {
-			City one = c.getCity1();
-			City two = c.getCity2(); // are the references correct?
-
-			ArrayList<Edge> city1Edges = one.getEdges(curPlayer.getTrainColor());
-			ArrayList<Edge> city2Edges = two.getEdges(curPlayer.getTrainColor());
-
-			if (city1Edges.isEmpty() || city2Edges.isEmpty()) // no path, nothing to find here!
-				return;
-
-			// calls traversals from each city, storing the added edges
-			ArrayList<Edge> sharedCity1 = new ArrayList<>();
-			sharedCity1 = checkContractsHelper(sharedCity1, city1Edges, one);
-
-			ArrayList<Edge> sharedCity2 = new ArrayList<>();
-			sharedCity1 = checkContractsHelper(sharedCity2, city2Edges, two);
-			// retainAll edges, if resulting set.isEmpty(), no path
-			sharedCity1.retainAll(sharedCity2);
-			if (sharedCity1.isEmpty())
-				return;
-			else // there is a path, add points
-				curPlayer.addPoints(c.getNumPoints());
-			// add method to make sure contracts are added to player, also setComplete
-		}
-
-	}
-
-	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, ArrayList<Edge> cityEdges, City start) {
-		if (start == null || cityEdges == null)
-			return shared;
-		else {
-			Edge current = new Edge();
-			for (Edge e : cityEdges)
-				if (e.getCities().contains(start))
-					current = e;
-			cityEdges.remove(current);
-			return checkContractsHelper(shared, cityEdges, current.getOtherCity(start));
-		}
-	}
-	public String initChoiceContract() {
-		String str = null;
-		for(int i = 0; i < 5; i++)
-			str = "" + this.contractList.poll();
-		return str;
-	}
 	public boolean chooseTrainCard(int choice) { //player action
+		if(choosingContracts)
+			return false;
 		TrainCard t = displayCards.get(choice);
-		if (t.getColor().equals("Wild") && turnCounter != 1) {
+		if (t.getColor().equals("Wild") && turnCounter == 2) {
 			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
 			displayCards.add(trainCardDeck.pop());
@@ -204,34 +161,45 @@ public class GameState {
 		} else {
 			System.out.println("Stop right there, criminal scum!");
 		}
-		checkTurn();
 		System.out.println(turnCounter);
 		System.out.println(curPlayer.getTrainCards());
+		checkTurn();
 		return true;
 	}
 
 	public void drawTrainCard() { //player action
+		if(choosingContracts)
+			return;
 		curPlayer.addTrainCard(trainCardDeck.pop());
 		turnCounter--;
 		checkTurn();
 	}
+	
 	public String chooseContractCard(ArrayList<Integer> choices, int amnt) { //player action
+		if(!choosingContracts)
+			return "";
 		if (choices.size() < 1)
 			return "Invalid. You must choose at least one contract.";
 		for (int i = 0; i < amnt; i++)
-			if (choices.contains(i)) {
-				this.contractList.offer(this.displayContracts.get(i));
-			}
+			if (choices.contains(i))
+				curPlayer.addContractCard(displayContracts.get(i));
+		System.out.println(curPlayer.getContracts());
 		turnCounter -= 2;
+		choosingContracts = false;
 		
 		checkTurn();
-		
 		return "Successful";
 	}
-
+	public ArrayList<ContractCard> drawContracts(int amnt) {
+		choosingContracts = true;
+		ArrayList<ContractCard> temps = new ArrayList<>();
+		for (int i = 0; i < amnt; i++)
+			temps.add(this.contractDeck.poll());
+		displayContracts = temps;
+		return temps;
+	}
 	public ArrayList<Player> endGame() {
 		isEnded = true;
-		turnCounter = 0;
 		longestPath = longestPath();
 		mostContracts = mostContractCards();
 		ArrayList<Player> winnerPoints = new ArrayList<>();
@@ -239,17 +207,12 @@ public class GameState {
 		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
 		// sorts the winners by order of points
 		return winnerPoints;
-
 	}
 
 	public void endTurn() {
-		Player temp = players.poll();
-		// goes to next player
 		players.offer(curPlayer);
-		curPlayer = temp;
-
+		curPlayer = players.poll();
 		turnCounter = 2;
-
 	}
 	public String longestPath() { // THINGS TO DO: Check for sketchy case, do the recursion
 		ArrayList<City> startCities = this.cities;
@@ -328,32 +291,21 @@ public class GameState {
 			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
 		}
-		if (lastRound)
+		if (lastRound && lastPlayer == curPlayer)
 			endGame();
-		lastRound = false;
-		for (Player p : players)
-			if (p.getTrains() < 3) {
-				lastRound = true;
-				break;
-			}
+		if (curPlayer.getTrains() < 3 && !lastRound) {
+			lastRound = true;
+			lastPlayer = curPlayer;
+		}
 
 		if (turnCounter == 0 && !lastRound) {
 			endTurn();
 			return;
 		}
-		return;
-	}
-	private boolean checkWilds() {
-		int count = 0;
-		for (TrainCard t : displayCards)
-			if (t.getColor().equals("Rainbow"))
-				count++;
-		
-		return count >= 3;
 	}
 	public Player getCurPlayer() {return curPlayer;}
 	
-	public ArrayList<Edge> getEdges() {return this.edges;}
+	public ArrayList<Edge> getEdges() {return edges;}
 	
 	public Queue<Player> getPlayerList() {return players;}
 	
@@ -361,15 +313,60 @@ public class GameState {
 	
 	public String getMostContracts() {return mostContracts;}
 	
-	public boolean isEnded() {
-		return this.isEnded;
-	}
+	public boolean isEnded() {return isEnded;}
 	
-	public ArrayList<ContractCard> getDisplayContracts(int amnt) {
-		ArrayList<ContractCard> temps = new ArrayList<>();
-		for (int i = 0; i < amnt; i++)
-			temps.add(this.contractList.poll());
-		displayContracts = temps;
-		return temps;
+	private boolean checkWilds() {
+		int count = 0;
+		for (TrainCard t : displayCards)
+			if (t.getColor().equals("Rainbow"))
+				count++;
+		return count >= 3;
+	}
+	private City cityHelper(String name) {
+		for (City c : cities)
+			if (c.getName().equals(name))
+				return c;
+		return null;
+	}
+	private void checkContracts() {
+		ArrayList<ContractCard> contracts = curPlayer.getContracts();
+		for (ContractCard c : contracts) {
+			City one = c.getCity1();
+			City two = c.getCity2(); // are the references correct?
+
+			ArrayList<Edge> city1Edges = one.getEdges(curPlayer.getTrainColor());
+			ArrayList<Edge> city2Edges = two.getEdges(curPlayer.getTrainColor());
+
+			if (city1Edges.isEmpty() || city2Edges.isEmpty()) // no path, nothing to find here!
+				return;
+
+			// calls traversals from each city, storing the added edges
+			ArrayList<Edge> sharedCity1 = new ArrayList<>();
+			sharedCity1 = checkContractsHelper(sharedCity1, city1Edges, one);
+
+			ArrayList<Edge> sharedCity2 = new ArrayList<>();
+			sharedCity1 = checkContractsHelper(sharedCity2, city2Edges, two);
+			// retainAll edges, if resulting set.isEmpty(), no path
+			sharedCity1.retainAll(sharedCity2);
+			if (sharedCity1.isEmpty())
+				return;
+			else // there is a path, add points
+				curPlayer.addPoints(c.getNumPoints());
+			// add method to make sure contracts are added to player, also setComplete
+		}
+
+	}
+
+	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, ArrayList<Edge> cityEdges, City start) {
+		if (start == null || cityEdges == null)
+			return shared;
+		else {
+			Edge current = new Edge();
+			for (Edge e : cityEdges)
+				if (e.getCities().contains(start))
+					current = e;
+			cityEdges.remove(current);
+			return checkContractsHelper(shared, cityEdges, current.getOtherCity(start));
+		}
 	}
 }
