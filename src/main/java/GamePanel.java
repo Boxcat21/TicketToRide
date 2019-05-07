@@ -67,26 +67,21 @@ public class GamePanel extends JPanel implements MouseListener{
 	@Override
 	public void paintComponent(Graphics g) {
 		BoardDrawer.drawBoard(g, this.clickedEdgeIndecies);
-		HandDrawer.drawHand(g, p);
+		HandDrawer.drawHand(g, game.getCurPlayer());
 		HandDrawer.drawContractSelection(g, /*game.getDisplayContracts()*/ new ArrayList<ContractCard>());
-		HandDrawer.drawContractCards(g, p.getContracts());
+		HandDrawer.drawContractCards(g, game.getCurPlayer().getContracts());
 		
 		g.setColor(new Color(184, 134,11));
 		g.fillRect(1535, 0, 1920-1535, 1080);
 		g.setColor(Color.BLACK);
 		g.drawRect(1535, 0, 1920-1535, 1080);
 		
-		HandDrawer.drawPlayer(g, p);
+		HandDrawer.drawPlayer(g, game.getCurPlayer());
 		
-		ArrayList<Player> temp = new ArrayList<>();
-		temp.add(p);
-		temp.add(p);
-		temp.add(p);
-		temp.add(p);
-		DataDrawer.drawData(g, temp);
 		
-		DataDrawer.drawDisplayCards(g, p.getTrainCards());
-		DataDrawer.drawCurPlayer(g, p);
+		
+		DataDrawer.drawDisplayCards(g, game.getCurPlayer().getTrainCards());
+		DataDrawer.drawCurPlayer(g, game.getCurPlayer());
 	}
 	
 	
