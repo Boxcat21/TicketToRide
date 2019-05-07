@@ -32,4 +32,9 @@ public class City {
 		}
 		return temp;
 	}
+	
+	public String toString()
+	{
+		return name;
+	}
 }

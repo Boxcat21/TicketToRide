@@ -14,6 +14,13 @@ public class TextRunner {
 		scan = new Scanner(System.in);
 
 		int cnt = 0;
+		//Each player gets to choose their contracts from five at the beginning of the round
+		for(int i=0; i<5;i++)
+		{
+			System.out.println(g.getCurPlayer().toString());
+			testDrawContract(true);
+		}
+		
 		// Starting each turn
 		while (!g.isEnded()) {
 			System.out.println(g.getCurPlayer().toString());
@@ -31,7 +38,7 @@ public class TextRunner {
 
 			// Drawing contracts
 			else if (s.equals("c")) {
-				testDrawContract();
+				testDrawContract(false);
 			}
 			// Placing trains
 			else if (s.equals("p")) {
@@ -56,19 +63,24 @@ public class TextRunner {
 			} else
 				g.drawTrainCard();
 		}
+		System.out.println(current.get);
 	}
 
-	public static void testDrawContract() {
-		ArrayList<ContractCard> c = g.getDisplayContracts();
+	public static void testDrawContract(boolean b) 
+	{
+		int nums = 3;
+		if(b)
+			nums = 5;
+		ArrayList<ContractCard> c = g.drawContracts(nums);
 		for (int i = 0; i < c.size(); i++)
 			System.out.println(c.get(i).getCity1() + " to " + c.get(i).getCity2());
 		System.out.println(
-				"put in each number the numbers of the cards you want in the corresponding order of the display and seperate by comma");
+				"Put in each number the numbers of the cards you want in the corresponding order of the display and seperate by comma");
 		String[] arr = scan.nextLine().split(",");
 		ArrayList<Integer> choices = new ArrayList<>();
 		for (String str : arr)
 			choices.add(Integer.parseInt(str));
-		g.chooseContractCard(choices);
+		g.chooseContractCard(choices,c.size());
 
 	}
 
@@ -85,6 +97,7 @@ public class TextRunner {
 		System.out
 				.println("Enter the two cities with commas that you want to place your train on - any order is fine.");
 		String[] arr = scan.nextLine().split(",");
+		System.out.println(arr.toString());
 		ArrayList<Edge> edges = g.getEdges();
 		for (Edge e : edges) {
 			ArrayList<String> list = new ArrayList<>();
