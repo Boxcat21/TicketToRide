@@ -24,10 +24,10 @@ public class HandDrawer {
 	public static ArrayList<Rectangle> clickableContracts;
 
 	public static void init() {
-		clickableAdd = new ArrayList<Rectangle>();
-		clickableSub = new ArrayList<Rectangle>();
-		clickableArrow = new ArrayList<Rectangle>();
-		clickableContracts = new ArrayList<Rectangle>();
+		clickableAdd = new ArrayList<Rectangle>(); // add card to selection
+		clickableSub = new ArrayList<Rectangle>(); // subtract from train card selection
+		clickableArrow = new ArrayList<Rectangle>(); // switch between contract cards
+		clickableContracts = new ArrayList<Rectangle>(); // first 3 are the selectable contracts, last index is the complete seletion button
 		int x = 90;
 		for (int i = 0; i < 9; i++) {
 			clickableAdd.add(new Rectangle(x, 870, 50, 40));
@@ -60,21 +60,21 @@ public class HandDrawer {
 
 		for (int i = 0; i < COLOR_NAMES.length; i++) {
 			
-			BufferedImage card = null;
+			BufferedImage card = null; // image of train cards
 			try { 
 				card = ImageIO.read(new File(TRAIN_COLORS[i]+".png"));
 			}
 			catch (Exception e) {}
 			
 			g2.setColor(Color.BLACK);
-			g2.setStroke(new BasicStroke(6));
+			g2.setStroke(new BasicStroke(6)); // draws outline box for hand card
 			g2.drawRect(x, 870, 50, 210);
 			drawArrow(g, x + 25, 870 + 35, x + 25, 870);
 			g2.drawRect(x + 50, 870, 50, 210);
 			drawArrow(g, x + 75, 870, x + 75, 870 + 35);
-			g2.setStroke(new BasicStroke(1)); // replace these with images Cole made
+			g2.setStroke(new BasicStroke(1));
 
-			g2.setColor(COLOR_NAMES[i]);
+			g2.setColor(COLOR_NAMES[i]); // draws body of each
 			g2.fillRect(x + 1, 910, 98, 170);
 			g2.drawImage(card, x + 1, 910, 98, 170, null);
 			
@@ -83,7 +83,7 @@ public class HandDrawer {
 			g2.drawLine(x, 910, x + 100, 910);
 			g2.setStroke(new BasicStroke(2));
 
-			if (TRAIN_COLORS[i].equals("Black"))
+			if (TRAIN_COLORS[i].equals("Black")) // sid this doesn't work beceause of uppercase black. This paints the count of traincards
 				g2.setColor(Color.WHITE);
 			else
 				g2.setColor(Color.BLACK);
@@ -104,15 +104,15 @@ public class HandDrawer {
 		g2.fillRect(600, 760, 380, 100);
 		g2.setColor(Color.BLACK);
 		g2.drawRect(600, 760, 320, 33);
-		g2.drawString(selection.get(0).getCity1().getName() + " to " + selection.get(0).getCity2().getName(), 610, 780);
+		g2.drawString(selection.get(0).getCity1().getName() + " to " + selection.get(0).getCity2().getName(), 610, 780); // contract 1
 		g2.drawRect(600, 793, 320, 33);
-		g2.drawString(selection.get(1).getCity1().getName() + " to " + selection.get(1).getCity2().getName(), 610, 815);
+		g2.drawString(selection.get(1).getCity1().getName() + " to " + selection.get(1).getCity2().getName(), 610, 815);// contract 2
 		g2.drawRect(600, 826, 320, 33);
-		g2.drawString(selection.get(2).getCity1().getName() + " to " + selection.get(2).getCity2().getName(), 610, 850);
+		g2.drawString(selection.get(2).getCity1().getName() + " to " + selection.get(2).getCity2().getName(), 610, 850); // ontract 3
 	}
 
 	public static void drawContractCards(Graphics g, ArrayList<ContractCard> cards) {
-
+		// draws contract cards in the player's hand
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setStroke(new BasicStroke(4));
 		g2.setColor(Color.BLACK);
@@ -133,7 +133,7 @@ public class HandDrawer {
 	}
 
 	public static void advanceCard(Player p, int direction) {
-
+		// shifts the card displaying left or right
 		if (direction < 0)
 			Collections.rotate(p.getContracts(), 1);
 		else if (direction > 0)
@@ -142,6 +142,7 @@ public class HandDrawer {
 	}
 
 	private static String getCount(String string, ArrayList<TrainCard> list) {
+		// gets the count of each color card.
 		int count = 0;
 		for (TrainCard c : list)
 			if (c.getColor().equals(string))
@@ -150,7 +151,7 @@ public class HandDrawer {
 	}
 
 	public static void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {
-
+		// draws the arrow.
 		Graphics2D g = (Graphics2D) g1.create();
 		g.setStroke(new BasicStroke(3));
 		double dx = x2 - x1, dy = y2 - y1;

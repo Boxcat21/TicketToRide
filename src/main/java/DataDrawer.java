@@ -21,18 +21,18 @@ public class DataDrawer {
 	public static ArrayList<String> colors;
 	public static void init() {
 		
-		colors = new ArrayList<>();
+		colors = new ArrayList<>(); // corresponding colors to players
 		colors.add("Red");
 		colors.add("Green");
 		colors.add("Yellow");
 		colors.add("Blue");
 		int temp = 1575;
 		for ( int i = 0; i < 3; i++) {  // 5 display and one deck
-			clickableTrainCard.add(new Rectangle(temp, 775, 70, 120));
+			clickableTrainCard.add(new Rectangle(temp, 775, 70, 120)); // display cards from the deck. The last index is the deck itself
 			temp += 110;
 		}
 		temp = 1575;
-		for ( int i = 0; i < 3; i++) {  // 5 display and one deck
+		for ( int i = 0; i < 3; i++) { 
 			clickableTrainCard.add(new Rectangle(temp, 925, 70, 120));
 			temp += 110;
 		}
@@ -51,7 +51,7 @@ public class DataDrawer {
 		// add image for contract
 		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 24)); 
 		
-		
+		// draws the player's current stats
 		int x = 1545, y = 40;
 		int xAdd = 150;
 		for ( int i = 0; i < 4; i++) {		
@@ -71,7 +71,8 @@ public class DataDrawer {
 	}
 	
 	public static void drawDisplayCards(Graphics g, ArrayList<TrainCard> display) {
-	
+		// draws the passed in display of train cards
+		// *NOTE We probably need to pass in the deck as well
 		Graphics2D g2 = (Graphics2D) g;
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(4));
@@ -98,6 +99,7 @@ public class DataDrawer {
 	}
 	
 	public static void drawCurPlayer(Graphics g, Player p) {
+		// draws the crrent player in the corner. We might need to add a slot for the number of trains selected for each track placement
 		init();
 		Graphics2D g2 = (Graphics2D) g;
 		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 24)); 
