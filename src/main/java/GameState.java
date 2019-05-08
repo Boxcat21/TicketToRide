@@ -18,7 +18,7 @@ import java.util.TreeMap;
 public class GameState {
 	// i made this public, neccessary for graphics so the whole datastructure doesnt
 	// need to be remade, can just refer to the index
-	public static final String[] TRAIN_COLORS = {"Purple","White","Blue","Yellow","Orange","Black","Red","Green"};
+	public static final String[] TRAIN_COLORS = {"Purple","White","Blue","Yellow","Orange","Black","Red","Green","Wild"};
 	public static final String[] PLAYER_COLORS = {"Red","Green","Yellow","Blue"};
 	private Queue<Player> players;
 	private Queue<ContractCard> contractDeck;
@@ -58,7 +58,7 @@ public class GameState {
 			for (int i = 0; i < 12; i++)
 				trainCardDeck.add(new TrainCard(TRAIN_COLORS[j]));
 		for (int i = 0; i < 14; i++)
-			trainCardDeck.add(new TrainCard("Wild"));
+			trainCardDeck.add(new TrainCard(TRAIN_COLORS[TRAIN_COLORS.length-1]));
 		Collections.shuffle(trainCardDeck);
 
 		//Adding display cards

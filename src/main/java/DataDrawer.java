@@ -96,12 +96,11 @@ public class DataDrawer {
 	}
 	
 	public static void drawCurPlayer(Graphics g, Player p) {
-		
-		//System.out.println(p.getTrainColor());
+		init();
 		Graphics2D g2 = (Graphics2D) g;
 		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 24)); 
 		g2.setColor(playerColors[colors.indexOf(p.getTrainColor())]);
-		g2.drawString(GameState.PLAYER_COLORS[colors.indexOf(p.getTrainColor())] + " Turn", 200, 780);
+		g2.drawString(p.getTrainColor() + " Turn", 200, 780);
 	}
 
 }
