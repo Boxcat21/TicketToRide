@@ -150,13 +150,12 @@ public class GameState {
 				e.setPlayer(curPlayer);
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
+				checkContracts();
+				checkTurn();
+				return true;
 			}
-			else 
-				return false;
 		}
-		checkContracts();
-		checkTurn();
-		return true;
+		return false;
 	}
 	public boolean chooseTrainCard(int choice) { //player action
 		if(choosingContracts)
