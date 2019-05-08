@@ -47,12 +47,14 @@ public class GamePanel extends JPanel implements MouseListener {
 			for (int i = 0; i < HandDrawer.clickableAdd.size(); i++) {
 				if(HandDrawer.clickableAdd.get(i).contains(e.getPoint())) {
 					chosenTrainCards.add(GameState.TRAIN_COLORS[i]);
+				repaint();
 				}	
 			}
 			for (int i = 0; i < HandDrawer.clickableSub.size(); i++) {
 				if(HandDrawer.clickableSub.get(i).contains(e.getPoint())) {
 					if(chosenTrainCards.contains(GameState.TRAIN_COLORS[i]))
 						chosenTrainCards.remove(GameState.TRAIN_COLORS[i]);
+					repaint();
 				}	
 			}
 			int index = BoardDrawer.edgeClick(e, game);

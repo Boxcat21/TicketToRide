@@ -3,10 +3,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+
+import javax.imageio.ImageIO;
 
 public class HandDrawer {
 
@@ -56,6 +59,13 @@ public class HandDrawer {
 		int x = 90;
 
 		for (int i = 0; i < COLOR_NAMES.length; i++) {
+			
+			BufferedImage card = null;
+			try { 
+				card = ImageIO.read(new File(TRAIN_COLORS[i]+".png"));
+			}
+			catch (Exception e) {}
+			
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6));
 			g2.drawRect(x, 870, 50, 210);
@@ -66,7 +76,8 @@ public class HandDrawer {
 
 			g2.setColor(COLOR_NAMES[i]);
 			g2.fillRect(x + 1, 910, 98, 170);
-
+			g2.drawImage(card, x + 1, 910, 98, 170, null);
+			
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6));
 			g2.drawLine(x, 910, x + 100, 910);
