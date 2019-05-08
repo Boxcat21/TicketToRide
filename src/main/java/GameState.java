@@ -18,7 +18,8 @@ import java.util.TreeMap;
 public class GameState {
 	// i made this public, neccessary for graphics so the whole datastructure doesnt
 	// need to be remade, can just refer to the index
-	public static final String[] TRAIN_COLORS = {"Purple","White","Blue","Yellow","Orange","Black","Red","Green","Wild"};
+	public static final String[] TRAIN_COLORS = {"purple","white","blue","yellow","orange",
+			"black","red","green","wild"};
 	public static final String[] PLAYER_COLORS = {"Red","Green","Yellow","Blue"};
 	private Queue<Player> players;
 	private Queue<ContractCard> contractDeck;
@@ -122,15 +123,26 @@ public class GameState {
 			contractDeck.add(tempCards.get(i));
 		scan.close();
 	}
-	public void placeTrain(Edge e, ArrayList<String> input) { //player action
+	public boolean placeTrain(Edge e, ArrayList<String> input) { //player action
 		if(choosingContracts)
-			return;
+			return false;
 		if (!e.getHasTrains() && input.size() == e.getLength()) {
 			
-			for(int i = 0; i < input.size(); i++) {
-				if(input.get(i).equals(e.getColor()) || input.get(i).equals("wild")) {
-					input.remove(i);
-					i--;
+			if(!e.getColor().equals("gray")) {
+				for(int i = 0; i < input.size(); i++) {
+					if(input.get(i).equals(e.getColor()) || input.get(i).equals("wild")) {
+						input.remove(i);
+						i--;
+					}
+				}
+			}
+			else {
+				String s = input.remove(0);
+				for(int i = 0; i < input.size(); i++) {
+					if(input.get(0).equals(s)) {
+						input.remove(i);
+						i--;
+					}
 				}
 			}
 			if(!(input.size() > 0)) {
@@ -139,9 +151,12 @@ public class GameState {
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
 			}
+			else 
+				return false;
 		}
 		checkContracts();
 		checkTurn();
+		return true;
 	}
 	public boolean chooseTrainCard(int choice) { //player action
 		if(choosingContracts)

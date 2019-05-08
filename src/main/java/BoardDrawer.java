@@ -99,15 +99,10 @@ public class BoardDrawer {
 		}
 		return -1;
 	}
-	public static void drawBoard(Graphics g, ArrayList<Integer> eds, Player p) {
+	public static void drawBoard(Graphics g, ArrayList<Integer> eds, ArrayList<Player> playerColors) {
 		//temporary
-		System.out.println(p.getTrainColor());
 		ArrayList<String> colours = new ArrayList<String>();
-		
-		for(int i = 0; i < GameState.PLAYER_COLORS.length; i++)
-			colours.add(GameState.PLAYER_COLORS[i]);
-		Color playerColor = DataDrawer.playerColors[colours.indexOf(p.getTrainColor())];
-		
+		DataDrawer.init();
 		init();
 		//find edges indecies
 		for(int i = 0; i < citys.length; i++) {
@@ -152,8 +147,12 @@ public class BoardDrawer {
 				
 				if(!eds.contains(i))
 					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
-				else 
-					drawRotatedRect(g, x1, y1, angle, distance, size, playerColor, true);
+				else {
+					String s = playerColors.get(eds.indexOf(i)).getTrainColor();
+					int index  = DataDrawer.colors.indexOf(s);
+					Color colour = DataDrawer.playerColors[index];
+					drawRotatedRect(g, x1, y1, angle, distance, size, colour, true);
+				}
 				i++;
 				
 				try {
@@ -164,8 +163,12 @@ public class BoardDrawer {
 				doubleEdgeCheck = 2;
 				if(!eds.contains(i))
 					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
-				else 
-					drawRotatedRect(g, x1, y1, angle, distance, size, playerColor, true);
+				else {
+					String s = playerColors.get(eds.indexOf(i)).getTrainColor();
+					int index  = DataDrawer.colors.indexOf(s);
+					Color colour = DataDrawer.playerColors[index];
+					drawRotatedRect(g, x1, y1, angle, distance, size, colour, true);
+				}
 				doubleEdgeCheck = 0;
 			}
 			else {
@@ -186,7 +189,10 @@ public class BoardDrawer {
 				if(!eds.contains(i))
 					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
 				else {
-					drawRotatedRect(g, x1, y1, angle, distance, size, playerColor, true);
+					String s = playerColors.get(eds.indexOf(i)).getTrainColor();
+					int index  = DataDrawer.colors.indexOf(s);
+					Color colour = DataDrawer.playerColors[index];
+					drawRotatedRect(g, x1, y1, angle, distance, size, colour, true);
 				}
 			}
 		}

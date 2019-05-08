@@ -18,7 +18,7 @@ public class DataDrawer {
 	public final static Color[] playerColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE};
 	
 
-	private static ArrayList<String> colors;
+	public static ArrayList<String> colors;
 	public static void init() {
 		
 		colors = new ArrayList<>();

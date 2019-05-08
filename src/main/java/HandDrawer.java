@@ -10,8 +10,8 @@ import java.util.Collections;
 
 public class HandDrawer {
 
-	public static final String[] TRAIN_COLORS = { "Purple", "White", "Blue", "Yellow", "Orange", "Black", "Red",
-			"Green", "Rainbow" };
+	public static final String[] TRAIN_COLORS = {"purple","white","blue","yellow","orange",
+			"black","red","green","wild"};
 	public static final Color[] COLOR_NAMES = { new Color(84, 22, 180), Color.WHITE, Color.BLUE, Color.YELLOW,
 			Color.ORANGE, Color.BLACK, Color.RED, Color.GREEN, new Color(255, 0, 127) };
 	public static final int ARR_SIZE = 10;

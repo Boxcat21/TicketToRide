@@ -13,6 +13,7 @@ public class GamePanel extends JPanel implements MouseListener {
 	private GameState game;
 	private ArrayList<Integer> clickedEdgeIndecies;
 	private ArrayList<String> chosenTrainCards;
+	private ArrayList<Player> playerTracks;
 	public GamePanel() throws IOException {
 		setSize(1920, 1080);
 		setVisible(true);
@@ -21,11 +22,10 @@ public class GamePanel extends JPanel implements MouseListener {
 		game = new GameState();
 		clickedEdgeIndecies = new ArrayList<Integer>();
 		chosenTrainCards= new ArrayList<>();
+		playerTracks = new ArrayList<>();
 		
-		HandDrawer.init(); // please can we keep it? 
-		DataDrawer.init();//lol yes i realized we needed it, 
-		//                  i just put it in the listener instead of constructor
-		//                  it doesnt matter though
+		HandDrawer.init();
+		DataDrawer.init();	
 	}
 
 	@Override
@@ -44,22 +44,50 @@ public class GamePanel extends JPanel implements MouseListener {
 	@Override
 	public void mousePressed(MouseEvent e) {
 		if(chosenTrainCards.size() > 0) {
-			return;
+			for (int i = 0; i < HandDrawer.clickableAdd.size(); i++) {
+				if(HandDrawer.clickableAdd.get(i).contains(e.getPoint())) {
+					ArrayList<TrainCard> cards = game.getCurPlayer().getTrainCards();
+					
+					for(int x = 0; x < cards.size(); x++) {
+						
+					
+					chosenTrainCards.add(GameState.TRAIN_COLORS[i]);
+				}	
+			}
+			for (int i = 0; i < HandDrawer.clickableSub.size(); i++) {
+				if(HandDrawer.clickableSub.get(i).contains(e.getPoint())) {
+					if(chosenTrainCards.contains(GameState.TRAIN_COLORS[i]))
+						chosenTrainCards.remove(GameState.TRAIN_COLORS[i]);
+				}	
+			}
+			int index = BoardDrawer.edgeClick(e, game);
+			boolean check = false;
+			Player prev = game.getCurPlayer();
+			if(index != -1) {
+				check = game.placeTrain(game.getEdges().get(index), chosenTrainCards);
+			}
+			if(check) {
+				clickedEdgeIndecies.add(index);
+				playerTracks.add(prev);
+				chosenTrainCards = new ArrayList<String>();
+			}
+			else
+				return;
 		}
-		int index = BoardDrawer.edgeClick(e, game);
-		if(index != -1)
-			clickedEdgeIndecies.add(index);
+		
 		
 		for (int i = 0; i < HandDrawer.clickableAdd.size(); i++) {
 			if(HandDrawer.clickableAdd.get(i).contains(e.getPoint())) {
-				
+				chosenTrainCards.add(GameState.TRAIN_COLORS[i]);
 			}	
 		}
 		 
-		//HandDrawer.trainCardPlusClick(e, game);
-		for (Rectangle rec : HandDrawer.clickableSub)
-			if (rec.contains(e.getPoint()))
-				System.out.println(-1); // subtracts 1 card
+		for (int i = 0; i < HandDrawer.clickableSub.size(); i++) {
+			if(HandDrawer.clickableSub.get(i).contains(e.getPoint())) {
+				if(chosenTrainCards.contains(GameState.TRAIN_COLORS[i]))
+					chosenTrainCards.remove(GameState.TRAIN_COLORS[i]);
+			}	
+		}
 
 		if ( HandDrawer.clickableArrow.get(0).contains(e.getPoint()))
 			HandDrawer.advanceCard(game.getCurPlayer(), -1);
@@ -76,7 +104,7 @@ public class GamePanel extends JPanel implements MouseListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		if (!game.isEnded()) {
-			BoardDrawer.drawBoard(g, clickedEdgeIndecies, game.getCurPlayer());
+			BoardDrawer.drawBoard(g, clickedEdgeIndecies, playerTracks);
 			HandDrawer.drawHand(g, game.getCurPlayer());
 			if (game.getDisplayContracts() != null)
 				HandDrawer.drawContractCards(g, game.getDisplayContracts());
