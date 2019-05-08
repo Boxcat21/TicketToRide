@@ -20,7 +20,12 @@ public class GamePanel extends JPanel implements MouseListener {
 
 		game = new GameState();
 		clickedEdgeIndecies = new ArrayList<Integer>();
-		chosenTrainCards = new ArrayList<String>();
+		chosenTrainCards= new ArrayList<>();
+		
+		HandDrawer.init(); // please can we keep it? 
+		DataDrawer.init();//lol yes i realized we needed it, 
+		//                  i just put it in the listener instead of constructor
+		//                  it doesnt matter though
 	}
 
 	@Override
@@ -38,7 +43,6 @@ public class GamePanel extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		HandDrawer.init();
 		if(chosenTrainCards.size() > 0) {
 			return;
 		}

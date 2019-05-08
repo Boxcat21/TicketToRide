@@ -14,11 +14,14 @@ public class DataDrawer {
 	public static ArrayList<Rectangle> clickableTrainCard = new ArrayList<>();
 	public static ArrayList<Rectangle> clickableContract = new ArrayList<>();
 	
+
 	public final static Color[] playerColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE};
-	private static ArrayList<String> colors = new ArrayList<>();
+	
+
+	private static ArrayList<String> colors;
 	public static void init() {
 		
-		
+		colors = new ArrayList<>();
 		colors.add("Red");
 		colors.add("Green");
 		colors.add("Yellow");
@@ -41,12 +44,10 @@ public class DataDrawer {
 	public static void drawData(Graphics g, ArrayList<Player> data) {
 		
 		Graphics2D g2 = (Graphics2D) g;
-		Collections.sort(data, new Comparator<Player>() {
-			@Override
-			public int compare(Player arg0, Player arg1) {
-				return arg0.getTrainColor().compareTo(arg1.getTrainColor());
-			}
-		});
+		ArrayList<String> names = new ArrayList<>();
+		for ( Player p : data) 
+			names.add(p.getTrainColor());
+		
 		// add image for contract
 		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 24)); 
 		
@@ -55,10 +56,11 @@ public class DataDrawer {
 		int xAdd = 150;
 		for ( int i = 0; i < 4; i++) {		
 			g2.setColor(playerColors[i]);
-			g2.drawString("Trains: " + data.get(i).getTrains()+"", x, y);
-			g2.drawString("Points: " + data.get(i).getPoints()+"", x+190, y);
-			g2.drawString("#Contracts: " + data.get(i).getContracts().size()+"", x, y+50);
-			g2.drawString("#TrainCards: " + data.get(i).getTrainCards().size()+"", x+190, y+50);
+			int n = names.indexOf(GameState.PLAYER_COLORS[i]);
+			g2.drawString("Trains: " + data.get(n).getTrains()+"", x, y);
+			g2.drawString("Points: " + data.get(n).getPoints()+"", x+190, y);
+			g2.drawString("#Contracts: " + data.get(n).getContracts().size()+"", x, y+50);
+			g2.drawString("#TrainCards: " + data.get(n).getTrainCards().size()+"", x+190, y+50);
 			g2.setColor(Color.BLACK);
 			g2.drawLine(1535, xAdd, 1920, xAdd);
 			xAdd += 150;
