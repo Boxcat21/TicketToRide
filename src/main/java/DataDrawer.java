@@ -16,12 +16,12 @@ public class DataDrawer {
 	
 
 	public final static Color[] playerColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE};
-	public static final String[] PLAYER_COLORS = {"Red","Green","Yellow","Blue"};
+	
 
-	private static ArrayList<String> colors = new ArrayList<>();
+	private static ArrayList<String> colors;
 	public static void init() {
 		
-		
+		colors = new ArrayList<>();
 		colors.add("Red");
 		colors.add("Green");
 		colors.add("Yellow");
@@ -56,7 +56,7 @@ public class DataDrawer {
 		int xAdd = 150;
 		for ( int i = 0; i < 4; i++) {		
 			g2.setColor(playerColors[i]);
-			int n = names.indexOf(PLAYER_COLORS[i]);
+			int n = names.indexOf(GameState.PLAYER_COLORS[i]);
 			g2.drawString("Trains: " + data.get(n).getTrains()+"", x, y);
 			g2.drawString("Points: " + data.get(n).getPoints()+"", x+190, y);
 			g2.drawString("#Contracts: " + data.get(n).getContracts().size()+"", x, y+50);

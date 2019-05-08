@@ -21,6 +21,9 @@ public class GamePanel extends JPanel implements MouseListener{
 		game = new GameState();
 		clickedEdgeIndecies = new ArrayList<Integer>();
 		chosenTrainCards= new ArrayList<>();
+		
+		HandDrawer.init(); // please can we keep it? 
+		DataDrawer.init();
 	}
 
 	@Override
