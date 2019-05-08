@@ -48,8 +48,8 @@ public class HandDrawer {
 		
 		g2.setColor(Color.BLACK);
 		int x = 90;
+		
 		for (int i = 0; i < COLOR_NAMES.length; i++) {
-
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6));
 			g2.drawRect(x, 870, 50, 210);
@@ -74,6 +74,7 @@ public class HandDrawer {
 			g2.drawString(getCount(TRAIN_COLORS[i], trainCard), x + 28, 1010);
 			x += 140;
 		}
+		
 	}
 
 	public static void drawContractSelection(Graphics g, ArrayList<ContractCard> selection) {

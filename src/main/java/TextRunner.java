@@ -99,8 +99,9 @@ public class TextRunner {
 		System.out.println(arr.toString());
 		ArrayList<Edge> edges = g.getEdges();
 		for (Edge e : edges) {
-			if(e.getCities().contains(arr[0])&&e.getCities().contains(arr[1]))
-				g.placeTrain(e, choices);
+			if(e.getCities().contains(arr[0])&&e.getCities().contains(arr[1])) {
+				//g.placeTrain(e, choices);
+			}
 		}
 
 	}

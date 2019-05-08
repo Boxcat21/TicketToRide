@@ -14,8 +14,10 @@ public class DataDrawer {
 	public static ArrayList<Rectangle> clickableTrainCard = new ArrayList<>();
 	public static ArrayList<Rectangle> clickableContract = new ArrayList<>();
 	
-	private final static Color[] playerColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE};
+
+	public final static Color[] playerColors = {Color.RED, Color.GREEN, Color.YELLOW, Color.BLUE};
 	public static final String[] PLAYER_COLORS = {"Red","Green","Yellow","Blue"};
+
 	private static ArrayList<String> colors = new ArrayList<>();
 	public static void init() {
 		

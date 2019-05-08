@@ -99,9 +99,14 @@ public class BoardDrawer {
 		}
 		return -1;
 	}
-	public static void drawBoard(Graphics g, ArrayList<Integer> eds) {
+	public static void drawBoard(Graphics g, ArrayList<Integer> eds, Player p) {
 		//temporary
-		Color playerColor = Color.BLUE;
+		System.out.println(p.getTrainColor());
+		ArrayList<String> colours = new ArrayList<String>();
+		
+		for(int i = 0; i < GameState.PLAYER_COLORS.length; i++)
+			colours.add(GameState.PLAYER_COLORS[i]);
+		Color playerColor = DataDrawer.playerColors[colours.indexOf(p.getTrainColor())];
 		
 		init();
 		//find edges indecies
@@ -148,7 +153,7 @@ public class BoardDrawer {
 				if(!eds.contains(i))
 					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
 				else 
-					drawRotatedRect(g, x1, y1, angle, distance, size, color, true);
+					drawRotatedRect(g, x1, y1, angle, distance, size, playerColor, true);
 				i++;
 				
 				try {
@@ -160,7 +165,7 @@ public class BoardDrawer {
 				if(!eds.contains(i))
 					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
 				else 
-					drawRotatedRect(g, x1, y1, angle, distance, size, color, true);
+					drawRotatedRect(g, x1, y1, angle, distance, size, playerColor, true);
 				doubleEdgeCheck = 0;
 			}
 			else {
@@ -181,7 +186,7 @@ public class BoardDrawer {
 				if(!eds.contains(i))
 					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
 				else {
-					drawRotatedRect(g, x1, y1, angle, distance, size, color, true);
+					drawRotatedRect(g, x1, y1, angle, distance, size, playerColor, true);
 				}
 			}
 		}
