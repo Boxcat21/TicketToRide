@@ -117,11 +117,12 @@ public class BoardDrawer {
 			map = ImageIO.read(new File("Map.png"));
 		}
 		catch (Exception e) {}
-		//g.drawImage(map, 0, 0, 1535, 755, null);
-		g.setColor(Color.LIGHT_GRAY);
+		
+		g.drawImage(map, -40, 0, 1920, 1080, null);
+		/*g.setColor(new Color(Color.BLACK.getRed(), Color.BLACK.getBlue(), Color.BLACK.getGreen(), 50));
 		g.fillRect(0, 0, 1535, 755);
 		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, 1535, 755);
+		g.drawRect(0, 0, 1535, 755);*/
 		// connecting edges
 		for (int i = 0; i < connectedData.length; i++) {
 			int x1 = (int) points[connectedData[i][0]].getX();
