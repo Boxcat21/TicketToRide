@@ -45,7 +45,6 @@ public class GamePanel extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-
 		for (int i = 0; i < HandDrawer.clickableAdd.size(); i++) {
 			if (HandDrawer.clickableAdd.get(i).contains(e.getPoint())) {
 				if(game.curPlayer().cardIndex(GameState.TRAIN_COLORS[i]) != -1) {
@@ -58,8 +57,10 @@ public class GamePanel extends JPanel implements MouseListener {
 		for (int i = 0; i < HandDrawer.clickableSub.size(); i++) {
 			if (HandDrawer.clickableSub.get(i).contains(e.getPoint())) {
 				for(int p = 0; p < chosenTrainCards.size(); p++) {
-					if(chosenTrainCards.get(p).getColor().equals(GameState.TRAIN_COLORS[i]))
+					if(chosenTrainCards.get(p).getColor().equals(GameState.TRAIN_COLORS[i])) {
 						game.curPlayer().addTrainCard(chosenTrainCards.remove(p));
+						break;
+					}
 				}
 			}
 		}
@@ -80,6 +81,14 @@ public class GamePanel extends JPanel implements MouseListener {
 				HandDrawer.advanceCard(game.curPlayer(), -1);
 			if (HandDrawer.clickableArrow.get(1).contains(e.getPoint()))
 				HandDrawer.advanceCard(game.curPlayer(), 1);
+			
+			//System.out.println(DataDrawer.clickableTrainDeck.getX() + " " + DataDrawer.clickableTrainDeck.getY());
+			//System.out.println(e.getPoint());
+			
+			if(DataDrawer.getTicketDeck().contains(e.getPoint())) {
+				System.out.println("true");
+				game.drawTrainCard();
+			}
 		}
 		repaint();
 	}

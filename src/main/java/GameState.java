@@ -105,13 +105,14 @@ public class GameState {
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
 			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");
-			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.length()).split(",");
+			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.indexOf("/")).split(",");
+			int serial = Integer.parseInt(line.substring(line.indexOf("/")+1));
 			ArrayList<City> tempCities = new ArrayList<>();
 			String key = tempFirstTwo[0];
 			String value = tempFirstTwo[1];
 			tempCities.add(cityHelper(key));
 			tempCities.add(cityHelper(value));
-			edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities));
+			edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities, serial));
 		}
 		for (int i = cities.size() - 1; i >= 0; i--) {
 			ArrayList<Edge> temps = new ArrayList<>();
@@ -142,7 +143,7 @@ public class GameState {
 		scan.close();
 	}
 	public boolean placeTrain(Edge e, ArrayList<TrainCard> thing) { //player action
-		if(choosingContracts)
+		if(choosingContracts || e.getHasTrains() || checkDoubleEdge(e))
 			return false;
 		ArrayList<TrainCard> input = new ArrayList<TrainCard>();
 		input.addAll(thing);
@@ -159,14 +160,14 @@ public class GameState {
 			else {
 				TrainCard tc = input.remove(0);
 				for(int i = 0; i < input.size(); i++) {
-					if(input.get(0).equals(tc)) {
+					if(input.get(0).getColor().equals(tc.getColor())) {
 						input.remove(i);
 						i--;
 					}
 				}
 			}
 			if(!(input.size() > 0)) {
-				e.setHasTrains();
+				setActualEdge(e, curPlayer.getTrainColor());
 				e.setPlayer(curPlayer);
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
@@ -195,8 +196,6 @@ public class GameState {
 		} else {
 			//ystem.out.println("Stop right there, criminal scum!");
 		}
-		//System.out.println(turnCounter);
-		//System.out.println(curPlayer.getTrainCards());
 		checkTurn();
 		return true;
 	}
@@ -349,6 +348,8 @@ public class GameState {
 	
 	public String getMostContracts() {return mostContracts;}
 	
+	public boolean isChoosingContracts() {return choosingContracts;}
+	
 	public boolean isEnded() {return isEnded;}
 	
 	private boolean checkWilds() {
@@ -405,8 +406,24 @@ public class GameState {
 			return checkContractsHelper(shared, cityEdges, current.getOtherCity(start));
 		}
 	}
-	
-	public boolean isChoosingContracts() {
-		return choosingContracts;
+	private boolean checkDoubleEdge(Edge e) {
+		for(int i = 0; i < edges.size(); i++) {
+			ArrayList<City> tempCities = edges.get(i).getCities();
+			if(edges.get(i).getHasTrains()) {
+				if(tempCities.contains(e.getCities().get(0)) && tempCities.contains(e.getCities().get(1))) {
+					if(edges.get(i).getTrainColor().equals(curPlayer.getTrainColor()) && e.getSerial() != edges.get(i).getSerial()) {
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	}
+	private void setActualEdge(Edge e, String s) {
+		for(int i = 0; i < edges.size(); i++) {
+			if(edges.get(i).compare(e)) {
+				edges.get(i).setHasTrains(s);				
+			}
+		}
 	}
 }

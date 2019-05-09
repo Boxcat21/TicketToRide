@@ -23,13 +23,14 @@ public class HandDrawer {
 	public static ArrayList<Rectangle> clickableSub;
 	public static ArrayList<Rectangle> clickableArrow;
 	public static ArrayList<Rectangle> clickableContracts;
-	public static final int shift = 150;
+	public static final int shift = -50;
 
 	public static void init() {
 		clickableAdd = new ArrayList<Rectangle>(); // add card to selection
 		clickableSub = new ArrayList<Rectangle>(); // subtract from train card selection
 		clickableArrow = new ArrayList<Rectangle>(); // switch between contract cards
 		clickableContracts = new ArrayList<Rectangle>(); // first 3 are the selectable contracts, last index is the complete seletion button
+		
 		int x = 90;
 		for (int i = 0; i < 9; i++) {
 			clickableAdd.add(new Rectangle(x + shift, 870, 50, 40));
@@ -94,9 +95,12 @@ public class HandDrawer {
 			x += 140;
 		}
 		if(chosen.size() > 0) {
+			g2.setColor(Color.BLACK);
+			g2.setStroke(new BasicStroke(3));
+			g2.drawRect(1310, 920, 150, 50);
 			g2.setColor(Color.RED);
 			g2.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
-			g2.drawString("Chosen: " + chosen.size(), 20 , 950);
+			g2.drawString("Chosen: " + chosen.size(), 20 +1300, 950);
 		}
 	}
 

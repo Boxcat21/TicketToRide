@@ -85,7 +85,7 @@ public class BoardDrawer {
 			connectedData[cnt][1] = index2;
 			
 			lengths[cnt] = Integer.parseInt(line.substring(line.indexOf("|")+1,line.lastIndexOf(",")));
-			colors[cnt] = line.substring(line.lastIndexOf(",")+1);
+			colors[cnt] = line.substring(line.lastIndexOf(",")+1, line.indexOf("/"));
 			cnt++;
 		}
 		try {

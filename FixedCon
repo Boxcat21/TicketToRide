@@ -1,100 +1,100 @@
-Montreal,Sault St. Marie|5,black
-Montreal,Toronto|3,gray
-Montreal,New York|3,blue
-Montreal,Boston|2,gray
-Montreal,Boston|2,gray
-Sault St. Marie,Winnipeg|6,gray
-Sault St. Marie,Duluth|3,gray
-Sault St. Marie,Toronto|2,gray
-Toronto,Duluth|6,magenta
-Toronto,Chicago|4,white
-Toronto,Pittsburgh|2,gray
-New York,Pittsburgh|2,white
-New York,Pittsburgh|2,green
-New York,Washington|2,orange
-New York,Washington|2,black
-New York,Boston|2,yellow
-New York,Boston|2,red
-Winnipeg,Calgary|6,white
-Winnipeg,Helena|4,blue
-Winnipeg,Duluth|4,black
-Duluth,Helena|6,orange
-Duluth,Omaha|2,gray
-Duluth,Omaha|2,gray
-Duluth,Chicago|3,red
-Chicago,Omaha|4,blue
-Chicago,Saint Louis|2,green
-Chicago,Saint Louis|2,white
-Chicago,Pittsburgh|3,orange
-Chicago,Pittsburgh|3,black
-Pittsburgh,Saint Louis|5,green
-Pittsburgh,Nashville|4,yellow
-Pittsburgh,Raleigh|2,gray
-Pittsburgh,Washington|2,gray
-Washington,Raleigh|2,gray
-Washington,Raleigh|2,gray
-Calgary,Vancouver|3,gray
-Calgary,Seattle|4,gray
-Calgary,Helena|4,gray
-Helena,Seattle|6,yellow
-Helena,Salt Lake City|3,magenta
-Helena,Denver|4,green
-Helena,Omaha|5,red
-Omaha,Denver|4,magenta
-Omaha,Kansas City|1,gray
-Omaha,Kansas City|1,gray
-Saint Louis,Kansas City|2,blue
-Saint Louis,Kansas City|2,magenta
-Saint Louis,Little Rock|2,gray
-Saint Louis,Nashville|2,gray
-Nashville,Little Rock|3,white
-Nashville,Atlanta|1,gray
-Nashville,Raleigh|3,black
-Raleigh,Atlanta|2,gray
-Raleigh,Atlanta|2,gray
-Raleigh,Charleston|2,gray
-Vancouver,Seattle|1,gray
-Vancouver,Seattle|1,gray
-Seattle,Portland|1,gray
-Seattle,Portland|1,gray
-Portland,Salt Lake City|6,blue
-Portland,San Francisco|5,green
-Portland,San Francisco|5,magenta
-Salt Lake City,San Francisco|5,orange
-Salt Lake City,San Francisco|5,white
-Salt Lake City,Las Vegas|3,orange
-Salt Lake City,Denver|3,yellow
-Salt Lake City,Denver|3,red
-Denver,Phoenix|5,white
-Denver,Santa Fe|2,gray
-Denver,Oklahoma City|4,red
-Denver,Kansas City|4,orange
-Denver,Kansas City|4,black
-Oklahoma City,Santa Fe|3,blue
-Oklahoma City,El Paso|5,yellow
-Oklahoma City,Dallas|2,gray
-Oklahoma City,Dallas|2,gray
-Oklahoma City,Little Rock|2,gray
-Oklahoma City,Kansas City|2,gray
-Oklahoma City,Kansas City|2,gray
-Little Rock,Dallas|2,gray
-Little Rock,New Orleans|3,green
-Atlanta,New Orleans|4,yellow
-Atlanta,New Orleans|4,orange
-Atlanta,Miami|5,blue
-Atlanta,Charleston|2,gray
-Charleston,Miami|4,magenta
-San Francisco,Los Angeles|3,magenta
-San Francisco,Los Angeles|3,yellow
-Las Vegas,Los Angeles|2,gray
-Santa Fe,El Paso|2,gray
-Santa Fe,Phoenix|3,gray
-Dallas,El Paso|4,red
-Dallas,Houston|1,gray
-Dallas,Houston|1,gray
-New Orleans,Houston|2,gray
-New Orleans,Miami|6,red
-Los Angeles,Phoenix|3,gray
-Los Angeles,El Paso|6,black
-Phoenix,El Paso|3,gray
-El Paso,Houston|6,green
+Montreal,Sault St. Marie|5,black/0
+Montreal,Toronto|3,gray/1
+Montreal,New York|3,blue/0
+Montreal,Boston|2,gray/1
+Montreal,Boston|2,gray/0
+Sault St. Marie,Winnipeg|6,gray/1
+Sault St. Marie,Duluth|3,gray/0
+Sault St. Marie,Toronto|2,gray/1
+Toronto,Duluth|6,magenta/0
+Toronto,Chicago|4,white/1
+Toronto,Pittsburgh|2,gray/0
+New York,Pittsburgh|2,white/1
+New York,Pittsburgh|2,green/0
+New York,Washington|2,orange/1
+New York,Washington|2,black/0
+New York,Boston|2,yellow/1
+New York,Boston|2,red/0
+Winnipeg,Calgary|6,white/1
+Winnipeg,Helena|4,blue/0
+Winnipeg,Duluth|4,black/1
+Duluth,Helena|6,orange/0
+Duluth,Omaha|2,gray/1
+Duluth,Omaha|2,gray/0
+Duluth,Chicago|3,red/1
+Chicago,Omaha|4,blue/0
+Chicago,Saint Louis|2,green/1
+Chicago,Saint Louis|2,white/0
+Chicago,Pittsburgh|3,orange/1
+Chicago,Pittsburgh|3,black/0
+Pittsburgh,Saint Louis|5,green/1
+Pittsburgh,Nashville|4,yellow/0
+Pittsburgh,Raleigh|2,gray/1
+Pittsburgh,Washington|2,gray/0
+Washington,Raleigh|2,gray/1
+Washington,Raleigh|2,gray/0
+Calgary,Vancouver|3,gray/1
+Calgary,Seattle|4,gray/0
+Calgary,Helena|4,gray/1
+Helena,Seattle|6,yellow/0
+Helena,Salt Lake City|3,magenta/1
+Helena,Denver|4,green/0
+Helena,Omaha|5,red/1
+Omaha,Denver|4,magenta/0
+Omaha,Kansas City|1,gray/1
+Omaha,Kansas City|1,gray/0
+Saint Louis,Kansas City|2,blue/1
+Saint Louis,Kansas City|2,magenta/0
+Saint Louis,Little Rock|2,gray/1
+Saint Louis,Nashville|2,gray/0
+Nashville,Little Rock|3,white/1
+Nashville,Atlanta|1,gray/0
+Nashville,Raleigh|3,black/1
+Raleigh,Atlanta|2,gray/0
+Raleigh,Atlanta|2,gray/1
+Raleigh,Charleston|2,gray/0
+Vancouver,Seattle|1,gray/1
+Vancouver,Seattle|1,gray/0
+Seattle,Portland|1,gray/1
+Seattle,Portland|1,gray/0
+Portland,Salt Lake City|6,blue/1
+Portland,San Francisco|5,green/0
+Portland,San Francisco|5,magenta/1
+Salt Lake City,San Francisco|5,orange/0
+Salt Lake City,San Francisco|5,white/1
+Salt Lake City,Las Vegas|3,orange/0
+Salt Lake City,Denver|3,yellow/1
+Salt Lake City,Denver|3,red/0
+Denver,Phoenix|5,white/1
+Denver,Santa Fe|2,gray/0
+Denver,Oklahoma City|4,red/1
+Denver,Kansas City|4,orange/0
+Denver,Kansas City|4,black/1
+Oklahoma City,Santa Fe|3,blue/0
+Oklahoma City,El Paso|5,yellow/1
+Oklahoma City,Dallas|2,gray/0
+Oklahoma City,Dallas|2,gray/1
+Oklahoma City,Little Rock|2,gray/0
+Oklahoma City,Kansas City|2,gray/1
+Oklahoma City,Kansas City|2,gray/0
+Little Rock,Dallas|2,gray/1
+Little Rock,New Orleans|3,green/0
+Atlanta,New Orleans|4,yellow/1
+Atlanta,New Orleans|4,orange/0
+Atlanta,Miami|5,blue/1
+Atlanta,Charleston|2,gray/0
+Charleston,Miami|4,magenta/1
+San Francisco,Los Angeles|3,magenta/0
+San Francisco,Los Angeles|3,yellow/1
+Las Vegas,Los Angeles|2,gray/0
+Santa Fe,El Paso|2,gray/1
+Santa Fe,Phoenix|3,gray/0
+Dallas,El Paso|4,red/1
+Dallas,Houston|1,gray/0
+Dallas,Houston|1,gray/1
+New Orleans,Houston|2,gray/0
+New Orleans,Miami|6,red/1
+Los Angeles,Phoenix|3,gray/0
+Los Angeles,El Paso|6,black/1
+Phoenix,El Paso|3,gray/0
+El Paso,Houston|6,green/1
