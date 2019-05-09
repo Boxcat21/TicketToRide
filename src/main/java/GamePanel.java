@@ -85,9 +85,14 @@ public class GamePanel extends JPanel implements MouseListener {
 			//System.out.println(DataDrawer.clickableTrainDeck.getX() + " " + DataDrawer.clickableTrainDeck.getY());
 			//System.out.println(e.getPoint());
 			
-			if(DataDrawer.getTicketDeck().contains(e.getPoint())) {
-				System.out.println("true");
+			if(DataDrawer.getTrainDeck().contains(e.getPoint())) {
 				game.drawTrainCard();
+			}
+			for(int i = 0; i < DataDrawer.clickableDisplayCards.size(); i++) {
+				Rectangle r = DataDrawer.clickableDisplayCards.get(i);
+				if(r.contains(e.getPoint())) {
+					game.chooseTrainCard(i);
+				}
 			}
 		}
 		repaint();
@@ -100,6 +105,7 @@ public class GamePanel extends JPanel implements MouseListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		if (!game.isEnded()) {
+			System.out.println(game.getDisplayCards());
 			BoardDrawer.drawBoard(g, clickedEdgeIndecies, playerTracks);
 			HandDrawer.drawHand(g, game.curPlayer(), chosenTrainCards);
 			if (game.getDisplayContracts() != null)

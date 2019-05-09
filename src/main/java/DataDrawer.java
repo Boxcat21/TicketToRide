@@ -111,7 +111,7 @@ public class DataDrawer {
 				catch (Exception e) {}
 				for(int s = 0; s < 8; s++) {
 					g.drawImage(card, 1605+s, 650+controlY+(i*500)-10-s, w+80, l+20, null);
-					if(s == 8) {
+					if(s == 7) {
 						clickableTrainDeck = new Rectangle(1605+s,650+controlY+(i*500)-10-s,w+80,l+20);
 					}
 				}
@@ -138,7 +138,7 @@ public class DataDrawer {
 			temp += 110;
 		}
 		temp = 1575+55;
-		for ( int i = 0; i < 2; i++) { 
+		for ( int i = 3; i < 5; i++) { 
 			g2.setColor(Color.BLACK);
 			g2.drawRect(temp, 960 + controlY, l, w);
 			int index = GameState.TRAIN_COLORS_LIST.indexOf(display.get(i).getColor());
