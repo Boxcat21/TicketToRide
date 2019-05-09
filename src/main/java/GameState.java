@@ -183,12 +183,14 @@ public class GameState {
 		if(choosingContracts)
 			return false;
 		TrainCard t = displayCards.get(choice);
-		if (t.getColor().equals("Wild") && turnCounter == 2) {
+		if (t.getColor().equals("wild") && turnCounter == 2) {
+			System.out.println("CHOSE A WILD");
 			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
 			displayCards.add(choice, trainCardDeck.pop());
 			turnCounter -= 2;
-		} else if (!t.getColor().equals("Wild")) {
+		} else if (!t.getColor().equals("wild")) {
+			System.out.println("CHOSE A NORMAL");
 			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
 			displayCards.add(choice, trainCardDeck.pop());

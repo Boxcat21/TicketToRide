@@ -143,10 +143,9 @@ public class DataDrawer {
 			g2.drawRect(temp, 960 + controlY, l, w);
 			int index = GameState.TRAIN_COLORS_LIST.indexOf(display.get(i).getColor());
 			g2.drawImage(images.get(index),temp, 960 + controlY, l, w, null);
-			clickableDisplayCards.add(new Rectangle(temp,755+controlY,l,w));
+			clickableDisplayCards.add(new Rectangle(temp,960+controlY,l,w));
 			temp += 110;
 		}
-		System.out.println(clickableDisplayCards.size());
 	}
 	
 	public static void drawCurPlayer(Graphics g, Player p) {

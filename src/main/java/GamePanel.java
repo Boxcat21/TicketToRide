@@ -105,7 +105,6 @@ public class GamePanel extends JPanel implements MouseListener {
 	@Override
 	public void paintComponent(Graphics g) {
 		if (!game.isEnded()) {
-			System.out.println(game.getDisplayCards());
 			BoardDrawer.drawBoard(g, clickedEdgeIndecies, playerTracks);
 			HandDrawer.drawHand(g, game.curPlayer(), chosenTrainCards);
 			if (game.getDisplayContracts() != null)
