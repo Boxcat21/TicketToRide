@@ -1,4 +1,5 @@
 import java.awt.AlphaComposite;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Composite;
 
@@ -6,7 +7,9 @@ import javax.imageio.*;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Shape;
+import java.awt.Stroke;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Rectangle2D;
@@ -109,6 +112,12 @@ public class BoardDrawer {
 			//String ct1 = edges.get(arg0)
 		}
 		//
+		BufferedImage map = null;
+		try { 
+			map = ImageIO.read(new File("Map.png"));
+		}
+		catch (Exception e) {}
+		//g.drawImage(map, 0, 0, 1535, 755, null);
 		g.setColor(Color.LIGHT_GRAY);
 		g.fillRect(0, 0, 1535, 755);
 		g.setColor(Color.BLACK);
@@ -146,15 +155,14 @@ public class BoardDrawer {
 				doubleEdgeCheck = 1;
 				
 				if(!eds.contains(i))
-					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
+					drawRotatedRect(g, x1, y1, angle, distance, size, color, false, x2, y2);
 				else {
 					String s = playerColors.get(eds.indexOf(i)).getTrainColor();
 					int index  = DataDrawer.colors.indexOf(s);
 					Color colour = DataDrawer.playerColors[index];
-					drawRotatedRect(g, x1, y1, angle, distance, size, colour, true);
+					drawRotatedRect(g, x1, y1, angle, distance, size, colour, true,  x2, y2);
 				}
 				i++;
-				
 				try {
 					Field field = Class.forName("java.awt.Color").getField(colors[i]);
 					color = (Color)field.get(null);
@@ -162,12 +170,12 @@ public class BoardDrawer {
 				
 				doubleEdgeCheck = 2;
 				if(!eds.contains(i))
-					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
+					drawRotatedRect(g, x1, y1, angle, distance, size, color, false, x2, y2);
 				else {
 					String s = playerColors.get(eds.indexOf(i)).getTrainColor();
 					int index  = DataDrawer.colors.indexOf(s);
 					Color colour = DataDrawer.playerColors[index];
-					drawRotatedRect(g, x1, y1, angle, distance, size, colour, true);
+					drawRotatedRect(g, x1, y1, angle, distance, size, colour, true, x2, y2);
 				}
 				doubleEdgeCheck = 0;
 			}
@@ -187,12 +195,12 @@ public class BoardDrawer {
 				} catch (Exception e) { color = null;}
 				//
 				if(!eds.contains(i))
-					drawRotatedRect(g, x1, y1, angle, distance, size, color, false);
+					drawRotatedRect(g, x1, y1, angle, distance, size, color, false, x2, y2);
 				else {
 					String s = playerColors.get(eds.indexOf(i)).getTrainColor();
 					int index  = DataDrawer.colors.indexOf(s);
 					Color colour = DataDrawer.playerColors[index];
-					drawRotatedRect(g, x1, y1, angle, distance, size, colour, true);
+					drawRotatedRect(g, x1, y1, angle, distance, size, colour, true, x2, y2);
 				}
 			}
 		}
@@ -217,7 +225,7 @@ public class BoardDrawer {
 		//g.fillOval(1535, 755, 10, 10);
 		
 	}
-	private static void drawRotatedRect(Graphics g, int x, int y, double angle, int length, int width, Color color, boolean check) {
+	private static void drawRotatedRect(Graphics g, int x, int y, double angle, int length, int width, Color color, boolean check, int x2, int y2) {
 		double theta = Math.toRadians(angle);
 		Rectangle2D rect = new Rectangle2D.Double(-length/2.,-width/2.,length, width);
 		
@@ -241,21 +249,36 @@ public class BoardDrawer {
 		
 		Shape rotatedRect = tran.createTransformedShape(rect);
 		
+		Rectangle re = rotatedRect.getBounds();
+		int minX = (int)(re.getMinX());
+		int minY = (int)(re.getMinY());
+		int maxX = (int)(re.getMaxX());
+		int maxY = (int)(re.getMaxX());
+		
 		Graphics2D g2d = (Graphics2D) g;
 		Composite a = g2d.getComposite();
 		
+		Stroke s = g2d.getStroke();
 		if(check) {
 			g2d.setColor(color);
+			Stroke dashed = new BasicStroke(4, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0, new float[]{12}, 0);
+			g2d.setStroke(dashed);
 		}
 		else {
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 9 * 0.1f));
-			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),40));
+			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),60));
 		}
 		g2d.fill(rotatedRect);
 		g2d.setComposite(a);
 		g.setColor(Color.BLACK);
+		//if(!g2d.getStroke().equals(s)) {
+			//g2d.drawLine(minX, minY, maxX, maxY);
+		//}
+		//g2d.setStroke(s);
 		g2d.draw(rotatedRect);
 		rotatedRects.add(rotatedRect);
+		
+		g2d.setStroke(s);
 	}
 	public static void drawTrains(Graphics g, ArrayList<Edge> trainEdges) {
 		

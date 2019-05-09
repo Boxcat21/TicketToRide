@@ -70,7 +70,13 @@ public class Player {
 		trains -= numRemoved;
 		return true;
 	}
-	
+	public int cardIndex(String s) {
+		for(int i = 0; i < trainCards.size(); i++) {
+			if(s.equals(trainCards.get(i).getColor()))
+				return i;
+		}
+		return -1;
+	}
 	public String toString()
 	{
 		return "|" + trainColor + "|" + (points + 0.0) + "|#" + trains  + "|" + "\n" + this.trainCards + "\n" + this.contracts;

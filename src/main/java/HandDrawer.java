@@ -1,5 +1,6 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -13,7 +14,7 @@ import javax.imageio.ImageIO;
 
 public class HandDrawer {
 
-	public static final String[] TRAIN_COLORS = {"purple","white","blue","yellow","orange",
+	public static final String[] TRAIN_COLORS = {"magenta","white","blue","yellow","orange",
 			"black","red","green","wild"};
 	public static final Color[] COLOR_NAMES = { new Color(84, 22, 180), Color.WHITE, Color.BLUE, Color.YELLOW,
 			Color.ORANGE, Color.BLACK, Color.RED, Color.GREEN, new Color(255, 0, 127) };
@@ -22,6 +23,7 @@ public class HandDrawer {
 	public static ArrayList<Rectangle> clickableSub;
 	public static ArrayList<Rectangle> clickableArrow;
 	public static ArrayList<Rectangle> clickableContracts;
+	public static final int shift = 150;
 
 	public static void init() {
 		clickableAdd = new ArrayList<Rectangle>(); // add card to selection
@@ -30,8 +32,8 @@ public class HandDrawer {
 		clickableContracts = new ArrayList<Rectangle>(); // first 3 are the selectable contracts, last index is the complete seletion button
 		int x = 90;
 		for (int i = 0; i < 9; i++) {
-			clickableAdd.add(new Rectangle(x, 870, 50, 40));
-			clickableSub.add(new Rectangle(x + 50, 870, 50, 40));
+			clickableAdd.add(new Rectangle(x + shift, 870, 50, 40));
+			clickableSub.add(new Rectangle(x + 50 + shift, 870, 50, 40));
 			x += 140;
 
 		}
@@ -45,10 +47,11 @@ public class HandDrawer {
 		clickableContracts.add(new Rectangle(920, 760, 60, 100)); // this one is the "done" button
 	}
 
-	public static void drawHand(Graphics g, Player p) {
+	public static void drawHand(Graphics g, Player p, ArrayList<TrainCard> chosen) {
 		Graphics2D g2 = (Graphics2D) g;
 		// g2.setColor(new Color(255, 105, 180));
 
+		//sets color for bottom panel
 		g2.setColor(new Color(184, 134, 11));
 		g2.fillRect(0, 756, 1535, 325);
 		g2.setColor(Color.BLACK);
@@ -68,30 +71,33 @@ public class HandDrawer {
 			
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6)); // draws outline box for hand card
-			g2.drawRect(x, 870, 50, 210);
-			drawArrow(g, x + 25, 870 + 35, x + 25, 870);
-			g2.drawRect(x + 50, 870, 50, 210);
-			drawArrow(g, x + 75, 870, x + 75, 870 + 35);
+			g2.drawRect(x + shift, 870, 50, 210);
+			drawArrow(g, x + 25 + shift, 870 + 35, x + 25 + shift, 870);
+			g2.drawRect(x + 50 + shift, 870, 50, 210);
+			drawArrow(g, x + 75 + shift, 870, x + 75 + shift, 870 + 35);
 			g2.setStroke(new BasicStroke(1));
 
 			g2.setColor(COLOR_NAMES[i]); // draws body of each
-			g2.fillRect(x + 1, 910, 98, 170);
-			g2.drawImage(card, x + 1, 910, 98, 170, null);
+			g2.fillRect(x + 1 + shift, 910, 98, 170);
+			g2.drawImage(card, x + 1 + shift, 910, 98, 170, null);
+
+			int cnt1 = getCount(TRAIN_COLORS[i], trainCard);
+			int cnt2 = getCount(TRAIN_COLORS[i], chosen);
 			
-			g2.setColor(Color.BLACK);
-			g2.setStroke(new BasicStroke(6));
-			g2.drawLine(x, 910, x + 100, 910);
-			g2.setStroke(new BasicStroke(2));
-
-			if (TRAIN_COLORS[i].equals("Black")) // sid this doesn't work beceause of uppercase black. This paints the count of traincards
-				g2.setColor(Color.WHITE);
-			else
-				g2.setColor(Color.BLACK);
-
-			g2.drawString(getCount(TRAIN_COLORS[i], trainCard), x + 28, 1010);
+			g2.setColor(Color.WHITE);
+			g2.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
+			g2.drawString((cnt1+cnt2) + "", x + 40 + shift, 1050);
+			
+			g2.setColor(Color.RED);
+			if(cnt2 != 0)
+				g2.drawString("" + cnt2, x + 40 + shift, 950);
 			x += 140;
 		}
-
+		if(chosen.size() > 0) {
+			g2.setColor(Color.RED);
+			g2.setFont(new Font("Comic Sans MS", Font.PLAIN, 30));
+			g2.drawString("Chosen: " + chosen.size(), 20 , 950);
+		}
 	}
 
 	public static void drawContractSelection(Graphics g, ArrayList<ContractCard> selection) {
@@ -141,13 +147,13 @@ public class HandDrawer {
 		// drawContractCards(g, p.getContracts());
 	}
 
-	private static String getCount(String string, ArrayList<TrainCard> list) {
+	private static int getCount(String string, ArrayList<TrainCard> list) {
 		// gets the count of each color card.
 		int count = 0;
 		for (TrainCard c : list)
 			if (c.getColor().equals(string))
 				count++;
-		return "" + count;
+		return count;
 	}
 
 	public static void drawArrow(Graphics g1, int x1, int y1, int x2, int y2) {

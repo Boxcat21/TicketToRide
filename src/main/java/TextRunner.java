@@ -17,13 +17,13 @@ public class TextRunner {
 		//Each player gets to choose their contracts from five at the beginning of the round
 		for(int i=0; i<4;i++)
 		{
-			System.out.println(g.getCurPlayer().toString());
+			System.out.println(g.curPlayer().toString());
 			testDrawContract(true);
 		}
 		
 		// Starting each turn
 		while (!g.isEnded()) {
-			System.out.println(g.getCurPlayer().toString());
+			System.out.println(g.curPlayer().toString());
 			if(cnt == 0) {
 				System.out.println("Enter your choice of contracts: ");
 				
@@ -50,8 +50,8 @@ public class TextRunner {
 	}
 
 	public static void testDrawTrainCards() {
-		Player current = g.getCurPlayer();
-		while (current.getTrainColor().equals(g.getCurPlayer().getTrainColor())) {
+		Player current = g.curPlayer();
+		while (current.getTrainColor().equals(g.curPlayer().getTrainColor())) {
 			System.out.println("If you want face up cards, press f. If not press something else lmao");
 			ArrayList<TrainCard> display = g.getDisplayCards();
 			if (scan.nextLine().equals("f")) {
@@ -85,7 +85,7 @@ public class TextRunner {
 
 	public static void testPlaceTrains() {
 
-		ArrayList<TrainCard> trains = g.getCurPlayer().getTrainCards();
+		ArrayList<TrainCard> trains = g.curPlayer().getTrainCards();
 		System.out.println("These are your available trains; enter the indexes of the ones you want starting from 0");
 		for (TrainCard t : trains)
 			System.out.println(t);

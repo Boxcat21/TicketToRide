@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Scanner;
@@ -18,9 +19,12 @@ import java.util.TreeMap;
 public class GameState {
 	// i made this public, neccessary for graphics so the whole datastructure doesnt
 	// need to be remade, can just refer to the index
-	public static final String[] TRAIN_COLORS = {"purple","white","blue","yellow","orange",
+	public static final String[] TRAIN_COLORS = {"magenta","white","blue","yellow","orange",
 			"black","red","green","wild"};
 	public static final String[] PLAYER_COLORS = {"Red","Green","Yellow","Blue"};
+	public static final ArrayList<String> TRAIN_COLORS_LIST = new ArrayList<String>();
+	public static final ArrayList<String> PLAYER_COLORS_LIST = new ArrayList<String>();
+	private Map<Integer, Integer> routePoints = new HashMap<Integer, Integer>();
 	private Queue<Player> players;
 	private Queue<ContractCard> contractDeck;
 	private Stack<TrainCard> trainCardDeck;
@@ -39,6 +43,19 @@ public class GameState {
 	private String longestPath;
 	private String mostContracts;
 	public GameState() throws FileNotFoundException {
+		//points map
+		routePoints.put(1, 1);
+		routePoints.put(2, 2);
+		routePoints.put(3, 4);
+		routePoints.put(4, 7);
+		routePoints.put(5, 10);
+		routePoints.put(6, 15);
+		//static variables
+		for(String s : TRAIN_COLORS)
+			TRAIN_COLORS_LIST.add(s);
+		for(String s : PLAYER_COLORS)
+			PLAYER_COLORS_LIST.add(s);
+		//globals
 		isEnded = false;
 		lastPlayer = null;
 		//Datastructures init
@@ -60,7 +77,8 @@ public class GameState {
 				trainCardDeck.add(new TrainCard(TRAIN_COLORS[j]));
 		for (int i = 0; i < 14; i++)
 			trainCardDeck.add(new TrainCard(TRAIN_COLORS[TRAIN_COLORS.length-1]));
-		Collections.shuffle(trainCardDeck);
+		for(int i = 0; i < 10; i++)
+			Collections.shuffle(trainCardDeck);
 
 		//Adding display cards
 		for (int i = 0; i < 5; i++)
@@ -123,23 +141,25 @@ public class GameState {
 			contractDeck.add(tempCards.get(i));
 		scan.close();
 	}
-	public boolean placeTrain(Edge e, ArrayList<String> input) { //player action
+	public boolean placeTrain(Edge e, ArrayList<TrainCard> thing) { //player action
 		if(choosingContracts)
 			return false;
+		ArrayList<TrainCard> input = new ArrayList<TrainCard>();
+		input.addAll(thing);
 		if (!e.getHasTrains() && input.size() == e.getLength()) {
 			
 			if(!e.getColor().equals("gray")) {
 				for(int i = 0; i < input.size(); i++) {
-					if(input.get(i).equals(e.getColor()) || input.get(i).equals("wild")) {
+					if(input.get(i).getColor().equals(e.getColor()) || input.get(i).getColor().equals("wild")) {
 						input.remove(i);
 						i--;
 					}
 				}
 			}
 			else {
-				String s = input.remove(0);
+				TrainCard tc = input.remove(0);
 				for(int i = 0; i < input.size(); i++) {
-					if(input.get(0).equals(s)) {
+					if(input.get(0).equals(tc)) {
 						input.remove(i);
 						i--;
 					}
@@ -150,6 +170,7 @@ public class GameState {
 				e.setPlayer(curPlayer);
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
+				curPlayer.addPoints(routePoints.get(e.getLength()));
 				checkContracts();
 				checkTurn();
 				return true;
@@ -164,12 +185,12 @@ public class GameState {
 		if (t.getColor().equals("Wild") && turnCounter == 2) {
 			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
-			displayCards.add(trainCardDeck.pop());
+			displayCards.add(choice, trainCardDeck.pop());
 			turnCounter -= 2;
 		} else if (!t.getColor().equals("Wild")) {
 			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
-			displayCards.add(trainCardDeck.pop());
+			displayCards.add(choice, trainCardDeck.pop());
 			turnCounter--;
 		} else {
 			//ystem.out.println("Stop right there, criminal scum!");
@@ -316,7 +337,7 @@ public class GameState {
 			return;
 		}
 	}
-	public Player getCurPlayer() {return curPlayer;}
+	public Player curPlayer() {return curPlayer;}
 	
 	public ArrayList<Edge> getEdges() {return edges;}
 	
