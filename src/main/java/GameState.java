@@ -243,15 +243,11 @@ public class GameState {
 		displayContracts = temps;
 		return true;
 	}
-	public ArrayList<Player> endGame() {
+	public void endGame() {
 		isEnded = true;
 		longestPath = longestPath();
 		mostContracts = mostContractCards();
-		ArrayList<Player> winnerPoints = new ArrayList<>();
-		winnerPoints.addAll(players);
-		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
-		// sorts the winners by order of points
-		return winnerPoints;
+
 	}
 
 	public void endTurn() {
@@ -442,5 +438,22 @@ public class GameState {
 				edges.get(i).setPlayer(p);
 			}
 		}
+	}
+	
+	public ArrayList<String> endScreen()//returns the four players in order of points 
+	{
+		ArrayList<String> list = new ArrayList<>();
+		ArrayList<Player> winnerPoints = new ArrayList<>();
+		winnerPoints.addAll(players);
+		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
+		for(int i = 0; i<winnerPoints.size(); i++)
+		{
+			Player p = winnerPoints.get(i);
+			list.add(i+": "+p.getTrainColor()+": "+p.getPoints());
+		}
+	
+			
+		return list;
+		
 	}
 }
