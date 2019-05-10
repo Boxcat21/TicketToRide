@@ -8,6 +8,7 @@ public class Player {
 	private ArrayList<TrainCard> trainCards;
 	private int trains; // number of trains
 	private String trainColor; // color of player
+	private boolean isSetUp;
 
 	public Player(String trainColor) {
 		super();
@@ -16,6 +17,7 @@ public class Player {
 		this.trainCards = new ArrayList<TrainCard>();
 		this.trains = 40;
 		this.trainColor = trainColor;
+		this.isSetUp = false;
 	}
 	
 	
@@ -64,6 +66,10 @@ public class Player {
 	public void addContractCard(ContractCard c) {
 		contracts.add(c);
 	}
+	public void addContractCards(ArrayList<ContractCard> list) {
+		for(ContractCard c : list)
+			contracts.add(c);
+	}
 	public boolean reduceTrains(int numRemoved) {
 		if ( trains < 3) 
 			return false;
@@ -81,4 +87,10 @@ public class Player {
 	{
 		return "|" + trainColor + "|" + (points + 0.0) + "|#" + trains  + "|" + "\n" + this.trainCards + "\n" + this.contracts;
 	}	
+	public boolean isSetUp() {
+		return isSetUp;
+	}
+	public void setUp() {
+		isSetUp = true;
+	}
 }

@@ -106,9 +106,10 @@ public class HandDrawer {
 		}
 	}
 
-	public static void drawContractSelection(Graphics g, ArrayList<ContractCard> selection, ArrayList<Integer> indecies, Color thing) {
+	public static void drawContractSelection(Graphics g, ArrayList<ContractCard> selection, ArrayList<Integer> indecies) {
 		init();
 		Graphics2D g2 = (Graphics2D) g;
+		Color thing = new Color(184, 134, 11);
 		/*
 		g2.setStroke(new BasicStroke(6));
 		g2.drawRect(600, 760, 380, 100);
@@ -134,7 +135,7 @@ public class HandDrawer {
 				g2.setColor(thing);
 				g2.fillRect(5+(i*170), 760, w, l);//set to fill and change color b4 it based on click
 			}
-			else {
+			else { //has been clicked on
 				g2.setColor(Color.WHITE);
 				g2.fillRect(5+(i*170), 760, w, l);
 			}
@@ -152,32 +153,44 @@ public class HandDrawer {
 			clickableContracts.add(new Rectangle(5+(i*170), 760, w, l));
 			if(i == selection.size()-1) {
 				i++;
-				g2.drawRect(5+(i*170), 760, l, l);//same as line 142
+				g2.setStroke(new BasicStroke(3));
+				g2.drawRect(5+(i*170), 760, l, l);
 				clickableContracts.add(new Rectangle(5+(i*170), 760, l, l));
 			}
+			g2.setStroke(s);
 		}
-		System.out.println(clickableContracts.size());
 	}
 
 	public static void drawContractCards(Graphics g, ArrayList<ContractCard> cards) {
 		// draws contract cards in the player's hand
 		Graphics2D g2 = (Graphics2D) g;
-		g2.setStroke(new BasicStroke(4));
+		if(cards == null || !(cards.size()>0))
+			return;
+		/*g2.setStroke(new BasicStroke(4));
 		g2.setColor(Color.BLACK);
 		g2.drawRect(1100, 765, 200, 85);
 		g2.setColor(Color.WHITE);
 		g2.fillRect(1100, 765, 199, 84);
 		// draw contents here
 		g2.setColor(Color.BLACK);
-
+		*/
 		// g2.drawString(cards.get(0).toString(), 1125, 800);
+		int serial = cards.get(0).getSerial();
+		String buffer = "";
+		if(serial < 10)
+			buffer = "0";
+		BufferedImage card = null; // image of contract cards
+		try { 			
+			card = ImageIO.read(new File("Contracts/" + buffer + serial + ".png"));
+		}
+		catch (Exception e) {}
+		g2.drawImage(card, 1100, 740, 200, 120, null);
 		g2.setColor(Color.BLACK);
-
+		g2.setStroke(new BasicStroke(4));
 		g2.drawRect(1050, 790, 35, 35);
 		g2.drawRect(1315, 790, 35, 35);
 		drawArrow(g, 1085, 807, 1050, 807);
 		drawArrow(g, 1315, 807, 1350, 807);
-
 	}
 
 	public static void advanceCard(Player p, int direction) {

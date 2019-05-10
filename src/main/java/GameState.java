@@ -172,7 +172,7 @@ public class GameState {
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
 				curPlayer.addPoints(routePoints.get(e.getLength()));
-				checkContracts();
+				//checkContracts();
 				checkTurn();
 				return true;
 			}
@@ -201,7 +201,7 @@ public class GameState {
 	}
 
 	public void drawTrainCard() { //player action
-		if(choosingContracts)
+		if(choosingContracts || trainCardDeck.isEmpty())
 			return;
 		curPlayer.addTrainCard(trainCardDeck.pop());
 		turnCounter--;
@@ -218,22 +218,21 @@ public class GameState {
 		for (int i = 0; i < amnt; i++)
 			if (choices.contains(i))
 				curPlayer.addContractCard(displayContracts.get(i));
-		//System.out.println(curPlayer.getContracts());
 		turnCounter -= 2;
 		choosingContracts = false;
-		displayContracts = new ArrayList<ContractCard>();
+		displayContracts = null;
 		checkTurn();
 		return "Successful";
 	}
-	public ArrayList<ContractCard> drawContracts(int amnt) {
-		if(choosingContracts)
-			return new ArrayList<ContractCard>();
+	public boolean drawContracts(int amnt) {
+		if(choosingContracts || turnCounter != 2)
+			return false;
 		choosingContracts = true;
 		ArrayList<ContractCard> temps = new ArrayList<>();
 		for (int i = 0; i < amnt; i++)
 			temps.add(this.contractDeck.poll());
 		displayContracts = temps;
-		return temps;
+		return true;
 	}
 	public ArrayList<Player> endGame() {
 		isEnded = true;
@@ -355,6 +354,10 @@ public class GameState {
 	public boolean isChoosingContracts() {return choosingContracts;}
 	
 	public boolean isEnded() {return isEnded;}
+	
+	public Queue<ContractCard> getContractDeck() {
+		return contractDeck;
+	}
 	
 	private boolean checkWilds() {
 		int count = 0;

@@ -40,6 +40,6 @@ public class ContractCard {
 	}
 	@Override
 	public String toString() {
-		return "|" + cities[0].getName() + " to " + cities[1].getName() + "|" + count;
+		return "|" + cities[0].getName() + " to " + cities[1].getName() + "|" + value;
 	}
 }

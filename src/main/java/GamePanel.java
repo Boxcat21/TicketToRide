@@ -1,5 +1,7 @@
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
@@ -14,14 +16,12 @@ public class GamePanel extends JPanel implements MouseListener {
 	private ArrayList<Integer> clickedEdgeIndecies;
 	private ArrayList<TrainCard> chosenTrainCards;
 	private ArrayList<Player> playerTracks;
-	private ArrayList<Integer> selectionIndecies;
-	private int minChoose;
-	private int selectSize;
-	private boolean setup;
-	private int count;
+	private ArrayList<Integer> chosenContracts; 
+	private int amount;
+	private int min;
 	public GamePanel() throws IOException {
-		setup = true;
-		count = 0;
+		amount = 3;
+		min = 2;
 		setSize(1920, 1080);
 		setVisible(true);
 		addMouseListener(this);
@@ -30,7 +30,7 @@ public class GamePanel extends JPanel implements MouseListener {
 		clickedEdgeIndecies = new ArrayList<Integer>();
 		chosenTrainCards = new ArrayList<>();
 		playerTracks = new ArrayList<>();
-		selectionIndecies = new ArrayList<>();
+		chosenContracts = new ArrayList<Integer>();
 
 		HandDrawer.init();
 		DataDrawer.init();
@@ -51,15 +51,21 @@ public class GamePanel extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		if(setup) {
+		if(!(game.isChoosingContracts())) {
 			chooseCards(e);
 			placeEdge(e);
 			if(!(chosenTrainCards.size() > 0)) {	
-				arrowClick(e);
+				scrollClick(e);
 				obtainCards(e);
 			}
-			repaint();
 		}
+		else {
+			scrollClick(e);
+			boolean b = selectionContractClick(e);
+			if(b)
+				chosenContracts = new ArrayList<Integer>();
+		}
+		repaint();
 	}
 
 	@Override
@@ -68,25 +74,34 @@ public class GamePanel extends JPanel implements MouseListener {
 
 	@Override
 	public void paintComponent(Graphics g) {
+		if(!(game.curPlayer().isSetUp())) {
+			game.curPlayer().setUp();
+			amount = 5;
+			min = 3;
+			game.drawContracts(amount); 
+		}
+		
 		if (!game.isEnded()) {
-			BoardDrawer.drawBoard(g, clickedEdgeIndecies, playerTracks);
-			HandDrawer.drawHand(g, game.curPlayer(), chosenTrainCards);
-			//if (game.getDisplayContracts() != null || game.getDisplayContracts().size() > 0)
-			//	HandDrawer.drawContractCards(g, game.getDisplayContracts());
+			BoardDrawer.drawBoard(g, clickedEdgeIndecies, playerTracks);//
+			HandDrawer.drawHand(g, game.curPlayer(), chosenTrainCards);//
+			if (game.isChoosingContracts())
+				HandDrawer.drawContractSelection(g, game.getDisplayContracts(), chosenContracts);
 			HandDrawer.drawContractCards(g, game.curPlayer().getContracts());
 
-			if (game.isChoosingContracts())
-				HandDrawer.drawContractSelection(g, game.getDisplayContracts(), selectionIndecies, new Color(184, 134, 11));
 			g.setColor(new Color(184, 134, 11));
 			g.fillRect(1535, 0, 1920 - 1535, 1080);
 			g.setColor(Color.BLACK);
 			g.drawRect(1535, 0, 1920 - 1535, 1080);
-
+			
 			DataDrawer.drawDisplayCards(g, game.getDisplayCards());
 			ArrayList<Player> temp = new ArrayList<>();
 			temp.addAll(game.getPlayerList());
 			temp.add(game.curPlayer());
 			DataDrawer.drawData(g, temp);
+			
+			Graphics2D g2 = (Graphics2D)g;
+			g2.setStroke(new BasicStroke(3));
+			g2.drawLine(1535, 1, 1535, 1079);
 		}
 		/*
 		 * BoardDrawer.drawBoard(g, this.clickedEdgeIndecies); HandDrawer.drawHand(g,
@@ -101,6 +116,15 @@ public class GamePanel extends JPanel implements MouseListener {
 		 * p.getTrainCards()); DataDrawer.drawCurPlayer(g, p);
 		 */
 	}
+	private boolean allSetUp() {
+		int count = 0;
+		for(Player p : game.getPlayerList()) {
+			if(p.isSetUp())
+				count++;
+		}
+		return count == game.getPlayerList().size()+1;
+	}
+
 	private void chooseCards(MouseEvent e) {
 		for (int i = 0; i < HandDrawer.clickableAdd.size(); i++) {
 			if (HandDrawer.clickableAdd.get(i).contains(e.getPoint())) {
@@ -135,7 +159,7 @@ public class GamePanel extends JPanel implements MouseListener {
 			chosenTrainCards = new ArrayList<TrainCard>();
 		}
 	}
-	private void arrowClick(MouseEvent e) {
+	private void scrollClick(MouseEvent e) {
 		if (HandDrawer.clickableArrow.get(0).contains(e.getPoint()))
 			HandDrawer.advanceCard(game.curPlayer(), -1);
 		if (HandDrawer.clickableArrow.get(1).contains(e.getPoint()))
@@ -152,25 +176,35 @@ public class GamePanel extends JPanel implements MouseListener {
 			}
 		}
 		if(DataDrawer.getTicketDeck().contains(e.getPoint())) {
-			game.drawContracts(3);
+			amount = 3;
+			min = 2;
+			game.drawContracts(amount);
 		}
 	}
-	private boolean contractClick(MouseEvent e) {
+	
+	private boolean selectionContractClick(MouseEvent e) {
 		for(int i = 0; i < HandDrawer.getClickableContracts().size(); i++) {
 			Rectangle r = HandDrawer.getClickableContracts().get(i);
 			if(r.contains(e.getPoint()) && i == HandDrawer.getClickableContracts().size()-1) {
-				if(selectionIndecies.size()>minChoose) {
-					game.chooseContractCard(selectionIndecies, selectSize);
+				if(chosenContracts.size()>=min) {
+					game.chooseContractCard(chosenContracts, amount);
 					return true;
 				}
 			}
 			else if(r.contains(e.getPoint())) {
-				if(!(selectionIndecies.contains(i)))
-					selectionIndecies.add(i);
-				else
-					selectionIndecies.remove(i);
+				if(!(chosenContracts.contains(i)))
+					chosenContracts.add(i);
+				else {
+					for(int p = 0; p < chosenContracts.size(); p++) {
+						if(chosenContracts.get(p).equals(i)) {
+							chosenContracts.remove(p);
+							break;
+						}
+					}
+				}
 			}
 		}
 		return false;
 	}
+	
 }

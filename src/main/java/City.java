@@ -27,7 +27,7 @@ public class City {
 		ArrayList<Edge> temp = new ArrayList<Edge>();
 		
 		for(Edge e : edges) {
-			if(e.getPlayer().getTrainColor().equals(s))
+			if(e.getTrainColor().equals(s))
 				temp.add(e);
 		}
 		return temp;
