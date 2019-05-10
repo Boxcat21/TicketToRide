@@ -158,9 +158,17 @@ public class GameState {
 				}
 			}
 			else {
-				TrainCard tc = input.remove(0);
+				TrainCard tc = null;
 				for(int i = 0; i < input.size(); i++) {
-					if(input.get(0).getColor().equals(tc.getColor())) {
+					if(!(input.get(i).getColor().equals("wild"))) {
+						tc = input.remove(i);
+						break;
+					}
+				}
+				if(tc == null)
+					tc = input.remove(0);
+				for(int i = 0; i < input.size(); i++) {
+					if(input.get(0).getColor().equals(tc.getColor()) || input.get(0).getColor().equals("wild")) {
 						input.remove(i);
 						i--;
 					}
