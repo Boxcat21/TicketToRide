@@ -95,13 +95,13 @@ public class GameState {
 		turnCounter = 2;
 
 		//Edges and Cities
-		Scanner scan = new Scanner(new File("Cities"));
+		Scanner scan = new Scanner(new File("TextFiles/Cities"));
 		while (scan.hasNextLine()) {
 			String[] temp1 = scan.nextLine().split(",");
 			cities.add(new City(new Point(Integer.parseInt(temp1[1]), Integer.parseInt(temp1[2])), temp1[0],
 					new ArrayList<Edge>()));
 		}
-		scan = new Scanner(new File("FixedCon"));
+		scan = new Scanner(new File("TextFiles/FixedCon"));
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
 			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");
@@ -124,7 +124,7 @@ public class GameState {
 		}
 		//adding contracts
 		ArrayList<ContractCard> tempCards = new ArrayList<ContractCard>();
-		scan = new Scanner(new File("tickets.txt"));
+		scan = new Scanner(new File("TextFiles/tickets.txt"));
 		int counter = Integer.parseInt(scan.nextLine());
 		for (int i = 0; i < counter; i++) {
 			String[] temp = scan.nextLine().split(",");
@@ -135,7 +135,7 @@ public class GameState {
 				if (c.getName().equals(temp[2]))
 					two = c;
 			}
-			tempCards.add(new ContractCard(one, two, Integer.parseInt(temp[0])));
+			tempCards.add(new ContractCard(one, two, Integer.parseInt(temp[0]), i+2));
 		}
 		Collections.shuffle(tempCards);
 		for(int i = 0; i < tempCards.size(); i++)
@@ -143,7 +143,7 @@ public class GameState {
 		scan.close();
 	}
 	public boolean placeTrain(Edge e, ArrayList<TrainCard> thing) { //player action
-		if(choosingContracts || e.getHasTrains() || checkDoubleEdge(e))
+		if(choosingContracts || e.getHasTrains() || checkDoubleEdge(e) || turnCounter == 1)
 			return false;
 		ArrayList<TrainCard> input = new ArrayList<TrainCard>();
 		input.addAll(thing);
@@ -210,6 +210,8 @@ public class GameState {
 	
 	public String chooseContractCard(ArrayList<Integer> choices, int amnt) { //player action
 		if(!choosingContracts)
+			return "";
+		if(turnCounter == 1)
 			return "";
 		if (choices.size() < 1)
 			return "Invalid. You must choose at least one contract.";

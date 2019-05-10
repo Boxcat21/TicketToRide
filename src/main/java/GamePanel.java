@@ -14,8 +14,10 @@ public class GamePanel extends JPanel implements MouseListener {
 	private ArrayList<Integer> clickedEdgeIndecies;
 	private ArrayList<TrainCard> chosenTrainCards;
 	private ArrayList<Player> playerTracks;
-
+	private ArrayList<ContractCard> selection;
+	private boolean setup;
 	public GamePanel() throws IOException {
+		setup = false;
 		setSize(1920, 1080);
 		setVisible(true);
 		addMouseListener(this);
@@ -24,9 +26,12 @@ public class GamePanel extends JPanel implements MouseListener {
 		clickedEdgeIndecies = new ArrayList<Integer>();
 		chosenTrainCards = new ArrayList<>();
 		playerTracks = new ArrayList<>();
+		selection = new ArrayList<>();
 
 		HandDrawer.init();
 		DataDrawer.init();
+		
+		ArrayList<ContractCard> temp = game.drawContracts(5);
 		
 	}
 
@@ -45,6 +50,63 @@ public class GamePanel extends JPanel implements MouseListener {
 
 	@Override
 	public void mousePressed(MouseEvent e) {
+		if(setup) {
+			chooseCards(e);
+			placeEdge(e);
+			if(!(chosenTrainCards.size() > 0)) {	
+				arrowClick(e);
+				obtainCards(e);
+			}
+			repaint();
+		}
+		else {
+			
+		}
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+	}
+
+	@Override
+	public void paintComponent(Graphics g) {
+		if (!game.isEnded()) {
+			BoardDrawer.drawBoard(g, clickedEdgeIndecies, playerTracks);
+			HandDrawer.drawHand(g, game.curPlayer(), chosenTrainCards);
+			if (game.getDisplayContracts() != null)
+				HandDrawer.drawContractCards(g, game.getDisplayContracts());
+			HandDrawer.drawContractCards(g, game.curPlayer().getContracts());
+
+			if (game.isChoosingContracts())
+				HandDrawer.drawContractSelection(g, game.getDisplayContracts());
+			if(selection.size() > 0) {
+				HandDrawer.drawContractSelection(g, selection);
+			}
+		}
+		g.setColor(new Color(184, 134, 11));
+		g.fillRect(1535, 0, 1920 - 1535, 1080);
+		g.setColor(Color.BLACK);
+		g.drawRect(1535, 0, 1920 - 1535, 1080);
+
+		DataDrawer.drawDisplayCards(g, game.getDisplayCards());
+		ArrayList<Player> temp = new ArrayList<>();
+		temp.addAll(game.getPlayerList());
+		temp.add(game.curPlayer());
+		DataDrawer.drawData(g, temp);
+		/*
+		 * BoardDrawer.drawBoard(g, this.clickedEdgeIndecies); HandDrawer.drawHand(g,
+		 * p); HandDrawer.drawContractSelection(g, game.getDisplayContracts() new
+		 * ArrayList<ContractCard>()); HandDrawer.drawContractCards(g,
+		 * p.getContracts());
+		 * 
+		 * g.setColor(new Color(184, 134,11)); g.fillRect(1535, 0, 1920-1535, 1080);
+		 * g.setColor(Color.BLACK); g.drawRect(1535, 0, 1920-1535, 1080);
+		 * 
+		 * HandDrawer.drawPlayer(g, game.curPlayer()); DataDrawer.drawDisplayCards(g,
+		 * p.getTrainCards()); DataDrawer.drawCurPlayer(g, p);
+		 */
+	}
+	private void chooseCards(MouseEvent e) {
 		for (int i = 0; i < HandDrawer.clickableAdd.size(); i++) {
 			if (HandDrawer.clickableAdd.get(i).contains(e.getPoint())) {
 				if(game.curPlayer().cardIndex(GameState.TRAIN_COLORS[i]) != -1) {
@@ -64,6 +126,8 @@ public class GamePanel extends JPanel implements MouseListener {
 				}
 			}
 		}
+	}
+	private void placeEdge(MouseEvent e) {
 		int index = BoardDrawer.edgeClick(e, game);
 		boolean check = false;
 		Player prev = game.curPlayer();
@@ -75,68 +139,25 @@ public class GamePanel extends JPanel implements MouseListener {
 			playerTracks.add(prev);
 			chosenTrainCards = new ArrayList<TrainCard>();
 		}
-
-		if(!(chosenTrainCards.size() > 0)) {	
-			if (HandDrawer.clickableArrow.get(0).contains(e.getPoint()))
-				HandDrawer.advanceCard(game.curPlayer(), -1);
-			if (HandDrawer.clickableArrow.get(1).contains(e.getPoint()))
-				HandDrawer.advanceCard(game.curPlayer(), 1);
-			
-			//System.out.println(DataDrawer.clickableTrainDeck.getX() + " " + DataDrawer.clickableTrainDeck.getY());
-			//System.out.println(e.getPoint());
-			
-			if(DataDrawer.getTrainDeck().contains(e.getPoint())) {
-				game.drawTrainCard();
-			}
-			for(int i = 0; i < DataDrawer.clickableDisplayCards.size(); i++) {
-				Rectangle r = DataDrawer.clickableDisplayCards.get(i);
-				if(r.contains(e.getPoint())) {
-					game.chooseTrainCard(i);
-				}
+	}
+	private void arrowClick(MouseEvent e) {
+		if (HandDrawer.clickableArrow.get(0).contains(e.getPoint()))
+			HandDrawer.advanceCard(game.curPlayer(), -1);
+		if (HandDrawer.clickableArrow.get(1).contains(e.getPoint()))
+			HandDrawer.advanceCard(game.curPlayer(), 1);
+	}
+	private void obtainCards(MouseEvent e) {
+		if(DataDrawer.getTrainDeck().contains(e.getPoint())) {
+			game.drawTrainCard();
+		}
+		for(int i = 0; i < DataDrawer.clickableDisplayCards.size(); i++) {
+			Rectangle r = DataDrawer.clickableDisplayCards.get(i);
+			if(r.contains(e.getPoint())) {
+				game.chooseTrainCard(i);
 			}
 		}
-		repaint();
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent e) {
-	}
-
-	@Override
-	public void paintComponent(Graphics g) {
-		if (!game.isEnded()) {
-			BoardDrawer.drawBoard(g, clickedEdgeIndecies, playerTracks);
-			HandDrawer.drawHand(g, game.curPlayer(), chosenTrainCards);
-			if (game.getDisplayContracts() != null)
-				HandDrawer.drawContractCards(g, game.getDisplayContracts());
-			HandDrawer.drawContractCards(g, game.curPlayer().getContracts());
-
-			if (game.isChoosingContracts())
-				HandDrawer.drawContractSelection(g, game.getDisplayContracts());
+		if(DataDrawer.getTicketDeck().contains(e.getPoint())) {
+			game.drawContracts(3);
 		}
-		g.setColor(new Color(184, 134, 11));
-		g.fillRect(1535, 0, 1920 - 1535, 1080);
-		g.setColor(Color.BLACK);
-		g.drawRect(1535, 0, 1920 - 1535, 1080);
-
-		DataDrawer.drawDisplayCards(g, game.getDisplayCards());
-		DataDrawer.drawCurPlayer(g, game.curPlayer());
-		ArrayList<Player> temp = new ArrayList<>();
-		temp.addAll(game.getPlayerList());
-		temp.add(game.curPlayer());
-		DataDrawer.drawData(g, temp);
-		/*
-		 * BoardDrawer.drawBoard(g, this.clickedEdgeIndecies); HandDrawer.drawHand(g,
-		 * p); HandDrawer.drawContractSelection(g, game.getDisplayContracts() new
-		 * ArrayList<ContractCard>()); HandDrawer.drawContractCards(g,
-		 * p.getContracts());
-		 * 
-		 * g.setColor(new Color(184, 134,11)); g.fillRect(1535, 0, 1920-1535, 1080);
-		 * g.setColor(Color.BLACK); g.drawRect(1535, 0, 1920-1535, 1080);
-		 * 
-		 * HandDrawer.drawPlayer(g, game.curPlayer()); DataDrawer.drawDisplayCards(g,
-		 * p.getTrainCards()); DataDrawer.drawCurPlayer(g, p);
-		 */
 	}
-
 }

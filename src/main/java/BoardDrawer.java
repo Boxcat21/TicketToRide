@@ -48,7 +48,7 @@ public class BoardDrawer {
 		//city points
 		Scanner sc = null;
 		try {
-			sc = new Scanner(new File("Cities"));
+			sc = new Scanner(new File("TextFiles/Cities"));
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
 		citys = new String[36];
@@ -67,7 +67,7 @@ public class BoardDrawer {
 		
 		//connected cities
 		try {
-			sc = new Scanner(new File("FixedCon"));
+			sc = new Scanner(new File("TextFiles/FixedCon"));
 		} catch (FileNotFoundException e) {e.printStackTrace();}
 		
 		connectedData = new int[100][2];
@@ -87,12 +87,6 @@ public class BoardDrawer {
 			lengths[cnt] = Integer.parseInt(line.substring(line.indexOf("|")+1,line.lastIndexOf(",")));
 			colors[cnt] = line.substring(line.lastIndexOf(",")+1, line.indexOf("/"));
 			cnt++;
-		}
-		try {
-			sc = new Scanner(new File("Doubles.txt"));
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	private static int findCitysIndex(String name) {
@@ -119,10 +113,10 @@ public class BoardDrawer {
 		catch (Exception e) {}
 		
 		g.drawImage(map, -40, 0, 1920, 1080, null);
-		/*g.setColor(new Color(Color.BLACK.getRed(), Color.BLACK.getBlue(), Color.BLACK.getGreen(), 50));
+		g.setColor(new Color(Color.BLACK.getRed(), Color.BLACK.getBlue(), Color.BLACK.getGreen(), 90));
 		g.fillRect(0, 0, 1535, 755);
 		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, 1535, 755);*/
+		g.drawRect(0, 0, 1535, 755);
 		// connecting edges
 		for (int i = 0; i < connectedData.length; i++) {
 			int x1 = (int) points[connectedData[i][0]].getX();
@@ -267,7 +261,7 @@ public class BoardDrawer {
 		}
 		else {
 			g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 9 * 0.1f));
-			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),100));
+			g2d.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue(),90));
 		}
 		g2d.fill(rotatedRect);
 		g2d.setComposite(a);

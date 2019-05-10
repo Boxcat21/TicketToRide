@@ -54,7 +54,7 @@ public class DataDrawer {
 		for(int i = 0; i < GameState.TRAIN_COLORS_LIST.size(); i++) {
 			BufferedImage card = null; // image of train cards
 			try { 
-				card = ImageIO.read(new File(GameState.TRAIN_COLORS[i]+".png"));
+				card = ImageIO.read(new File("TrainCards/" + GameState.TRAIN_COLORS[i]+".png"));
 			}
 			catch (Exception e) {}
 			images.add(card);
@@ -146,15 +146,6 @@ public class DataDrawer {
 			clickableDisplayCards.add(new Rectangle(temp,960+controlY,l,w));
 			temp += 110;
 		}
-	}
-	
-	public static void drawCurPlayer(Graphics g, Player p) {
-		// draws the crrent player in the corner. We might need to add a slot for the number of trains selected for each track placement
-		
-		Graphics2D g2 = (Graphics2D) g;
-		g.setFont(new Font("Comic Sans MS", Font.PLAIN, 50)); 
-		g2.setColor(playerColors[colors.indexOf(p.getTrainColor())]);
-		g2.drawString(p.getTrainColor() + " Player", 200, 800);
 	}
 	public static Rectangle getTrainDeck() {
 		return clickableTrainDeck;

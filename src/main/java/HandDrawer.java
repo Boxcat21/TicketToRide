@@ -59,17 +59,22 @@ public class HandDrawer {
 		g2.drawRect(0, 755, 1535, 325);
 		ArrayList<TrainCard> trainCard = p.getTrainCards();
 
+		g2.setColor(DataDrawer.playerColors[GameState.PLAYER_COLORS_LIST.indexOf(p.getTrainColor())]);
+		g2.setStroke(new BasicStroke(7));
+		g2.drawLine(0, 759, 1535, 759);
+		g2.drawLine(1530, 759, 1530, 1079);
+		g2.drawLine(2, 759, 2, 1079);
+		
 		g2.setColor(Color.BLACK);
 		int x = 90;
 
 		for (int i = 0; i < COLOR_NAMES.length; i++) {
 			
 			BufferedImage card = null; // image of train cards
-			try { 
-				card = ImageIO.read(new File(TRAIN_COLORS[i]+".png"));
+			try { 			
+				card = ImageIO.read(new File("TrainCards/" + TRAIN_COLORS[i] + ".png"));
 			}
 			catch (Exception e) {}
-			
 			g2.setColor(Color.BLACK);
 			g2.setStroke(new BasicStroke(6)); // draws outline box for hand card
 			g2.drawRect(x + shift, 870, 50, 210);
@@ -77,7 +82,7 @@ public class HandDrawer {
 			g2.drawRect(x + 50 + shift, 870, 50, 210);
 			drawArrow(g, x + 75 + shift, 870, x + 75 + shift, 870 + 35);
 			g2.setStroke(new BasicStroke(1));
-
+			
 			g2.setColor(COLOR_NAMES[i]); // draws body of each
 			g2.fillRect(x + 1 + shift, 910, 98, 170);
 			g2.drawImage(card, x + 1 + shift, 910, 98, 170, null);
@@ -107,6 +112,7 @@ public class HandDrawer {
 	public static void drawContractSelection(Graphics g, ArrayList<ContractCard> selection) {
 
 		Graphics2D g2 = (Graphics2D) g;
+		/*
 		g2.setStroke(new BasicStroke(6));
 		g2.drawRect(600, 760, 380, 100);
 		g2.setStroke(new BasicStroke(1));
@@ -119,6 +125,18 @@ public class HandDrawer {
 		g2.drawString(selection.get(1).getCity1().getName() + " to " + selection.get(1).getCity2().getName(), 610, 815);// contract 2
 		g2.drawRect(600, 826, 320, 33);
 		g2.drawString(selection.get(2).getCity1().getName() + " to " + selection.get(2).getCity2().getName(), 610, 850); // ontract 3
+		*/
+		int w = 170, l = 98;
+		for(int i = 0; i < selection.size(); i++) {
+			int serial = selection.get(i).getSerial();
+			
+			BufferedImage card = null; // image of contract cards
+			try { 			
+				card = ImageIO.read(new File(serial + ".png"));
+			}
+			catch (Exception e) {}
+			g2.drawImage(card, 5, 760, w, l, null);
+		}
 	}
 
 	public static void drawContractCards(Graphics g, ArrayList<ContractCard> cards) {
