@@ -4,6 +4,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -41,11 +42,6 @@ public class HandDrawer {
 		// adds the turn arrows for contract viewing
 		clickableArrow.add(new Rectangle(1050, 790, 35, 35));
 		clickableArrow.add(new Rectangle(1315, 790, 35, 35));
-
-		clickableContracts.add(new Rectangle(600, 760, 320, 33));
-		clickableContracts.add(new Rectangle(600, 793, 320, 33));
-		clickableContracts.add(new Rectangle(600, 826, 320, 33));
-		clickableContracts.add(new Rectangle(920, 760, 60, 100)); // this one is the "done" button
 	}
 
 	public static void drawHand(Graphics g, Player p, ArrayList<TrainCard> chosen) {
@@ -53,17 +49,18 @@ public class HandDrawer {
 		// g2.setColor(new Color(255, 105, 180));
 
 		//sets color for bottom panel
+		int shiftaro = -20;
 		g2.setColor(new Color(184, 134, 11));
-		g2.fillRect(0, 756, 1535, 325);
+		g2.fillRect(0, 756+shiftaro, 1535, 325-shiftaro);
 		g2.setColor(Color.BLACK);
-		g2.drawRect(0, 755, 1535, 325);
+		g2.drawRect(0, 755+shiftaro, 1535, 325-shiftaro);
 		ArrayList<TrainCard> trainCard = p.getTrainCards();
 
 		g2.setColor(DataDrawer.playerColors[GameState.PLAYER_COLORS_LIST.indexOf(p.getTrainColor())]);
 		g2.setStroke(new BasicStroke(7));
-		g2.drawLine(0, 759, 1535, 759);
-		g2.drawLine(1530, 759, 1530, 1079);
-		g2.drawLine(2, 759, 2, 1079);
+		g2.drawLine(0, 759+shiftaro, 1535, 759+shiftaro);
+		g2.drawLine(1530, 759+shiftaro, 1530, 1079);
+		g2.drawLine(2, 759+shiftaro, 2, 1079);
 		
 		g2.setColor(Color.BLACK);
 		int x = 90;
@@ -109,8 +106,8 @@ public class HandDrawer {
 		}
 	}
 
-	public static void drawContractSelection(Graphics g, ArrayList<ContractCard> selection) {
-
+	public static void drawContractSelection(Graphics g, ArrayList<ContractCard> selection, ArrayList<Integer> indecies, Color thing) {
+		init();
 		Graphics2D g2 = (Graphics2D) g;
 		/*
 		g2.setStroke(new BasicStroke(6));
@@ -130,13 +127,36 @@ public class HandDrawer {
 		for(int i = 0; i < selection.size(); i++) {
 			int serial = selection.get(i).getSerial();
 			
+			String buffer = "";
+			if(serial < 10)
+				buffer = "0";
+			if(!(indecies.contains(i))) {
+				g2.setColor(thing);
+				g2.fillRect(5+(i*170), 760, w, l);//set to fill and change color b4 it based on click
+			}
+			else {
+				g2.setColor(Color.WHITE);
+				g2.fillRect(5+(i*170), 760, w, l);
+			}
+			Stroke s = g2.getStroke();
+			g2.setStroke(new BasicStroke(3));
+			g2.setColor(Color.BLACK);
+			g2.drawRect(5+(i*170), 760, w, l);
+			g2.setStroke(s);
 			BufferedImage card = null; // image of contract cards
 			try { 			
-				card = ImageIO.read(new File(serial + ".png"));
+				card = ImageIO.read(new File("Contracts/" + buffer + serial + ".png"));
 			}
 			catch (Exception e) {}
-			g2.drawImage(card, 5, 760, w, l, null);
+			g2.drawImage(card, 5+(i*170), 760, w, l, null);
+			clickableContracts.add(new Rectangle(5+(i*170), 760, w, l));
+			if(i == selection.size()-1) {
+				i++;
+				g2.drawRect(5+(i*170), 760, l, l);//same as line 142
+				clickableContracts.add(new Rectangle(5+(i*170), 760, l, l));
+			}
 		}
+		System.out.println(clickableContracts.size());
 	}
 
 	public static void drawContractCards(Graphics g, ArrayList<ContractCard> cards) {
@@ -192,5 +212,8 @@ public class HandDrawer {
 		// Draw horizontal arrow starting in (0, 0)
 		g.drawLine(0, 0, len, 0);
 		g.fillPolygon(new int[] { len, len - ARR_SIZE, len - ARR_SIZE, len }, new int[] { 0, -ARR_SIZE, ARR_SIZE, 0 },3);
+	}
+	public static ArrayList<Rectangle> getClickableContracts() {
+		return clickableContracts;
 	}
 }

@@ -221,11 +221,13 @@ public class GameState {
 		//System.out.println(curPlayer.getContracts());
 		turnCounter -= 2;
 		choosingContracts = false;
-		displayContracts = null;
+		displayContracts = new ArrayList<ContractCard>();
 		checkTurn();
 		return "Successful";
 	}
 	public ArrayList<ContractCard> drawContracts(int amnt) {
+		if(choosingContracts)
+			return new ArrayList<ContractCard>();
 		choosingContracts = true;
 		ArrayList<ContractCard> temps = new ArrayList<>();
 		for (int i = 0; i < amnt; i++)
