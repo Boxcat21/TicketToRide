@@ -70,7 +70,8 @@ public class TextRunner {
 		int nums = 3;
 		if(b)
 			nums = 5;
-		ArrayList<ContractCard> c = g.drawContracts(nums);
+		g.drawContracts(nums);
+		ArrayList<ContractCard> c = g.getDisplayContracts();
 		for (int i = 0; i < c.size(); i++)
 			System.out.println(c.get(i).getCity1() + " to " + c.get(i).getCity2());
 		System.out.println(

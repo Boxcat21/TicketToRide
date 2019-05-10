@@ -175,12 +175,13 @@ public class GameState {
 				}
 			}
 			if(!(input.size() > 0)) {
-				setActualEdge(e, curPlayer.getTrainColor());
+				setActualEdge(e, curPlayer.getTrainColor(), curPlayer);
+				
 				e.setPlayer(curPlayer);
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
 				curPlayer.addPoints(routePoints.get(e.getLength()));
-				//checkContracts();
+				checkContracts();
 				checkTurn();
 				return true;
 			}
@@ -434,10 +435,11 @@ public class GameState {
 		}
 		return false;
 	}
-	private void setActualEdge(Edge e, String s) {
+	private void setActualEdge(Edge e, String s, Player p) {
 		for(int i = 0; i < edges.size(); i++) {
 			if(edges.get(i).compare(e)) {
-				edges.get(i).setHasTrains(s);				
+				edges.get(i).setHasTrains(s);	
+				edges.get(i).setPlayer(p);
 			}
 		}
 	}
