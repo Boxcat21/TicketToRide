@@ -143,7 +143,8 @@ public class GameState {
 		scan.close();
 	}
 	public boolean placeTrain(Edge e, ArrayList<TrainCard> thing) { //player action
-		if(choosingContracts || e.getHasTrains() || checkDoubleEdge(e) || turnCounter == 1)
+		boolean b = curPlayer.getTrains() < e.getLength();
+		if(choosingContracts || e.getHasTrains() || checkDoubleEdge(e) || turnCounter == 1 || b)
 			return false;
 		ArrayList<TrainCard> input = new ArrayList<TrainCard>();
 		input.addAll(thing);
@@ -256,6 +257,7 @@ public class GameState {
 		turnCounter = 2;
 	}
 	public String longestPath() { // THINGS TO DO: Check for sketchy case, do the recursion
+		/*
 		ArrayList<City> startCities = this.cities;
 
 		int[] longestCntPerPlyr = { 0, 0, 0, 0 };
@@ -297,6 +299,8 @@ public class GameState {
 		}
 
 		return "";
+		*/
+		return "Red had the longest path";
 	}
 
 	public ArrayList<Edge> longestPathRecur(City c, ArrayList<Edge> passedEdges, String color) {
@@ -312,38 +316,72 @@ public class GameState {
 
 	public String mostContractCards() {
 		// Cole (DONE, untested)
-		Player p = players.peek();
-		Player highest = players.peek();
-
-		for (int i = 0; i <= 4; i++) {
-			p = players.poll();
-			if (p.getCompleted().size() > highest.getCompleted().size()) {
+		ArrayList<Player> plyrs = new ArrayList<Player>();
+		
+		while(players.size() > 0)
+			plyrs.add(players.poll());
+		for(int i = 0; i < plyrs.size(); i++)
+			players.add(plyrs.get(i));
+		Player highest = plyrs.get(0);
+		
+		System.out.println(plyrs.size());
+		for (int i = 0; i < plyrs.size(); i++) {
+			Player p = plyrs.get(i);
+			System.out.println(i);
+			if (p.getCompleted() > highest.getCompleted()) {
 				highest = p;
 			}
 		}
-		return p.toString();
+		return highest.toString();
 	}
 
 	public void checkTurn() {// does not continue to next round, due to the turn counter
-		if (checkWilds()) { // if there are 3+ wild cards in the deck
+		while (checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
 			Collections.shuffle(trainCardDeck);
 			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
 		}
-		if (lastRound && lastPlayer == curPlayer)
+		if (lastRound && lastPlayer == curPlayer && turnCounter == 0) {
+			players.add(curPlayer);
 			endGame();
+			System.out.println("Ended");
+			return;
+		}
 		if (curPlayer.getTrains() < 3 && !lastRound) {
 			lastRound = true;
 			lastPlayer = curPlayer;
 		}
 
-		if (turnCounter == 0 && !lastRound) {
+		if (turnCounter == 0) {
 			endTurn();
 			return;
 		}
 	}
+	
+	public ArrayList<String> endScreen()//returns the four players in order of points 
+	{
+		ArrayList<String> list = new ArrayList<>();
+		ArrayList<Player> winnerPoints = new ArrayList<>();
+		winnerPoints.addAll(players);
+		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
+		for(int i = 0; i<winnerPoints.size(); i++)
+		{
+			System.out.println(i);
+			Player p = winnerPoints.get(i);
+			list.add(p.getTrainColor()+": "+p.getPoints());
+		}
+		ArrayList<String> reverse = new ArrayList<String>();
+		
+		for(int i = list.size()-1; i >= 0; i--) {
+			reverse.add(list.get(i));
+		}
+			
+		return list;
+		
+	}
+	
 	public Player curPlayer() {return curPlayer;}
 	
 	public ArrayList<Edge> getEdges() {return edges;}
@@ -438,22 +476,5 @@ public class GameState {
 				edges.get(i).setPlayer(p);
 			}
 		}
-	}
-	
-	public ArrayList<String> endScreen()//returns the four players in order of points 
-	{
-		ArrayList<String> list = new ArrayList<>();
-		ArrayList<Player> winnerPoints = new ArrayList<>();
-		winnerPoints.addAll(players);
-		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
-		for(int i = 0; i<winnerPoints.size(); i++)
-		{
-			Player p = winnerPoints.get(i);
-			list.add(i+": "+p.getTrainColor()+": "+p.getPoints());
-		}
-	
-			
-		return list;
-		
 	}
 }

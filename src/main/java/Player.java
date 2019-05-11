@@ -31,7 +31,7 @@ public class Player {
 		return contracts;
 	}
 	
-	public ArrayList<ContractCard> getCompleted()
+	public int getCompleted()
 	{
 		ArrayList<ContractCard> temp = new ArrayList<ContractCard>();
 		for(int i = 0; i < contracts.size(); i++)
@@ -41,8 +41,9 @@ public class Player {
 				temp.add(contracts.get(i));
 			}
 		}
-		
-		return temp;
+		if(temp == null)
+			return 0;
+		return temp.size();
 	}
 	
 	public ArrayList<TrainCard> getTrainCards() {
