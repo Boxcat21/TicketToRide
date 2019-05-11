@@ -149,6 +149,7 @@ public class HandDrawer {
 				card = ImageIO.read(new File("Contracts/" + buffer + serial + ".png"));
 			}
 			catch (Exception e) {}
+			
 			g2.drawImage(card, 5+(i*170), 760, w, l, null);
 			clickableContracts.add(new Rectangle(5+(i*170), 760, w, l));
 			if(i == selection.size()-1) {
