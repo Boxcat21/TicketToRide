@@ -181,8 +181,8 @@ public class GameState {
 				e.setPlayer(curPlayer);
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
-				curPlayer.addPoints(routePoints.get(e.getLength()));
-				checkContracts();
+				curPlayer.addPoints(routePoints.get(e.getLength())); 
+				checkContracts(); 
 				checkTurn();
 				return true;
 			}
@@ -251,6 +251,7 @@ public class GameState {
 		isEnded = true;
 		longestPath = longestPath();
 		mostContracts = mostContractCards();
+		addContractPoints();
 
 	}
 
@@ -403,7 +404,7 @@ public class GameState {
 
 	private void checkContracts() {
 		ArrayList<ContractCard> contracts = curPlayer.getContracts();
-		for (ContractCard c : contracts) {
+		for (ContractCard c : contracts) { // gives points and makes contracts complete
 			City one = c.getCity1();
 			City two = c.getCity2(); // are the references correct?
 
@@ -423,13 +424,11 @@ public class GameState {
 			sharedCity1.retainAll(sharedCity2);
 			if (sharedCity1.isEmpty())
 				return;
-			else {// there is a path, add points
-				curPlayer.addPoints(c.getNumPoints());
+			else {// there is a path
 				c.complete();
 				// add method to make sure contracts are added to player, also setComplete
 			}
 		}
-
 	}
 
 	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, ArrayList<Edge> cityEdges, City start) {
@@ -450,6 +449,15 @@ public class GameState {
 				}
 			}
 			return shared;
+		}
+	}
+	
+	private void addContractPoints() {
+		for (ContractCard c : curPlayer.getContracts()) {
+			if (!c.isComplete())
+				curPlayer.addPoints(-1 * (c.getNumPoints()));
+			if ( c.isComplete())
+				curPlayer.addPoints(c.getNumPoints());
 		}
 	}
 
