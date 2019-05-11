@@ -56,12 +56,19 @@ public class Edge {
 		return serial;
 	}
 	public City getOtherCity(City c) {
-		if(c.equals(cities.get(0)))
+		if(c.getName().equals(cities.get(0).getName()))
 			return cities.get(1);
-		else if(c.equals(cities.get(1)))
+		else if(c.getName().equals(cities.get(1).getName()))
 			return cities.get(0);
 		else
 			return null;
+	}
+	public ArrayList<Edge> getSamePlayerEdges() {
+		
+		for(City c : this.cities) {
+			
+		}
+		return null;
 	}
 	public boolean equals(Edge other) {
 		for(int i = 0; i < this.cities.size(); i++) {

@@ -351,7 +351,6 @@ public class GameState {
 		if (lastRound && lastPlayer == curPlayer && turnCounter == 0) {
 			players.add(curPlayer);
 			endGame();
-			System.out.println("Ended");
 			return;
 		}
 		if (curPlayer.getTrains() < 3 && !lastRound) {
