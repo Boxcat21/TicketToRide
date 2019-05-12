@@ -120,8 +120,12 @@ public class GameState {
 				if (e.getCities().contains(cities.get(i)))
 					temps.add(e);
 			}
-			cities.add(new City(cities.get(i).getPoint(), cities.get(i).getName(), temps));
+			City c = cities.remove(i);
+			cities.add(new City(c.getPoint(), c.getName(), temps));
+			
 		}
+		
+		System.out.println(cities.size());
 		//adding contracts
 		ArrayList<ContractCard> tempCards = new ArrayList<ContractCard>();
 		scan = new Scanner(new File("TextFiles/tickets.txt"));
