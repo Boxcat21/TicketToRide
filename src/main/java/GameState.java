@@ -2,26 +2,22 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.Stack;
-import java.util.TreeMap;
 
 public class GameState {
 	// i made this public, neccessary for graphics so the whole datastructure doesnt
 	// need to be remade, can just refer to the index
-	public static final String[] TRAIN_COLORS = {"magenta","white","blue","yellow","orange",
-			"black","red","green","wild"};
-	public static final String[] PLAYER_COLORS = {"Red","Green","Yellow","Blue"};
+	public static final String[] TRAIN_COLORS = { "magenta", "white", "blue", "yellow", "orange", "black", "red",
+			"green", "wild" };
+	public static final String[] PLAYER_COLORS = { "Red", "Green", "Yellow", "Blue" };
 	public static final ArrayList<String> TRAIN_COLORS_LIST = new ArrayList<String>();
 	public static final ArrayList<String> PLAYER_COLORS_LIST = new ArrayList<String>();
 	private Map<Integer, Integer> routePoints = new HashMap<Integer, Integer>();
@@ -42,23 +38,24 @@ public class GameState {
 	private boolean choosingContracts;
 	private String longestPath;
 	private String mostContracts;
+
 	public GameState() throws FileNotFoundException {
-		//points map
+		// points map
 		routePoints.put(1, 1);
 		routePoints.put(2, 2);
 		routePoints.put(3, 4);
 		routePoints.put(4, 7);
 		routePoints.put(5, 10);
 		routePoints.put(6, 15);
-		//static variables
-		for(String s : TRAIN_COLORS)
+		// static variables
+		for (String s : TRAIN_COLORS)
 			TRAIN_COLORS_LIST.add(s);
-		for(String s : PLAYER_COLORS)
+		for (String s : PLAYER_COLORS)
 			PLAYER_COLORS_LIST.add(s);
-		//globals
+		// globals
 		isEnded = false;
 		lastPlayer = null;
-		//Datastructures init
+		// Datastructures init
 		cities = new ArrayList<>();
 		contractDeck = new LinkedList<>();
 		longestPath = "";
@@ -71,30 +68,30 @@ public class GameState {
 		passedCities = new ArrayList<>();
 		discardTrainCard = new ArrayList<>();
 		lastRound = false;
-		//Adding train cards
+		// Adding train cards
 		for (int j = 0; j < 8; j++)
 			for (int i = 0; i < 12; i++)
 				trainCardDeck.add(new TrainCard(TRAIN_COLORS[j]));
 		for (int i = 0; i < 14; i++)
-			trainCardDeck.add(new TrainCard(TRAIN_COLORS[TRAIN_COLORS.length-1]));
-		for(int i = 0; i < 10; i++)
+			trainCardDeck.add(new TrainCard(TRAIN_COLORS[TRAIN_COLORS.length - 1]));
+		for (int i = 0; i < 10; i++)
 			Collections.shuffle(trainCardDeck);
 
-		//Adding display cards
+		// Adding display cards
 		for (int i = 0; i < 5; i++)
 			displayCards.add(trainCardDeck.pop());
 
-		//Adding players, cur player and turncounter
+		// Adding players, cur player and turncounter
 		for (int i = 0; i < PLAYER_COLORS.length; i++) {
 			Player p = new Player(PLAYER_COLORS[i]);
-			for(int j = 0; j < 4; j++)
+			for (int j = 0; j < 4; j++)
 				p.addTrainCard(trainCardDeck.pop());
 			players.add(p);
 		}
 		curPlayer = players.poll();
 		turnCounter = 2;
 
-		//Edges and Cities
+		// Edges and Cities
 		Scanner scan = new Scanner(new File("TextFiles/Cities"));
 		while (scan.hasNextLine()) {
 			String[] temp1 = scan.nextLine().split(",");
@@ -106,7 +103,7 @@ public class GameState {
 			String line = scan.nextLine();
 			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");
 			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.indexOf("/")).split(",");
-			int serial = Integer.parseInt(line.substring(line.indexOf("/")+1));
+			int serial = Integer.parseInt(line.substring(line.indexOf("/") + 1));
 			ArrayList<City> tempCities = new ArrayList<>();
 			String key = tempFirstTwo[0];
 			String value = tempFirstTwo[1];
@@ -124,9 +121,8 @@ public class GameState {
 			cities.add(new City(c.getPoint(), c.getName(), temps));
 			
 		}
-		
-		System.out.println(cities.size());
-		//adding contracts
+
+		// adding contracts
 		ArrayList<ContractCard> tempCards = new ArrayList<ContractCard>();
 		scan = new Scanner(new File("TextFiles/tickets.txt"));
 		int counter = Integer.parseInt(scan.nextLine());
@@ -139,61 +135,63 @@ public class GameState {
 				if (c.getName().equals(temp[2]))
 					two = c;
 			}
-			tempCards.add(new ContractCard(one, two, Integer.parseInt(temp[0]), i+2));
+			tempCards.add(new ContractCard(one, two, Integer.parseInt(temp[0]), i + 2));
 		}
 		Collections.shuffle(tempCards);
-		for(int i = 0; i < tempCards.size(); i++)
+		for (int i = 0; i < tempCards.size(); i++)
 			contractDeck.add(tempCards.get(i));
 		scan.close();
 	}
 	public boolean placeTrain(Edge e, ArrayList<TrainCard> thing) { //player action
-		if(choosingContracts || e.getHasTrains() || checkDoubleEdge(e) || turnCounter == 1)
+		boolean b = curPlayer.getTrains() < e.getLength();
+		if(choosingContracts || e.getHasTrains() || checkDoubleEdge(e) || turnCounter == 1 || b)
 			return false;
 		ArrayList<TrainCard> input = new ArrayList<TrainCard>();
 		input.addAll(thing);
 		if (!e.getHasTrains() && input.size() == e.getLength()) {
-			
-			if(!e.getColor().equals("gray")) {
-				for(int i = 0; i < input.size(); i++) {
-					if(input.get(i).getColor().equals(e.getColor()) || input.get(i).getColor().equals("wild")) {
+
+			if (!e.getColor().equals("gray")) {
+				for (int i = 0; i < input.size(); i++) {
+					if (input.get(i).getColor().equals(e.getColor()) || input.get(i).getColor().equals("wild")) {
 						input.remove(i);
 						i--;
 					}
 				}
-			}
-			else {
+			} else {
 				TrainCard tc = null;
-				for(int i = 0; i < input.size(); i++) {
-					if(!(input.get(i).getColor().equals("wild"))) {
+				for (int i = 0; i < input.size(); i++) {
+					if (!(input.get(i).getColor().equals("wild"))) {
 						tc = input.remove(i);
 						break;
 					}
 				}
-				if(tc == null)
+				if (tc == null)
 					tc = input.remove(0);
-				for(int i = 0; i < input.size(); i++) {
-					if(input.get(0).getColor().equals(tc.getColor()) || input.get(0).getColor().equals("wild")) {
+				for (int i = 0; i < input.size(); i++) {
+					if (input.get(0).getColor().equals(tc.getColor()) || input.get(0).getColor().equals("wild")) {
 						input.remove(i);
 						i--;
 					}
 				}
 			}
-			if(!(input.size() > 0)) {
+			if (!(input.size() > 0)) {
 				setActualEdge(e, curPlayer.getTrainColor(), curPlayer);
-				
 				e.setPlayer(curPlayer);
+				curPlayer.addEdge(e);
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
-				curPlayer.addPoints(routePoints.get(e.getLength()));
-				checkContracts();
+				curPlayer.addPoints(routePoints.get(e.getLength())); 
+				checkContracts(); 
+				curPlayer.addPath(longestPath(e));
 				checkTurn();
 				return true;
 			}
 		}
 		return false;
 	}
-	public boolean chooseTrainCard(int choice) { //player action
-		if(choosingContracts)
+
+	public boolean chooseTrainCard(int choice) { // player action
+		if (choosingContracts)
 			return false;
 		TrainCard t = displayCards.get(choice);
 		if (t.getColor().equals("wild") && turnCounter == 2) {
@@ -207,24 +205,24 @@ public class GameState {
 			displayCards.add(choice, trainCardDeck.pop());
 			turnCounter--;
 		} else {
-			//ystem.out.println("Stop right there, criminal scum!");
+			// ystem.out.println("Stop right there, criminal scum!");
 		}
 		checkTurn();
 		return true;
 	}
 
-	public void drawTrainCard() { //player action
-		if(choosingContracts || trainCardDeck.isEmpty())
+	public void drawTrainCard() { // player action
+		if (choosingContracts || trainCardDeck.isEmpty())
 			return;
 		curPlayer.addTrainCard(trainCardDeck.pop());
 		turnCounter--;
 		checkTurn();
 	}
-	
-	public String chooseContractCard(ArrayList<Integer> choices, int amnt) { //player action
-		if(!choosingContracts)
+
+	public String chooseContractCard(ArrayList<Integer> choices, int amnt) { // player action
+		if (!choosingContracts)
 			return "";
-		if(turnCounter == 1)
+		if (turnCounter == 1)
 			return "";
 		if (choices.size() < 1)
 			return "Invalid. You must choose at least one contract.";
@@ -237,8 +235,9 @@ public class GameState {
 		checkTurn();
 		return "Successful";
 	}
+
 	public boolean drawContracts(int amnt) {
-		if(choosingContracts || turnCounter != 2)
+		if (choosingContracts || turnCounter != 2)
 			return false;
 		choosingContracts = true;
 		ArrayList<ContractCard> temps = new ArrayList<>();
@@ -247,10 +246,27 @@ public class GameState {
 		displayContracts = temps;
 		return true;
 	}
+
 	public void endGame() {
 		isEnded = true;
-		longestPath = longestPath();
+		//longestPath = longestPath();
+		ArrayList<Player> plyrs = new ArrayList<Player>();
+		
+		while(players.size() > 0)
+			plyrs.add(players.poll());
+		for(int i = 0; i < plyrs.size(); i++)
+			players.add(plyrs.get(i));
+		int biggest = 0;
+		Player big = null;
+		for(int i = 0; i < plyrs.size(); i++) {
+			if(plyrs.get(i).getLongest() > biggest) {
+				biggest = plyrs.get(i).getLongest();
+				big = plyrs.get(i);
+			}
+		}
+		longestPath ="LONGEST PATH: |" + big.getTrainColor() + "|" + biggest;
 		mostContracts = mostContractCards();
+		addContractPoints();
 
 	}
 
@@ -259,95 +275,154 @@ public class GameState {
 		curPlayer = players.poll();
 		turnCounter = 2;
 	}
-	public String longestPath() { // THINGS TO DO: Check for sketchy case, do the recursion
-		ArrayList<City> startCities = this.cities;
 
-		int[] longestCntPerPlyr = { 0, 0, 0, 0 };
+	public int longestPath(Edge e) { 
+		//Ultimately how longest path works is: i calculate the longest path after each edge is placed (from placeTrain())
+		//after that, the max is stored in its respective player
+		//this is done to split up the runtime of the algorithm between each turn
+		//at the end, all of the players longest paths are compared and determined
+		
+		
+		ArrayList<ArrayList<Edge>> possible1 = new ArrayList<>(); //list of paths from one city
+		ArrayList<ArrayList<Edge>> possible2 = new ArrayList<>();//list of paths from another
+		ArrayList<Edge> passedEdges = new ArrayList<>();//passed edges (only edges cant be repeated)
+		passedEdges.add(e);
+		
+		ArrayList<Edge> same = e.getConnectedPlayerEdges(0);//connected edges from one city (corresponds to possible1)
+		ArrayList<Edge> same1 = e.getConnectedPlayerEdges(1);//connnected edges from the other city (corresponds to possible2)
+		
+		if(same.size() == 0 && same1.size() == 0) //accounts for case that if an edge is stand alone
+			return e.getLength();
+		
+		for(int i = 0; i < same.size(); i++) {
+			possible1.add(longestPathRecur(same.get(i),passedEdges)); //all the possibilities for one city
+		}
+		for(int i = 0; i < same.size(); i++) {
+			possible2.add(longestPathRecur(same1.get(i),passedEdges));// all the possibilities for the other city
+		}
 
-		for (int n = 0; n < longestCntPerPlyr.length; n++) { // COUNT = N
-			while (startCities.size() > 0) {
-				City start = startCities.get(0);
-				ArrayList<Edge> longest = longestPathRecur(start, new ArrayList<Edge>(), PLAYER_COLORS[n]);
-
-				// FIX FINDING END CITY ASAP - for future SID, cause current sid lazy af
-				City newStart = null;
-				ArrayList<City> endingEdgeCities1;
-				ArrayList<City> endingEdgeCities2;
-				if (longest.indexOf(start) > longest.size() / 2) {
-					endingEdgeCities1 = longest.get(0).getCities();
-					endingEdgeCities2 = longest.get(1).getCities();
-				} else {
-					endingEdgeCities1 = longest.get(longest.size() - 1).getCities();
-					endingEdgeCities2 = longest.get(longest.size() - 2).getCities();
-				}
-
-				if (endingEdgeCities2.contains(endingEdgeCities1.get(0)))
-					newStart = endingEdgeCities1.get(1);
-				else
-					newStart = endingEdgeCities1.get(0);
-				// ASUMING NEW START IS RIGHT :: I THINK IT WAS FIXED - future sid
-				longest = longestPathRecur(newStart, new ArrayList<Edge>(), PLAYER_COLORS[n]);
-
-				for (int i = 0; i < longest.size(); i++) {
-					longestCntPerPlyr[n] += longest.get(i).getLength();
-				}
-				for (int i = 0; i < startCities.size(); i++) {
-					if (passedCities.contains(startCities.get(i))) {
-						startCities.remove(i);
-						i--;
-					}
-				}
+		//the following nested for loop block of code description:
+		//this is taking all the combinations of paths from the given edge, and finding the combination that is the longest path
+		//taking into account repeats
+		ArrayList<ArrayList<Edge>> finalSets = new ArrayList<>(); 
+		for(int i = 0; i < possible1.size(); i++) {
+			for(int t = 0; t < possible2.size(); t++) {
+				System.out.println(i + " " + t);
+				ArrayList<Edge> temp = new ArrayList<Edge>();
+				temp.addAll(possible1.get(i));
+				temp.addAll(possible2.get(t));
+				removeRepeats(temp);//repeats are removed
+				finalSets.add(temp);//added to final sets
 			}
 		}
-
-		return "";
+		ArrayList<Edge> finalSet = getLargestArray(finalSets);//the longest path of those is the final longest path
+		//int longest = longestPathRecur(e, new ArrayList<Edge>());
+		
+		return actualSize(finalSet);//returned to a player
 	}
 
-	public ArrayList<Edge> longestPathRecur(City c, ArrayList<Edge> passedEdges, String color) {
-		ArrayList<Edge> edges = c.getEdges(color);
-
-		ArrayList<ArrayList<Edge>> paths = new ArrayList<ArrayList<Edge>>();
-		for (int i = 0; i < edges.size(); i++) {
-			// paths.add(longestPathRec)
+	public ArrayList<Edge> longestPathRecur(Edge e, ArrayList<Edge> passedEdges) {
+		//the reason that this method returns arraylist instead of an int, is to account for repeats later on
+		
+		
+		
+		ArrayList<Edge> same = e.getConnectedPlayerEdges();
+		//ArrayList<Integer> findMax = new ArrayList<Integer>(); 
+		//arraylist of arraylist of edges
+		ArrayList<ArrayList<Edge>> findMax = new ArrayList<>();//store all possible paths
+		for(int i = 0; i < same.size(); i++) {
+			if(passedEdges.contains(same.get(i))) { //if i have passed over the edge
+				same.remove(i);
+				i--;
+			}
 		}
-
-		return null;
+		passedEdges.add(e);
+		if(same.size() > 0) {//if there are more edges to recursively traverse through
+			for(int i = 0; i < same.size(); i++) {
+				findMax.add(longestPathRecur(same.get(i),passedEdges));
+			}
+		}
+		if(findMax.size() > 0) { //basically if the above if statemnet has run
+			ArrayList<Edge> biggest = getLargestArray(findMax);
+			biggest.add(e);//finds the longest path from this edge
+			return biggest;
+		}
+		else {
+			ArrayList<Edge> temp = new ArrayList<Edge>(); //if there are no more connected edges of the same color, this edge is the only one and must be returned
+			//basically this is the end of all recursive calls
+			temp.add(e);
+			//return e.getLength();
+			return temp;
+		}
 	}
 
 	public String mostContractCards() {
 		// Cole (DONE, untested)
-		Player p = players.peek();
-		Player highest = players.peek();
-
-		for (int i = 0; i <= 4; i++) {
-			p = players.poll();
-			if (p.getCompleted().size() > highest.getCompleted().size()) {
+		ArrayList<Player> plyrs = new ArrayList<Player>();
+		
+		while(players.size() > 0)
+			plyrs.add(players.poll());
+		for(int i = 0; i < plyrs.size(); i++)
+			players.add(plyrs.get(i));
+		Player highest = plyrs.get(0);
+		
+		System.out.println(plyrs.size());
+		for (int i = 0; i < plyrs.size(); i++) {
+			Player p = plyrs.get(i);
+			System.out.println(i);
+			if (p.getCompleted() > highest.getCompleted()) {
 				highest = p;
 			}
 		}
-		return p.toString();
+		return highest.toString();
 	}
 
 	public void checkTurn() {// does not continue to next round, due to the turn counter
-		if (checkWilds()) { // if there are 3+ wild cards in the deck
+		while (checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
 			Collections.shuffle(trainCardDeck);
 			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
 		}
-		if (lastRound && lastPlayer == curPlayer)
+		if (lastRound && lastPlayer == curPlayer && turnCounter == 0) {
+			players.add(curPlayer);
 			endGame();
+			return;
+		}
 		if (curPlayer.getTrains() < 3 && !lastRound) {
 			lastRound = true;
 			lastPlayer = curPlayer;
 		}
 
-		if (turnCounter == 0 && !lastRound) {
+		if (turnCounter == 0) {
 			endTurn();
 			return;
 		}
 	}
+	
+	public ArrayList<String> endScreen()//returns the four players in order of points 
+	{
+		ArrayList<String> list = new ArrayList<>();
+		ArrayList<Player> winnerPoints = new ArrayList<>();
+		winnerPoints.addAll(players);
+		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
+		for(int i = 0; i<winnerPoints.size(); i++)
+		{
+			System.out.println(i);
+			Player p = winnerPoints.get(i);
+			list.add(p.getTrainColor()+": "+p.getPoints());
+		}
+		ArrayList<String> reverse = new ArrayList<String>();
+		
+		for(int i = list.size()-1; i >= 0; i--) {
+			reverse.add(list.get(i));
+		}
+			
+		return list;
+		
+	}
+	
 	public Player curPlayer() {return curPlayer;}
 	
 	public ArrayList<Edge> getEdges() {return edges;}
@@ -364,70 +439,148 @@ public class GameState {
 	
 	public boolean isEnded() {return isEnded;}
 	
+	public String getLongestPath() {
+		return longestPath;
+	}
+	
 	public Queue<ContractCard> getContractDeck() {
 		return contractDeck;
 	}
-	
+
 	private boolean checkWilds() {
 		int count = 0;
 		for (TrainCard t : displayCards)
-			if (t.getColor().equals("Rainbow"))
+			if (t.getColor().equals("wild"))
 				count++;
 		return count >= 3;
 	}
+
 	private City cityHelper(String name) {
 		for (City c : cities)
 			if (c.getName().equals(name))
 				return c;
 		return null;
 	}
-	private void checkContracts() {
-		ArrayList<ContractCard> contracts = curPlayer.getContracts();
-		for (ContractCard c : contracts) {
-			City one = c.getCity1();
-			City two = c.getCity2(); // are the references correct?
 
-			ArrayList<Edge> city1Edges = one.getEdges(curPlayer.getTrainColor());
-			ArrayList<Edge> city2Edges = two.getEdges(curPlayer.getTrainColor());
+//	private void checkContracts() {
+//		System.out.println(1);
+//		ArrayList<ContractCard> contracts = curPlayer.getContracts();
+//		for (ContractCard c : contracts) { // gives points and makes contracts complete
+//			City one = c.getCity1();
+//			City two = c.getCity2(); // are the references correct?
+//
+//			ArrayList<Edge> city1Edges = one.getEdges(curPlayer.getTrainColor());
+//			ArrayList<Edge> city2Edges = two.getEdges(curPlayer.getTrainColor());
+//
+//			if (city1Edges.isEmpty() || city2Edges.isEmpty()) // no path, nothing to find here!
+//				return;
+//
+//			// calls traversals from each city, storing the added edges
+//			ArrayList<Edge> sharedCity1 = new ArrayList<>();
+//			sharedCity1 = checkContractsHelper(sharedCity1, city1Edges, one);
+//
+//			ArrayList<Edge> sharedCity2 = new ArrayList<>();
+//			sharedCity2 = checkContractsHelper(sharedCity2, city2Edges, two);
+//			System.out.println(sharedCity1);
+//			System.out.println(sharedCity2);
+//			// retainAll edges, if resulting set.isEmpty(), no path
+//			sharedCity1.retainAll(sharedCity2);
+//			System.out.println(sharedCity1);
+//			if (sharedCity1.isEmpty())
+//				return;
+//			else {// there is a path
+//				c.complete();
+//				// add method to make sure contracts are added to player, also setComplete
+//			}
+//		}
+//		System.out.println(curPlayer.getCompleted());
+//	}
 
-			if (city1Edges.isEmpty() || city2Edges.isEmpty()) // no path, nothing to find here!
-				return;
-
-			// calls traversals from each city, storing the added edges
-			ArrayList<Edge> sharedCity1 = new ArrayList<>();
-			sharedCity1 = checkContractsHelper(sharedCity1, city1Edges, one);
-
-			ArrayList<Edge> sharedCity2 = new ArrayList<>();
-			sharedCity1 = checkContractsHelper(sharedCity2, city2Edges, two);
-			// retainAll edges, if resulting set.isEmpty(), no path
-			sharedCity1.retainAll(sharedCity2);
-			if (sharedCity1.isEmpty())
-				return;
-			else // there is a path, add points
+//	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, ArrayList<Edge> cityEdges, City start) {
+//		System.out.println("L");
+//		if (start == null || cityEdges == null) {
+//			System.out.println("LBig");
+//			return shared;
+//		}
+//
+//		else {
+//			Edge current = new Edge();
+//			for (Edge e : cityEdges) {
+//				current = e;
+//				ArrayList<Edge> others = current.getOtherCity(start).getEdges(current.getTrainColor());
+//				System.out.println(current.getOtherCity(start).getAllEdges());
+//				System.out.println(current);
+//				
+//				System.out.println("others" + others);
+//				others.remove(current);
+//				shared.add(current);
+//				
+//				if (!others.isEmpty()) {
+//					shared = checkContractsHelper(shared, others, current.getOtherCity(start));
+//					System.out.println("another one");
+//				} else {
+//					return shared;
+//				}
+//			}
+//		}
+//		return shared;
+//
+//	}
+	
+	
+	public void checkContracts() {
+		
+		for ( ContractCard c : curPlayer.getContracts()) {
+			
+			for ( Set<City> s : curPlayer.paths) {
+				
+				if ( checkSameSet(c.getCity1(), c.getCity2(), s)) {
+					c.complete();
+					
+				}
+			}
+		}
+		
+	}
+	
+	private boolean checkSameSet(City a, City b, Set<City> s) {
+		boolean ba = false;
+		boolean bb = false;
+		
+		for ( City c : s) {
+			if (c.getName().equals(a.getName()))
+				ba = true;
+			if ( c.getName().equals(b.getName()))
+				bb = true;
+		}
+		return ba && bb;
+	}
+	
+	
+	private void addContractPoints() {
+		for (ContractCard c : curPlayer.getContracts()) {
+			if (!c.isComplete())
+				curPlayer.addPoints(-1 * (c.getNumPoints()));
+			if ( c.isComplete())
 				curPlayer.addPoints(c.getNumPoints());
-			// add method to make sure contracts are added to player, also setComplete
 		}
-
-	}
-
-	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, ArrayList<Edge> cityEdges, City start) {
-		if (start == null || cityEdges == null)
-			return shared;
-		else {
-			Edge current = new Edge();
-			for (Edge e : cityEdges)
-				if (e.getCities().contains(start))
-					current = e;
-			cityEdges.remove(current);
-			return checkContractsHelper(shared, cityEdges, current.getOtherCity(start));
+		for ( Player p : players) {
+			for ( ContractCard c : p.getContracts()) {
+				if (!c.isComplete())
+					p.addPoints(-1 * (c.getNumPoints()));
+				if ( c.isComplete())
+					p.addPoints(c.getNumPoints());
+			}
 		}
 	}
+
 	private boolean checkDoubleEdge(Edge e) {
-		for(int i = 0; i < edges.size(); i++) {
+		for (int i = 0; i < edges.size(); i++) {
 			ArrayList<City> tempCities = edges.get(i).getCities();
-			if(edges.get(i).getHasTrains()) {
-				if(tempCities.contains(e.getCities().get(0)) && tempCities.contains(e.getCities().get(1))) {
-					if(edges.get(i).getTrainColor().equals(curPlayer.getTrainColor()) && e.getSerial() != edges.get(i).getSerial()) {
+			if (edges.get(i).getHasTrains()) {
+				if (tempCities.contains(e.getCities().get(0)) && tempCities.contains(e.getCities().get(1))) {
+					if (edges.get(i).getTrainColor().equals(curPlayer.getTrainColor())
+							&& e.getSerial() != edges.get(i).getSerial()) {
 						return true;
 					}
 				}
@@ -435,29 +588,51 @@ public class GameState {
 		}
 		return false;
 	}
+
 	private void setActualEdge(Edge e, String s, Player p) {
-		for(int i = 0; i < edges.size(); i++) {
-			if(edges.get(i).compare(e)) {
-				edges.get(i).setHasTrains(s);	
+		for (int i = 0; i < edges.size(); i++) {
+			if (edges.get(i).compare(e)) {
+				edges.get(i).setHasTrains(s);
 				edges.get(i).setPlayer(p);
 			}
 		}
 	}
-	
-	public ArrayList<String> endScreen()//returns the four players in order of points 
-	{
-		ArrayList<String> list = new ArrayList<>();
-		ArrayList<Player> winnerPoints = new ArrayList<>();
-		winnerPoints.addAll(players);
-		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
-		for(int i = 0; i<winnerPoints.size(); i++)
-		{
-			Player p = winnerPoints.get(i);
-			list.add(i+": "+p.getTrainColor()+": "+p.getPoints());
-		}
-	
-			
-		return list;
+	//longest path helper
+	private ArrayList<Edge> getLargestArray(ArrayList<ArrayList<Edge>> mat) {//Path = array of edges, //array of paths is an array of an array of edges
+		//that is essentially what  ArrayList<ArrayList<Edge>> is
 		
+		//basically this is really getting the largest path out of the given possibilities
+		ArrayList<Edge> biggest = mat.get(0);
+		for(int i = 1; i < mat.size(); i++) {
+			if(actualSize(mat.get(i)) > actualSize(biggest))
+				biggest = mat.get(i);
+		}
+		return biggest;
+	}
+	//longest path helper
+	private int actualSize(ArrayList<Edge> list) { //this basically takes a path of edges and calculates the actual length 
+		//by adding up all the lengths of the contained edges
+		int sum = 0;
+		for(int i = 0; i < list.size(); i++) {
+			sum += list.get(i).getLength();
+		}
+		return sum;
+	}
+	private ArrayList<Edge> removeRepeats(ArrayList<Edge> list) { // I realized that whenever i call longest path from a single edge
+		//it branches off in multiple directions. I thought i could add all the total branches but the issue was that there would be repeats
+		//i created this method to solve it and made Edge implement comparable
+		//Still not sure if this actually solves it tho
+		ArrayList<Edge> temps = new ArrayList<Edge>();
+		temps.add(list.get(0));
+		for(int i = 1; i < list.size(); i++) {
+			if(temps.contains(list.get(i))) {
+				list.remove(i);
+				i--;
+			}
+			else {
+				temps.add(list.get(i));
+			}
+		}
+		return list;
 	}
 }

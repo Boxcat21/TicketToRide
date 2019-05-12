@@ -149,12 +149,19 @@ public class HandDrawer {
 				card = ImageIO.read(new File("Contracts/" + buffer + serial + ".png"));
 			}
 			catch (Exception e) {}
+			
 			g2.drawImage(card, 5+(i*170), 760, w, l, null);
 			clickableContracts.add(new Rectangle(5+(i*170), 760, w, l));
 			if(i == selection.size()-1) {
 				i++;
 				g2.setStroke(new BasicStroke(3));
 				g2.drawRect(5+(i*170), 760, l, l);
+				BufferedImage image = null; // image of contract cards
+				try { 			
+					image = ImageIO.read(new File("confirmButton.png"));
+				}
+				catch (Exception e) {}
+				g2.drawImage(image,5+(i*170), 760, l, l, null);
 				clickableContracts.add(new Rectangle(5+(i*170), 760, l, l));
 			}
 			g2.setStroke(s);

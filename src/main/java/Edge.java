@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Edge {
+public class Edge implements Comparable{
 	private int serial;
 	private int length;
 	private String color;
@@ -56,21 +56,33 @@ public class Edge {
 		return serial;
 	}
 	public City getOtherCity(City c) {
-		if(c.equals(cities.get(0)))
+		if(c.getName().equals(cities.get(0).getName()))
 			return cities.get(1);
-		else if(c.equals(cities.get(1)))
+		else if(c.getName().equals(cities.get(1).getName()))
 			return cities.get(0);
 		else
 			return null;
 	}
-	public boolean equals(Edge other) {
-		for(int i = 0; i < this.cities.size(); i++) {
-			if(!(other.cities.contains(cities.get(i))))
-				return false;
+	public ArrayList<Edge> getConnectedPlayerEdges() { //gets all edges linked to this one (directly) that have the same player
+		ArrayList<Edge> temp = new ArrayList<Edge>();
+		for(City c : cities) {
+			for(int i = 0; i < c.getAllEdges().size(); i++) {
+				if(c.getAllEdges().get(i).getTrainColor().equals(this.trainColor))
+					temp.add(c.getAllEdges().get(i));
+			}
 		}
-		if(!(this.color.equals(other.color)))
-			return false;
-		return true;
+		return temp; //if none, will return an empty array list
+	}
+	public ArrayList<Edge> getConnectedPlayerEdges(int x) { //based only on one city
+		ArrayList<Edge> temp = new ArrayList<Edge>();
+		
+		City c = cities.get(x);
+		for(int i = 0; i < c.getAllEdges().size(); i++) {
+			if(c.getAllEdges().get(i).getTrainColor().equals(this.trainColor)) {
+				temp.add(c.getAllEdges().get(i));
+			}
+		}
+		return temp;
 	}
 	public boolean compare(Edge e) {
 		if(this.cities.equals(e.getCities()))
@@ -85,5 +97,22 @@ public class Edge {
 	public String toString() {
 		return "|" + cities.get(0) + " to " + cities.get(1) + "|"+ getTrainColor();
 //		return "";
+	}
+	@Override
+	public int compareTo(Object o) {
+		Edge e = (Edge) o;
+		if(this.cities.equals(e.getCities()))
+			if(this.getColor().equals(e.getColor()))
+				if(this.getTrainColor().equals(e.getTrainColor()))
+					if(this.serial == e.getSerial())
+						if(this.length == e.getLength())
+							if(this.hasTrains == e.getHasTrains())
+								return 0;
+		return 1;
+	}
+	@Override
+	public boolean equals(Object arg0) {
+		Edge e = (Edge) arg0;
+		return compare(e);
 	}
 }

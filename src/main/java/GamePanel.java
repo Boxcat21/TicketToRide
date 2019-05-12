@@ -1,5 +1,6 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
@@ -102,6 +103,22 @@ public class GamePanel extends JPanel implements MouseListener {
 			Graphics2D g2 = (Graphics2D)g;
 			g2.setStroke(new BasicStroke(3));
 			g2.drawLine(1535, 1, 1535, 1079);
+		}
+		else {
+			g.setColor(new Color(184, 134, 11));
+			g.fillRect(0, 0, 1920, 1080);
+			g.setColor(Color.BLACK);
+			
+			g.setFont(new Font("Comic Sans MS", Font.PLAIN,44));
+			g.drawString("GAME OVER", 870, 70);
+			g.setFont(new Font("Comic Sans MS", Font.PLAIN,28));
+			g.drawString("Results:", 930, 370);
+			g.setFont(new Font("Comic Sans MS", Font.PLAIN,20));
+			ArrayList<String> end = game.endScreen();
+			for(int i = 0; i < end.size(); i++) {
+				g.drawString(end.get(i), 940, 400 + (i*30));
+			}
+			g.drawString(game.getLongestPath(), 940, 700);
 		}
 		/*
 		 * BoardDrawer.drawBoard(g, this.clickedEdgeIndecies); HandDrawer.drawHand(g,
