@@ -118,6 +118,7 @@ public class GamePanel extends JPanel implements MouseListener {
 			for(int i = 0; i < end.size(); i++) {
 				g.drawString(end.get(i), 940, 400 + (i*30));
 			}
+			g.drawString(game.getLongestPath(), 940, 700);
 		}
 		/*
 		 * BoardDrawer.drawBoard(g, this.clickedEdgeIndecies); HandDrawer.drawHand(g,

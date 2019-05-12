@@ -9,15 +9,17 @@ public class Player {
 	private int trains; // number of trains
 	private String trainColor; // color of player
 	private boolean isSetUp;
+	private int longestPath;
 
 	public Player(String trainColor) {
 		super();
 		this.points = 0;
 		this.contracts = new ArrayList<ContractCard>();
 		this.trainCards = new ArrayList<TrainCard>();
-		this.trains = 40;
+		this.trains = 10;
 		this.trainColor = trainColor;
 		this.isSetUp = false;
+		this.longestPath = 0;
 	}
 	
 	
@@ -30,7 +32,10 @@ public class Player {
 	public ArrayList<ContractCard> getContracts() {
 		return contracts;
 	}
-	
+	public void addPath(int x) {
+		if(x > longestPath)
+			longestPath = x;
+	}
 	public int getCompleted()
 	{
 		ArrayList<ContractCard> temp = new ArrayList<ContractCard>();
@@ -53,7 +58,9 @@ public class Player {
 	public int getTrains() {
 		return trains;
 	}
-	
+	public int getLongest() {
+		return longestPath;
+	}
 	public String getTrainColor() {
 		return trainColor;
 	}
