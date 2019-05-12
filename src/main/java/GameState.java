@@ -147,7 +147,9 @@ public class GameState {
 		if(choosingContracts || e.getHasTrains() || checkDoubleEdge(e) || turnCounter == 1 || b)
 			return false;
 		ArrayList<TrainCard> input = new ArrayList<TrainCard>();
+		ArrayList<TrainCard> tempDiscard = new ArrayList<>();
 		input.addAll(thing);
+		tempDiscard.addAll(input);
 		if (!e.getHasTrains() && input.size() == e.getLength()) {
 
 			if (!e.getColor().equals("gray")) {
@@ -175,6 +177,7 @@ public class GameState {
 				}
 			}
 			if (!(input.size() > 0)) {
+				discardTrainCard.addAll(tempDiscard);
 				setActualEdge(e, curPlayer.getTrainColor(), curPlayer);
 				e.setPlayer(curPlayer);
 				curPlayer.addEdge(e);
