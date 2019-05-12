@@ -7,8 +7,6 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 
 import javax.imageio.ImageIO;
 
@@ -132,18 +130,28 @@ public class DataDrawer {
 		for ( int i = 0; i < 3; i++) {  // 5 display and one deck
 			g2.setColor(Color.BLACK);
 			g2.drawRect(temp, 775 + controlY, l, w);
-			int index = GameState.TRAIN_COLORS_LIST.indexOf(display.get(i).getColor());
-			g2.drawImage(images.get(index),temp, 775 + controlY, l, w, null);
-			clickableDisplayCards.add(new Rectangle(temp,755+controlY,l,w));
+			try {
+				int index = GameState.TRAIN_COLORS_LIST.indexOf(display.get(i).getColor());
+				g2.drawImage(images.get(index),temp, 775 + controlY, l, w, null);
+				clickableDisplayCards.add(new Rectangle(temp,755+controlY,l,w));
+			} catch(Exception e) {
+				g2.drawRect(temp, 775+controlY, 1, w);
+			}
+			
 			temp += 110;
 		}
 		temp = 1575+55;
 		for ( int i = 3; i < 5; i++) { 
 			g2.setColor(Color.BLACK);
 			g2.drawRect(temp, 960 + controlY, l, w);
-			int index = GameState.TRAIN_COLORS_LIST.indexOf(display.get(i).getColor());
-			g2.drawImage(images.get(index),temp, 960 + controlY, l, w, null);
-			clickableDisplayCards.add(new Rectangle(temp,960+controlY,l,w));
+			try {
+				int index = GameState.TRAIN_COLORS_LIST.indexOf(display.get(i).getColor());
+				g2.drawImage(images.get(index),temp, 960 + controlY, l, w, null);
+				clickableDisplayCards.add(new Rectangle(temp,960+controlY,l,w));
+			} catch (Exception e) {
+				g2.drawRect(temp, 960+controlY, 1, w);
+			}
+			
 			temp += 110;
 		}
 	}

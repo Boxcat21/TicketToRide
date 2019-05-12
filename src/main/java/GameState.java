@@ -3,8 +3,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.EmptyStackException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
@@ -202,7 +202,11 @@ public class GameState {
 		} else if (!t.getColor().equals("wild")) {
 			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
-			displayCards.add(choice, trainCardDeck.pop());
+			try {
+				displayCards.add(choice, trainCardDeck.pop());
+			} catch(EmptyStackException e) {
+				
+			}
 			turnCounter--;
 		} else {
 			// ystem.out.println("Stop right there, criminal scum!");
