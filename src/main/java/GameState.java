@@ -2,19 +2,15 @@ import java.awt.Point;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Set;
 import java.util.Stack;
-import java.util.TreeMap;
 
 public class GameState {
 	// i made this public, neccessary for graphics so the whole datastructure doesnt
@@ -178,6 +174,7 @@ public class GameState {
 			if (!(input.size() > 0)) {
 				setActualEdge(e, curPlayer.getTrainColor(), curPlayer);
 				e.setPlayer(curPlayer);
+				curPlayer.addEdge(e);
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
 				curPlayer.addPoints(routePoints.get(e.getLength())); 
@@ -450,7 +447,7 @@ public class GameState {
 	private boolean checkWilds() {
 		int count = 0;
 		for (TrainCard t : displayCards)
-			if (t.getColor().equals("Rainbow"))
+			if (t.getColor().equals("wild"))
 				count++;
 		return count >= 3;
 	}
@@ -462,55 +459,100 @@ public class GameState {
 		return null;
 	}
 
-	private void checkContracts() {
-		ArrayList<ContractCard> contracts = curPlayer.getContracts();
-		for (ContractCard c : contracts) { // gives points and makes contracts complete
-			City one = c.getCity1();
-			City two = c.getCity2(); // are the references correct?
+//	private void checkContracts() {
+//		System.out.println(1);
+//		ArrayList<ContractCard> contracts = curPlayer.getContracts();
+//		for (ContractCard c : contracts) { // gives points and makes contracts complete
+//			City one = c.getCity1();
+//			City two = c.getCity2(); // are the references correct?
+//
+//			ArrayList<Edge> city1Edges = one.getEdges(curPlayer.getTrainColor());
+//			ArrayList<Edge> city2Edges = two.getEdges(curPlayer.getTrainColor());
+//
+//			if (city1Edges.isEmpty() || city2Edges.isEmpty()) // no path, nothing to find here!
+//				return;
+//
+//			// calls traversals from each city, storing the added edges
+//			ArrayList<Edge> sharedCity1 = new ArrayList<>();
+//			sharedCity1 = checkContractsHelper(sharedCity1, city1Edges, one);
+//
+//			ArrayList<Edge> sharedCity2 = new ArrayList<>();
+//			sharedCity2 = checkContractsHelper(sharedCity2, city2Edges, two);
+//			System.out.println(sharedCity1);
+//			System.out.println(sharedCity2);
+//			// retainAll edges, if resulting set.isEmpty(), no path
+//			sharedCity1.retainAll(sharedCity2);
+//			System.out.println(sharedCity1);
+//			if (sharedCity1.isEmpty())
+//				return;
+//			else {// there is a path
+//				c.complete();
+//				// add method to make sure contracts are added to player, also setComplete
+//			}
+//		}
+//		System.out.println(curPlayer.getCompleted());
+//	}
 
-			ArrayList<Edge> city1Edges = one.getEdges(curPlayer.getTrainColor());
-			ArrayList<Edge> city2Edges = two.getEdges(curPlayer.getTrainColor());
-
-			if (city1Edges.isEmpty() || city2Edges.isEmpty()) // no path, nothing to find here!
-				return;
-
-			// calls traversals from each city, storing the added edges
-			ArrayList<Edge> sharedCity1 = new ArrayList<>();
-			sharedCity1 = checkContractsHelper(sharedCity1, city1Edges, one);
-
-			ArrayList<Edge> sharedCity2 = new ArrayList<>();
-			sharedCity1 = checkContractsHelper(sharedCity2, city2Edges, two);
-			// retainAll edges, if resulting set.isEmpty(), no path
-			sharedCity1.retainAll(sharedCity2);
-			if (sharedCity1.isEmpty())
-				return;
-			else {// there is a path
-				c.complete();
-				// add method to make sure contracts are added to player, also setComplete
-			}
-		}
-	}
-
-	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, ArrayList<Edge> cityEdges, City start) {
-		if (start == null || cityEdges == null)
-			return shared;
-		else {
-			Edge current = new Edge();
-			for (Edge e : cityEdges) {
-				if (e.getCities().contains(start)) {
-					current = e;
-					ArrayList<Edge> others = current.getOtherCity(start).getEdges(current.getTrainColor());
-					others.remove(current);
-					shared.add(current);
-					if (!others.isEmpty())
-						shared = checkContractsHelper(shared, others, current.getOtherCity(start));
-					else
-						return shared;
+//	private ArrayList<Edge> checkContractsHelper(ArrayList<Edge> shared, ArrayList<Edge> cityEdges, City start) {
+//		System.out.println("L");
+//		if (start == null || cityEdges == null) {
+//			System.out.println("LBig");
+//			return shared;
+//		}
+//
+//		else {
+//			Edge current = new Edge();
+//			for (Edge e : cityEdges) {
+//				current = e;
+//				ArrayList<Edge> others = current.getOtherCity(start).getEdges(current.getTrainColor());
+//				System.out.println(current.getOtherCity(start).getAllEdges());
+//				System.out.println(current);
+//				
+//				System.out.println("others" + others);
+//				others.remove(current);
+//				shared.add(current);
+//				
+//				if (!others.isEmpty()) {
+//					shared = checkContractsHelper(shared, others, current.getOtherCity(start));
+//					System.out.println("another one");
+//				} else {
+//					return shared;
+//				}
+//			}
+//		}
+//		return shared;
+//
+//	}
+	
+	
+	public void checkContracts() {
+		
+		for ( ContractCard c : curPlayer.getContracts()) {
+			
+			for ( Set<City> s : curPlayer.paths) {
+				
+				if ( checkSameSet(c.getCity1(), c.getCity2(), s)) {
+					c.complete();
+					
 				}
 			}
-			return shared;
 		}
+		
 	}
+	
+	private boolean checkSameSet(City a, City b, Set<City> s) {
+		boolean ba = false;
+		boolean bb = false;
+		
+		for ( City c : s) {
+			if (c.getName().equals(a.getName()))
+				ba = true;
+			if ( c.getName().equals(b.getName()))
+				bb = true;
+		}
+		return ba && bb;
+	}
+	
 	
 	private void addContractPoints() {
 		for (ContractCard c : curPlayer.getContracts()) {
@@ -518,6 +560,14 @@ public class GameState {
 				curPlayer.addPoints(-1 * (c.getNumPoints()));
 			if ( c.isComplete())
 				curPlayer.addPoints(c.getNumPoints());
+		}
+		for ( Player p : players) {
+			for ( ContractCard c : p.getContracts()) {
+				if (!c.isComplete())
+					p.addPoints(-1 * (c.getNumPoints()));
+				if ( c.isComplete())
+					p.addPoints(c.getNumPoints());
+			}
 		}
 	}
 
