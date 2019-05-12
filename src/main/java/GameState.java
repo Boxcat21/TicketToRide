@@ -276,16 +276,22 @@ public class GameState {
 		turnCounter = 2;
 	}
 
-	public int longestPath(Edge e) { // THINGS TO DO: Check for sketchy case, do the recursion
-		ArrayList<ArrayList<Edge>> possible1 = new ArrayList<>();
-		ArrayList<ArrayList<Edge>> possible2 = new ArrayList<>();
-		ArrayList<Edge> passedEdges = new ArrayList<>();
+	public int longestPath(Edge e) { 
+		//Ultimately how longest path works is: i calculate the longest path after each edge is placed (from placeTrain())
+		//after that, the max is stored in its respective player
+		//this is done to split up the runtime of the algorithm between each turn
+		//at the end, all of the players longest paths are compared and determined
+		
+		
+		ArrayList<ArrayList<Edge>> possible1 = new ArrayList<>(); //list of paths from one city
+		ArrayList<ArrayList<Edge>> possible2 = new ArrayList<>();//list of paths from another
+		ArrayList<Edge> passedEdges = new ArrayList<>();//passed edges (only edges cant be repeated)
 		passedEdges.add(e);
 		
-		ArrayList<Edge> same = e.getConnectedPlayerEdges(0);
-		ArrayList<Edge> same1 = e.getConnectedPlayerEdges(1);
+		ArrayList<Edge> same = e.getConnectedPlayerEdges(0);//connected edges from one city (corresponds to possible1)
+		ArrayList<Edge> same1 = e.getConnectedPlayerEdges(1);//connnected edges from the other city (corresponds to possible2)
 		
-		if(same.size() == 0 && same1.size() == 0)
+		if(same.size() == 0 && same1.size() == 0) //accounts for case that if an edge is stand alone
 			return e.getLength();
 		
 		for(int i = 0; i < same.size(); i++) {
@@ -295,48 +301,55 @@ public class GameState {
 			possible2.add(longestPathRecur(same1.get(i),passedEdges));// all the possibilities for the other city
 		}
 
-		ArrayList<ArrayList<Edge>> finalSets = new ArrayList<>();
+		//the following nested for loop block of code description:
+		//this is taking all the combinations of paths from the given edge, and finding the combination that is the longest path
+		//taking into account repeats
+		ArrayList<ArrayList<Edge>> finalSets = new ArrayList<>(); 
 		for(int i = 0; i < possible1.size(); i++) {
 			for(int t = 0; t < possible2.size(); t++) {
 				System.out.println(i + " " + t);
 				ArrayList<Edge> temp = new ArrayList<Edge>();
 				temp.addAll(possible1.get(i));
 				temp.addAll(possible2.get(t));
-				removeRepeats(temp);
-				finalSets.add(temp);
+				removeRepeats(temp);//repeats are removed
+				finalSets.add(temp);//added to final sets
 			}
 		}
-		ArrayList<Edge> finalSet = getLargestArray(finalSets);
+		ArrayList<Edge> finalSet = getLargestArray(finalSets);//the longest path of those is the final longest path
 		//int longest = longestPathRecur(e, new ArrayList<Edge>());
 		
-		return actualSize(finalSet);
+		return actualSize(finalSet);//returned to a player
 	}
 
 	public ArrayList<Edge> longestPathRecur(Edge e, ArrayList<Edge> passedEdges) {
+		//the reason that this method returns arraylist instead of an int, is to account for repeats later on
+		
+		
+		
 		ArrayList<Edge> same = e.getConnectedPlayerEdges();
 		//ArrayList<Integer> findMax = new ArrayList<Integer>(); 
 		//arraylist of arraylist of edges
 		ArrayList<ArrayList<Edge>> findMax = new ArrayList<>();//store all possible paths
 		for(int i = 0; i < same.size(); i++) {
-			if(passedEdges.contains(same.get(i))) {
+			if(passedEdges.contains(same.get(i))) { //if i have passed over the edge
 				same.remove(i);
 				i--;
 			}
 		}
 		passedEdges.add(e);
-		if(same.size() > 0) {
+		if(same.size() > 0) {//if there are more edges to recursively traverse through
 			for(int i = 0; i < same.size(); i++) {
 				findMax.add(longestPathRecur(same.get(i),passedEdges));
-				//^^can be kept the same (i think)
 			}
 		}
-		if(findMax.size() > 0) {
+		if(findMax.size() > 0) { //basically if the above if statemnet has run
 			ArrayList<Edge> biggest = getLargestArray(findMax);
-			biggest.add(e);
+			biggest.add(e);//finds the longest path from this edge
 			return biggest;
 		}
 		else {
-			ArrayList<Edge> temp = new ArrayList<Edge>();
+			ArrayList<Edge> temp = new ArrayList<Edge>(); //if there are no more connected edges of the same color, this edge is the only one and must be returned
+			//basically this is the end of all recursive calls
 			temp.add(e);
 			//return e.getLength();
 			return temp;
@@ -532,7 +545,10 @@ public class GameState {
 		}
 	}
 	//longest path helper
-	private ArrayList<Edge> getLargestArray(ArrayList<ArrayList<Edge>> mat) {
+	private ArrayList<Edge> getLargestArray(ArrayList<ArrayList<Edge>> mat) {//Path = array of edges, //array of paths is an array of an array of edges
+		//that is essentially what  ArrayList<ArrayList<Edge>> is
+		
+		//basically this is really getting the largest path out of the given possibilities
 		ArrayList<Edge> biggest = mat.get(0);
 		for(int i = 1; i < mat.size(); i++) {
 			if(actualSize(mat.get(i)) > actualSize(biggest))
@@ -541,14 +557,18 @@ public class GameState {
 		return biggest;
 	}
 	//longest path helper
-	private int actualSize(ArrayList<Edge> list) {
+	private int actualSize(ArrayList<Edge> list) { //this basically takes a path of edges and calculates the actual length 
+		//by adding up all the lengths of the contained edges
 		int sum = 0;
 		for(int i = 0; i < list.size(); i++) {
 			sum += list.get(i).getLength();
 		}
 		return sum;
 	}
-	private ArrayList<Edge> removeRepeats(ArrayList<Edge> list) {
+	private ArrayList<Edge> removeRepeats(ArrayList<Edge> list) { // I realized that whenever i call longest path from a single edge
+		//it branches off in multiple directions. I thought i could add all the total branches but the issue was that there would be repeats
+		//i created this method to solve it and made Edge implement comparable
+		//Still not sure if this actually solves it tho
 		ArrayList<Edge> temps = new ArrayList<Edge>();
 		temps.add(list.get(0));
 		for(int i = 1; i < list.size(); i++) {
