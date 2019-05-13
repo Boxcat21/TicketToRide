@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
@@ -565,13 +566,11 @@ public class GameState {
 	
 	
 	private void addContractPoints() {
-		for (ContractCard c : curPlayer.getContracts()) {
-			if (!c.isComplete())
-				curPlayer.addPoints(-1 * (c.getNumPoints()));
-			if ( c.isComplete())
-				curPlayer.addPoints(c.getNumPoints());
-		}
-		for ( Player p : players) {
+		Set<Player> pla = new HashSet<>();
+		pla.addAll(players);
+		pla.add(curPlayer);
+
+		for ( Player p : pla) {
 			for ( ContractCard c : p.getContracts()) {
 				if (!c.isComplete())
 					p.addPoints(-1 * (c.getNumPoints()));
