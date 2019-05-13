@@ -272,7 +272,8 @@ public class GameState {
 				big = plyrs.get(i);
 			}
 		}
-		longestPath ="LONGEST PATH: |" + big.getTrainColor() + "|" + biggest;
+		longestPath ="LONGEST PATH: |" + big.getTrainColor();
+		big.addPath(20);
 		mostContracts = mostContractCards();
 		addContractPoints();
 
