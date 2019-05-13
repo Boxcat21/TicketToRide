@@ -387,9 +387,13 @@ public class GameState {
 	}
 
 	public void checkTurn() {// does not continue to next round, due to the turn counter
-		while (checkWilds()) { // if there are 3+ wild cards in the deck
+		while (displayCards.size()<5||checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
+			if(trainCardDeck.empty()) {
+				trainCardDeck.addAll(discardTrainCard);
+				Collections.shuffle(trainCardDeck);
+			}
 			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
 		}
@@ -401,11 +405,6 @@ public class GameState {
 		if (curPlayer.getTrains() < 3 && !lastRound) {
 			lastRound = true;
 			lastPlayer = curPlayer;
-		}
-
-		if(trainCardDeck.empty()) {
-			trainCardDeck.addAll(discardTrainCard);
-			Collections.shuffle(trainCardDeck);
 		}
 		if (turnCounter == 0) {
 			endTurn();
