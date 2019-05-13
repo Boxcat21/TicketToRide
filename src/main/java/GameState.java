@@ -273,6 +273,7 @@ public class GameState {
 			}
 		}
 		longestPath ="LONGEST PATH: |" + big.getTrainColor();
+		big.addPath(20);
 		mostContracts = mostContractCards();
 		addContractPoints();
 
