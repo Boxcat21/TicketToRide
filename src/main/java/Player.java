@@ -76,17 +76,14 @@ public class Player {
 		return false;
 	}
 	
-	private boolean sameSet(City a, City b) {
-		for ( Set<City> s : paths) 
-			if ( s.contains(a)&& s.contains(b))
-				return true;
-		return false;
-	}
+	
 	public int getPoints() {
 		return points;
 	}
 	public void addPoints(int points) {
 		this.points += points;
+		if ( points < 0)
+			points = 0;
 	}
 	public ArrayList<ContractCard> getContracts() {
 		return contracts;
