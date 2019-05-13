@@ -578,6 +578,10 @@ public class GameState {
 					p.addPoints(c.getNumPoints());
 			}
 		}
+		for ( Player p : pla) {
+			if (p.getPoints() < 0) 
+				p.addPoints(-1*(p.getPoints()));
+		}
 	}
 
 	private boolean checkDoubleEdge(Edge e) {
