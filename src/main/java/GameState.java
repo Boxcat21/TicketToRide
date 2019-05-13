@@ -38,7 +38,7 @@ public class GameState {
 	private boolean isEnded;
 	private boolean choosingContracts;
 	private String longestPath;
-	private String mostContracts;
+	private Player mostContracts;
 
 	public GameState() throws FileNotFoundException {
 		// points map
@@ -60,7 +60,7 @@ public class GameState {
 		cities = new ArrayList<>();
 		contractDeck = new LinkedList<>();
 		longestPath = "";
-		mostContracts = "";
+		mostContracts = null;
 		cities = new ArrayList<>();
 		edges = new ArrayList<>();
 		trainCardDeck = new Stack<>();
@@ -275,6 +275,7 @@ public class GameState {
 		longestPath ="LONGEST PATH: |" + big.getTrainColor();
 		big.addPath(20);
 		mostContracts = mostContractCards();
+		mostContracts.addPoints(10);
 		addContractPoints();
 
 	}
@@ -365,7 +366,7 @@ public class GameState {
 		}
 	}
 
-	public String mostContractCards() {
+	public Player mostContractCards() {
 		// Cole (DONE, untested)
 		ArrayList<Player> plyrs = new ArrayList<Player>();
 		
@@ -383,7 +384,7 @@ public class GameState {
 				highest = p;
 			}
 		}
-		return highest.toString();
+		return highest;
 	}
 
 	public void checkTurn() {// does not continue to next round, due to the turn counter
@@ -442,7 +443,7 @@ public class GameState {
 	
 	public ArrayList<ContractCard> getDisplayContracts() {return displayContracts;}
 	
-	public String getMostContracts() {return mostContracts;}
+	public Player getMostContracts() {return mostContracts;}
 	
 	public boolean isChoosingContracts() {return choosingContracts;}
 	
