@@ -194,7 +194,7 @@ public class GamePanel extends JPanel implements MouseListener {
 		}
 		if(DataDrawer.getTicketDeck().contains(e.getPoint())) {
 			amount = 3;
-			min = 2;
+			min = 1;
 			game.drawContracts(amount);
 		}
 	}
