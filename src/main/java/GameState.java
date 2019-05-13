@@ -391,7 +391,6 @@ public class GameState {
 		while (checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
-			Collections.shuffle(trainCardDeck);
 			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
 		}
@@ -405,10 +404,15 @@ public class GameState {
 			lastPlayer = curPlayer;
 		}
 
+		if(trainCardDeck.empty()) {
+			trainCardDeck.addAll(discardTrainCard);
+			Collections.shuffle(trainCardDeck);
+		}
 		if (turnCounter == 0) {
 			endTurn();
 			return;
 		}
+
 	}
 	
 	public ArrayList<String> endScreen()//returns the four players in order of points 
