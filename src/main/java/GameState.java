@@ -391,12 +391,22 @@ public class GameState {
 		while (displayCards.size()<5||checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
-			if(trainCardDeck.empty()) {
+			if(trainCardDeck.empty()) 
+			{
 				trainCardDeck.addAll(discardTrainCard);
+				System.out.println(discardTrainCard.toString());
 				Collections.shuffle(trainCardDeck);
+				discardTrainCard.clear();
 			}
 			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
+			int counter = 0;
+			for(TrainCard c:displayCards)
+				if(!c.getColor().equals("wild"))
+					counter++;
+			
+			
+		
 		}
 		if (lastRound && lastPlayer == curPlayer && turnCounter == 0) {
 			players.add(curPlayer);
