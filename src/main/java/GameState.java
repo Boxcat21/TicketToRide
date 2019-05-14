@@ -274,6 +274,7 @@ public class GameState {
 		}
 		longestPath ="LONGEST PATH: |" + big.getTrainColor();
 		big.addPath(20);
+		
 		mostContracts = mostContractCards();
 		mostContracts.addPoints(10);
 		addContractPoints();
@@ -388,6 +389,7 @@ public class GameState {
 	}
 
 	public void checkTurn() {// does not continue to next round, due to the turn counter
+		// we need to force next turn if stuck halfway through a turn
 		while (displayCards.size()<5||checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
@@ -420,18 +422,16 @@ public class GameState {
 		ArrayList<Player> winnerPoints = new ArrayList<>();
 		winnerPoints.addAll(players);
 		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
+		Collections.reverse(winnerPoints);
 		for(int i = 0; i<winnerPoints.size(); i++)
 		{
 			System.out.println(i);
 			Player p = winnerPoints.get(i);
 			list.add(p.getTrainColor()+": "+p.getPoints());
 		}
-		ArrayList<String> reverse = new ArrayList<String>();
 		
-		for(int i = list.size()-1; i >= 0; i--) {
-			reverse.add(list.get(i));
-		}
-			
+		
+	
 		return list;
 		
 	}
@@ -571,22 +571,19 @@ public class GameState {
 	
 	
 	private void addContractPoints() {
-		Set<Player> pla = new HashSet<>();
+		ArrayList<Player> pla = new ArrayList<>();
 		pla.addAll(players);
 		pla.add(curPlayer);
 
-		for ( Player p : pla) {
-			for ( ContractCard c : p.getContracts()) {
+		for ( int i = 0; i < pla.size(); i++) {
+			for ( ContractCard c : pla.get(i).getContracts()) {
 				if (!c.isComplete())
-					p.addPoints(-1 * (c.getNumPoints()));
+					pla.get(i).addPoints(-1 * (c.getNumPoints()));
 				if ( c.isComplete())
-					p.addPoints(c.getNumPoints());
+					pla.get(i).addPoints(c.getNumPoints());
 			}
 		}
-		for ( Player p : pla) {
-			if (p.getPoints() < 0) 
-				p.addPoints(-1*(p.getPoints()));
-		}
+		
 	}
 
 	private boolean checkDoubleEdge(Edge e) {
