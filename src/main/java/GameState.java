@@ -14,7 +14,7 @@ import java.util.Set;
 import java.util.Stack;
 
 public class GameState {
-	// i made this public, neccessary for graphics so the whole datastructure doesnt
+	// i made this public, necessary for graphics so the whole data structure doesn't
 	// need to be remade, can just refer to the index
 	public static final String[] TRAIN_COLORS = { "magenta", "white", "blue", "yellow", "orange", "black", "red",
 			"green", "wild" };
