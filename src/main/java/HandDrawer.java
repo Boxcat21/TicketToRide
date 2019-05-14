@@ -192,6 +192,11 @@ public class HandDrawer {
 		}
 		catch (Exception e) {}
 		g2.drawImage(card, 1100, 740, 200, 120, null);
+		if ( cards.get(0).isComplete()) {
+			g2.setFont(new Font("Comic Sans MS", Font.PLAIN,12));
+			g2.setColor(Color.BLACK);
+			g2.drawString("Complete", 1120, 740+24);
+		}
 		g2.setColor(Color.BLACK);
 		g2.setStroke(new BasicStroke(4));
 		g2.drawRect(1050, 790, 35, 35);
