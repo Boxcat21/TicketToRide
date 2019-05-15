@@ -406,6 +406,8 @@ public class GameState {
 			for(TrainCard c:displayCards)
 				if(!c.getColor().equals("wild"))
 					counter++;
+			if(counter<=3)
+			endGame();
 			
 			
 		
