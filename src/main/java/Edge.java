@@ -76,8 +76,15 @@ public class Edge implements Comparable{
 	public ArrayList<Edge> getConnectedPlayerEdges(int x) { //based only on one city
 		ArrayList<Edge> temp = new ArrayList<Edge>();
 		
+		System.out.println("x: " + x);//
+		
 		City c = cities.get(x);
+		
+		System.out.println("City: " + c.getName() + "");//
+		System.out.println(cities.get(0).getAllEdges());
 		for(int i = 0; i < c.getAllEdges().size(); i++) {
+			System.out.println("\n" + i);
+			System.out.println("COLORS:: " + c.getAllEdges().get(i).getTrainColor() + " " + this.trainColor);
 			if(c.getAllEdges().get(i).getTrainColor().equals(this.trainColor)) {
 				temp.add(c.getAllEdges().get(i));
 			}
