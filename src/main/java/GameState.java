@@ -102,14 +102,12 @@ public class GameState {
 		scan = new Scanner(new File("TextFiles/FixedCon"));
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
-			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");
-			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.indexOf("/")).split(",");
+			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");//2 cities
+			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.indexOf("/")).split(",");//cnt and color
 			int serial = Integer.parseInt(line.substring(line.indexOf("/") + 1));
 			ArrayList<City> tempCities = new ArrayList<>();
-			String key = tempFirstTwo[0];
-			String value = tempFirstTwo[1];
-			tempCities.add(cityHelper(key));
-			tempCities.add(cityHelper(value));
+			tempCities.add(cityHelper(tempFirstTwo[0]));
+			tempCities.add(cityHelper(tempFirstTwo[1]));
 			edges.add(new Edge(Integer.parseInt(tempLastTwo[0]), tempLastTwo[1], tempCities, serial));
 		}
 		for (int i = cities.size() - 1; i >= 0; i--) {
@@ -302,9 +300,9 @@ public class GameState {
 		ArrayList<Edge> same = e.getConnectedPlayerEdges(0);//connected edges from one city (corresponds to possible1)
 		ArrayList<Edge> same1 = e.getConnectedPlayerEdges(1);//connnected edges from the other city (corresponds to possible2)
 		
-		if(same.size() == 0 && same1.size() == 0) //accounts for case that if an edge is stand alone
+		if(same.size() == 0 && same1.size() == 0) {//accounts for case that if an edge is stand alone
 			return e.getLength();
-		
+		}
 		for(int i = 0; i < same.size(); i++) {
 			possible1.add(longestPathRecur(same.get(i),passedEdges)); //all the possibilities for one city
 		}
