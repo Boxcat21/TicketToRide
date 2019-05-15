@@ -14,7 +14,8 @@ import java.util.Set;
 import java.util.Stack;
 
 public class GameState {
-	// i made this public, necessary for graphics so the whole data structure doesn't
+	// i made this public, necessary for graphics so the whole data structure
+	// doesn't
 	// need to be remade, can just refer to the index
 	public static final String[] TRAIN_COLORS = { "magenta", "white", "blue", "yellow", "orange", "black", "red",
 			"green", "wild" };
@@ -120,7 +121,7 @@ public class GameState {
 			}
 			City c = cities.remove(i);
 			cities.add(new City(c.getPoint(), c.getName(), temps));
-			
+
 		}
 
 		// adding contracts
@@ -143,9 +144,10 @@ public class GameState {
 			contractDeck.add(tempCards.get(i));
 		scan.close();
 	}
-	public boolean placeTrain(Edge e, ArrayList<TrainCard> thing) { //player action
+
+	public boolean placeTrain(Edge e, ArrayList<TrainCard> thing) { // player action
 		boolean b = curPlayer.getTrains() < e.getLength();
-		if(choosingContracts || e.getHasTrains() || checkDoubleEdge(e) || turnCounter == 1 || b)
+		if (choosingContracts || e.getHasTrains() || checkDoubleEdge(e) || turnCounter == 1 || b)
 			return false;
 		ArrayList<TrainCard> input = new ArrayList<TrainCard>();
 		ArrayList<TrainCard> tempDiscard = new ArrayList<>();
@@ -184,8 +186,8 @@ public class GameState {
 				curPlayer.addEdge(e);
 				turnCounter -= 2;
 				curPlayer.reduceTrains(e.getLength());
-				curPlayer.addPoints(routePoints.get(e.getLength())); 
-				checkContracts(); 
+				curPlayer.addPoints(routePoints.get(e.getLength()));
+				checkContracts();
 				curPlayer.addPath(longestPath(e));
 				checkTurn();
 				return true;
@@ -208,8 +210,8 @@ public class GameState {
 			curPlayer.addTrainCard(t);
 			try {
 				displayCards.add(choice, trainCardDeck.pop());
-			} catch(EmptyStackException e) {
-				
+			} catch (EmptyStackException e) {
+
 			}
 			turnCounter--;
 		} else {
@@ -257,27 +259,36 @@ public class GameState {
 
 	public void endGame() {
 		isEnded = true;
-		//longestPath = longestPath();
+		// longestPath = longestPath();
 		ArrayList<Player> plyrs = new ArrayList<Player>();
-		
-		while(players.size() > 0)
+
+		while (players.size() > 0)
 			plyrs.add(players.poll());
-		for(int i = 0; i < plyrs.size(); i++)
+		for (int i = 0; i < plyrs.size(); i++)
 			players.add(plyrs.get(i));
 		int biggest = 0;
 		Player big = null;
-		for(int i = 0; i < plyrs.size(); i++) {
-			if(plyrs.get(i).getLongest() > biggest) {
+		for (int i = 0; i < plyrs.size(); i++) {
+			if (plyrs.get(i).getLongest() > biggest) {
 				biggest = plyrs.get(i).getLongest();
 				big = plyrs.get(i);
 			}
 		}
-		longestPath ="LONGEST PATH: |" + big.getTrainColor();
+		longestPath = "LONGEST PATH: |" + big.getTrainColor();
 		big.addPath(20);
-		
+
 		mostContracts = mostContractCards();
 		mostContracts.addPoints(10);
 		addContractPoints();
+		checkPoints(plyrs);
+
+	}
+
+	private void checkPoints(ArrayList<Player> p) {
+		for (int i = 0; i < p.size(); i++) {
+			if (p.get(i).getPoints() < 0)
+				p.get(i).addPoints(-1 * (p.get(i).getPoints()));
+		}
 
 	}
 
@@ -287,82 +298,83 @@ public class GameState {
 		turnCounter = 2;
 	}
 
-	public int longestPath(Edge e) { 
-		//Ultimately how longest path works is: i calculate the longest path after each edge is placed (from placeTrain())
-		//after that, the max is stored in its respective player
-		//this is done to split up the runtime of the algorithm between each turn
-		//at the end, all of the players longest paths are compared and determined
-		
-		
-		ArrayList<ArrayList<Edge>> possible1 = new ArrayList<>(); //list of paths from one city
-		ArrayList<ArrayList<Edge>> possible2 = new ArrayList<>();//list of paths from another
-		ArrayList<Edge> passedEdges = new ArrayList<>();//passed edges (only edges cant be repeated)
+	public int longestPath(Edge e) {
+		// Ultimately how longest path works is: i calculate the longest path after each
+		// edge is placed (from placeTrain())
+		// after that, the max is stored in its respective player
+		// this is done to split up the runtime of the algorithm between each turn
+		// at the end, all of the players longest paths are compared and determined
+
+		ArrayList<ArrayList<Edge>> possible1 = new ArrayList<>(); // list of paths from one city
+		ArrayList<ArrayList<Edge>> possible2 = new ArrayList<>();// list of paths from another
+		ArrayList<Edge> passedEdges = new ArrayList<>();// passed edges (only edges cant be repeated)
 		passedEdges.add(e);
-		
-		ArrayList<Edge> same = e.getConnectedPlayerEdges(0);//connected edges from one city (corresponds to possible1)
-		ArrayList<Edge> same1 = e.getConnectedPlayerEdges(1);//connnected edges from the other city (corresponds to possible2)
-		
-		if(same.size() == 0 && same1.size() == 0) //accounts for case that if an edge is stand alone
+
+		ArrayList<Edge> same = e.getConnectedPlayerEdges(0);// connected edges from one city (corresponds to possible1)
+		ArrayList<Edge> same1 = e.getConnectedPlayerEdges(1);// connnected edges from the other city (corresponds to
+																// possible2)
+
+		if (same.size() == 0 && same1.size() == 0) // accounts for case that if an edge is stand alone
 			return e.getLength();
-		
-		for(int i = 0; i < same.size(); i++) {
-			possible1.add(longestPathRecur(same.get(i),passedEdges)); //all the possibilities for one city
+
+		for (int i = 0; i < same.size(); i++) {
+			possible1.add(longestPathRecur(same.get(i), passedEdges)); // all the possibilities for one city
 		}
-		for(int i = 0; i < same.size(); i++) {
-			possible2.add(longestPathRecur(same1.get(i),passedEdges));// all the possibilities for the other city
+		for (int i = 0; i < same.size(); i++) {
+			possible2.add(longestPathRecur(same1.get(i), passedEdges));// all the possibilities for the other city
 		}
 
-		//the following nested for loop block of code description:
-		//this is taking all the combinations of paths from the given edge, and finding the combination that is the longest path
-		//taking into account repeats
-		ArrayList<ArrayList<Edge>> finalSets = new ArrayList<>(); 
-		for(int i = 0; i < possible1.size(); i++) {
-			for(int t = 0; t < possible2.size(); t++) {
+		// the following nested for loop block of code description:
+		// this is taking all the combinations of paths from the given edge, and finding
+		// the combination that is the longest path
+		// taking into account repeats
+		ArrayList<ArrayList<Edge>> finalSets = new ArrayList<>();
+		for (int i = 0; i < possible1.size(); i++) {
+			for (int t = 0; t < possible2.size(); t++) {
 				System.out.println(i + " " + t);
 				ArrayList<Edge> temp = new ArrayList<Edge>();
 				temp.addAll(possible1.get(i));
 				temp.addAll(possible2.get(t));
-				removeRepeats(temp);//repeats are removed
-				finalSets.add(temp);//added to final sets
+				removeRepeats(temp);// repeats are removed
+				finalSets.add(temp);// added to final sets
 			}
 		}
-		ArrayList<Edge> finalSet = getLargestArray(finalSets);//the longest path of those is the final longest path
-		//int longest = longestPathRecur(e, new ArrayList<Edge>());
-		
-		return actualSize(finalSet);//returned to a player
+		ArrayList<Edge> finalSet = getLargestArray(finalSets);// the longest path of those is the final longest path
+		// int longest = longestPathRecur(e, new ArrayList<Edge>());
+
+		return actualSize(finalSet);// returned to a player
 	}
 
 	public ArrayList<Edge> longestPathRecur(Edge e, ArrayList<Edge> passedEdges) {
-		//the reason that this method returns arraylist instead of an int, is to account for repeats later on
-		
-		
-		
+		// the reason that this method returns arraylist instead of an int, is to
+		// account for repeats later on
+
 		ArrayList<Edge> same = e.getConnectedPlayerEdges();
-		//ArrayList<Integer> findMax = new ArrayList<Integer>(); 
-		//arraylist of arraylist of edges
-		ArrayList<ArrayList<Edge>> findMax = new ArrayList<>();//store all possible paths
-		for(int i = 0; i < same.size(); i++) {
-			if(passedEdges.contains(same.get(i))) { //if i have passed over the edge
+		// ArrayList<Integer> findMax = new ArrayList<Integer>();
+		// arraylist of arraylist of edges
+		ArrayList<ArrayList<Edge>> findMax = new ArrayList<>();// store all possible paths
+		for (int i = 0; i < same.size(); i++) {
+			if (passedEdges.contains(same.get(i))) { // if i have passed over the edge
 				same.remove(i);
 				i--;
 			}
 		}
 		passedEdges.add(e);
-		if(same.size() > 0) {//if there are more edges to recursively traverse through
-			for(int i = 0; i < same.size(); i++) {
-				findMax.add(longestPathRecur(same.get(i),passedEdges));
+		if (same.size() > 0) {// if there are more edges to recursively traverse through
+			for (int i = 0; i < same.size(); i++) {
+				findMax.add(longestPathRecur(same.get(i), passedEdges));
 			}
 		}
-		if(findMax.size() > 0) { //basically if the above if statemnet has run
+		if (findMax.size() > 0) { // basically if the above if statemnet has run
 			ArrayList<Edge> biggest = getLargestArray(findMax);
-			biggest.add(e);//finds the longest path from this edge
+			biggest.add(e);// finds the longest path from this edge
 			return biggest;
-		}
-		else {
-			ArrayList<Edge> temp = new ArrayList<Edge>(); //if there are no more connected edges of the same color, this edge is the only one and must be returned
-			//basically this is the end of all recursive calls
+		} else {
+			ArrayList<Edge> temp = new ArrayList<Edge>(); // if there are no more connected edges of the same color,
+															// this edge is the only one and must be returned
+			// basically this is the end of all recursive calls
 			temp.add(e);
-			//return e.getLength();
+			// return e.getLength();
 			return temp;
 		}
 	}
@@ -370,13 +382,13 @@ public class GameState {
 	public Player mostContractCards() {
 		// Cole (DONE, untested)
 		ArrayList<Player> plyrs = new ArrayList<Player>();
-		
-		while(players.size() > 0)
+
+		while (players.size() > 0)
 			plyrs.add(players.poll());
-		for(int i = 0; i < plyrs.size(); i++)
+		for (int i = 0; i < plyrs.size(); i++)
 			players.add(plyrs.get(i));
 		Player highest = plyrs.get(0);
-		
+
 		System.out.println(plyrs.size());
 		for (int i = 0; i < plyrs.size(); i++) {
 			Player p = plyrs.get(i);
@@ -390,11 +402,10 @@ public class GameState {
 
 	public void checkTurn() {// does not continue to next round, due to the turn counter
 		// we need to force next turn if stuck halfway through a turn
-		while (displayCards.size()<5||checkWilds()) { // if there are 3+ wild cards in the deck
+		while (displayCards.size() < 5 || checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
-			if(trainCardDeck.empty()) 
-			{
+			if (trainCardDeck.empty()) {
 				trainCardDeck.addAll(discardTrainCard);
 				System.out.println(discardTrainCard.toString());
 				Collections.shuffle(trainCardDeck);
@@ -403,12 +414,10 @@ public class GameState {
 			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
 			int counter = 0;
-			for(TrainCard c:displayCards)
-				if(!c.getColor().equals("wild"))
+			for (TrainCard c : displayCards)
+				if (!c.getColor().equals("wild"))
 					counter++;
-			
-			
-		
+
 		}
 		if (lastRound && lastPlayer == curPlayer && turnCounter == 0) {
 			players.add(curPlayer);
@@ -425,47 +434,60 @@ public class GameState {
 		}
 
 	}
-	
-	public ArrayList<String> endScreen()//returns the four players in order of points 
+
+	public ArrayList<String> endScreen()// returns the four players in order of points
 	{
 		ArrayList<String> list = new ArrayList<>();
 		ArrayList<Player> winnerPoints = new ArrayList<>();
 		winnerPoints.addAll(players);
 		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
 		Collections.reverse(winnerPoints);
-		for(int i = 0; i<winnerPoints.size(); i++)
-		{
+		for (int i = 0; i < winnerPoints.size(); i++) {
 			System.out.println(i);
 			Player p = winnerPoints.get(i);
-			list.add(p.getTrainColor()+": "+p.getPoints());
+			list.add(p.getTrainColor() + ": " + p.getPoints());
 		}
-		
-		
-	
+
 		return list;
-		
+
 	}
-	
-	public Player curPlayer() {return curPlayer;}
-	
-	public ArrayList<Edge> getEdges() {return edges;}
-	
-	public Queue<Player> getPlayerList() {return players;}
-	
-	public ArrayList<TrainCard> getDisplayCards() {return displayCards;}
-	
-	public ArrayList<ContractCard> getDisplayContracts() {return displayContracts;}
-	
-	public Player getMostContracts() {return mostContracts;}
-	
-	public boolean isChoosingContracts() {return choosingContracts;}
-	
-	public boolean isEnded() {return isEnded;}
-	
+
+	public Player curPlayer() {
+		return curPlayer;
+	}
+
+	public ArrayList<Edge> getEdges() {
+		return edges;
+	}
+
+	public Queue<Player> getPlayerList() {
+		return players;
+	}
+
+	public ArrayList<TrainCard> getDisplayCards() {
+		return displayCards;
+	}
+
+	public ArrayList<ContractCard> getDisplayContracts() {
+		return displayContracts;
+	}
+
+	public Player getMostContracts() {
+		return mostContracts;
+	}
+
+	public boolean isChoosingContracts() {
+		return choosingContracts;
+	}
+
+	public boolean isEnded() {
+		return isEnded;
+	}
+
 	public String getLongestPath() {
 		return longestPath;
 	}
-	
+
 	public Queue<ContractCard> getContractDeck() {
 		return contractDeck;
 	}
@@ -549,51 +571,49 @@ public class GameState {
 //		return shared;
 //
 //	}
-	
-	
+
 	public void checkContracts() {
-		
-		for ( ContractCard c : curPlayer.getContracts()) {
-			
-			for ( Set<City> s : curPlayer.paths) {
-				
-				if ( checkSameSet(c.getCity1(), c.getCity2(), s)) {
+
+		for (ContractCard c : curPlayer.getContracts()) {
+
+			for (Set<City> s : curPlayer.paths) {
+
+				if (checkSameSet(c.getCity1(), c.getCity2(), s)) {
 					c.complete();
-					
+
 				}
 			}
 		}
-		
+
 	}
-	
+
 	private boolean checkSameSet(City a, City b, Set<City> s) {
 		boolean ba = false;
 		boolean bb = false;
-		
-		for ( City c : s) {
+
+		for (City c : s) {
 			if (c.getName().equals(a.getName()))
 				ba = true;
-			if ( c.getName().equals(b.getName()))
+			if (c.getName().equals(b.getName()))
 				bb = true;
 		}
 		return ba && bb;
 	}
-	
-	
+
 	private void addContractPoints() {
 		ArrayList<Player> pla = new ArrayList<>();
 		pla.addAll(players);
 		pla.add(curPlayer);
 
-		for ( int i = 0; i < pla.size(); i++) {
-			for ( ContractCard c : pla.get(i).getContracts()) {
+		for (int i = 0; i < pla.size(); i++) {
+			for (ContractCard c : pla.get(i).getContracts()) {
 				if (!c.isComplete())
 					pla.get(i).addPoints(-1 * (c.getNumPoints()));
-				if ( c.isComplete())
+				else if (c.isComplete())
 					pla.get(i).addPoints(c.getNumPoints());
 			}
 		}
-		
+
 	}
 
 	private boolean checkDoubleEdge(Edge e) {
@@ -619,39 +639,46 @@ public class GameState {
 			}
 		}
 	}
-	//longest path helper
-	private ArrayList<Edge> getLargestArray(ArrayList<ArrayList<Edge>> mat) {//Path = array of edges, //array of paths is an array of an array of edges
-		//that is essentially what  ArrayList<ArrayList<Edge>> is
-		
-		//basically this is really getting the largest path out of the given possibilities
+
+	// longest path helper
+	private ArrayList<Edge> getLargestArray(ArrayList<ArrayList<Edge>> mat) {// Path = array of edges, //array of paths
+																				// is an array of an array of edges
+		// that is essentially what ArrayList<ArrayList<Edge>> is
+
+		// basically this is really getting the largest path out of the given
+		// possibilities
 		ArrayList<Edge> biggest = mat.get(0);
-		for(int i = 1; i < mat.size(); i++) {
-			if(actualSize(mat.get(i)) > actualSize(biggest))
+		for (int i = 1; i < mat.size(); i++) {
+			if (actualSize(mat.get(i)) > actualSize(biggest))
 				biggest = mat.get(i);
 		}
 		return biggest;
 	}
-	//longest path helper
-	private int actualSize(ArrayList<Edge> list) { //this basically takes a path of edges and calculates the actual length 
-		//by adding up all the lengths of the contained edges
+
+	// longest path helper
+	private int actualSize(ArrayList<Edge> list) { // this basically takes a path of edges and calculates the actual
+													// length
+		// by adding up all the lengths of the contained edges
 		int sum = 0;
-		for(int i = 0; i < list.size(); i++) {
+		for (int i = 0; i < list.size(); i++) {
 			sum += list.get(i).getLength();
 		}
 		return sum;
 	}
-	private ArrayList<Edge> removeRepeats(ArrayList<Edge> list) { // I realized that whenever i call longest path from a single edge
-		//it branches off in multiple directions. I thought i could add all the total branches but the issue was that there would be repeats
-		//i created this method to solve it and made Edge implement comparable
-		//Still not sure if this actually solves it tho
+
+	private ArrayList<Edge> removeRepeats(ArrayList<Edge> list) { // I realized that whenever i call longest path from a
+																	// single edge
+		// it branches off in multiple directions. I thought i could add all the total
+		// branches but the issue was that there would be repeats
+		// i created this method to solve it and made Edge implement comparable
+		// Still not sure if this actually solves it tho
 		ArrayList<Edge> temps = new ArrayList<Edge>();
 		temps.add(list.get(0));
-		for(int i = 1; i < list.size(); i++) {
-			if(temps.contains(list.get(i))) {
+		for (int i = 1; i < list.size(); i++) {
+			if (temps.contains(list.get(i))) {
 				list.remove(i);
 				i--;
-			}
-			else {
+			} else {
 				temps.add(list.get(i));
 			}
 		}
