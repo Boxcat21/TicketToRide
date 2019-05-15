@@ -116,10 +116,10 @@ public class GamePanel extends JPanel implements MouseListener {
 			g.setFont(new Font("Comic Sans MS", Font.PLAIN,20));
 			ArrayList<String> end = game.endScreen();
 			for(int i = 0; i < end.size(); i++) {
-				g.drawString(end.get(i), 940, 400 + (i*30));
+				g.drawString("Place: " + (i+1)  + "    " + end.get(i), 940, 400 + (i*30));
 			}
 			g.drawString(game.getLongestPath(), 940, 700);
-			g.drawString("MOST CONTRACTS" + game.getMostContracts().getTrainColor() + " | " + game.getMostContracts().getCompleted()  + " contracts", 940, 740);
+			g.drawString("MOST CONTRACTS: " + game.getMostContracts().getTrainColor() + " | " + game.getMostContracts().getCompleted()  + " contracts", 940, 740);
 		}
 		/*
 		 * BoardDrawer.drawBoard(g, this.clickedEdgeIndecies); HandDrawer.drawHand(g,

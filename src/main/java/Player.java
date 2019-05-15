@@ -82,8 +82,7 @@ public class Player {
 	}
 	public void addPoints(int points) {
 		this.points += points;
-		if ( points < 0)
-			points = 0;
+		
 	}
 	public ArrayList<ContractCard> getContracts() {
 		return contracts;
