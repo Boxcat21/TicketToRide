@@ -403,20 +403,36 @@ public class GameState {
 		while (displayCards.size() < 5 || checkWilds()) { // if there are 3+ wild cards in the deck
 			discardTrainCard.addAll(displayCards);
 			displayCards.clear();
-			if (trainCardDeck.empty()) {
+			
+			if (trainCardDeck.empty()) //If the original deck is completely empty
+			{
+			
+			//Count the number of cards that are not wild in the discard deck	
+				int counter = 0;
+			for (TrainCard c : discardTrainCard)
+				if (!c.getColor().equals("wild"))
+					counter++;
+			//If the discard deck has less than three normal cards, it would enter an infinite loop because once it adds to trainCardDeck,
+			//it would pull 3 wilds and 2 normals, discard them because it violates the rules, pull it out again,etc.
+			//Therefore, end the game if the discardDeck has less than three normal cards
+			if(counter<3)
+			{
+				endGame();
+				break;
+			}
+			
+			//Otherwise, if there are more than three normal cards in the discard add them back to the train card deck
+			else
+			{
 				trainCardDeck.addAll(discardTrainCard);
-				System.out.println(discardTrainCard.toString());
 				Collections.shuffle(trainCardDeck);
 				discardTrainCard.clear();
 			}
+				
+			}
 			for (int i = 0; i < 5; i++)
 				displayCards.add(trainCardDeck.pop());
-			int counter = 0;
-			for (TrainCard c : displayCards)
-				if (!c.getColor().equals("wild"))
-					counter++;
-			if(counter<=3)
-			endGame();
+			
 			
 		}
 		if (lastRound && lastPlayer == curPlayer && turnCounter == 0) {
@@ -440,6 +456,7 @@ public class GameState {
 		ArrayList<String> list = new ArrayList<>();
 		ArrayList<Player> winnerPoints = new ArrayList<>();
 		winnerPoints.addAll(players);
+		winnerPoints.add(curPlayer);
 		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
 		Collections.reverse(winnerPoints);
 		for (int i = 0; i < winnerPoints.size(); i++) {

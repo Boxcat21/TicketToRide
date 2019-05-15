@@ -117,9 +117,11 @@ public class GamePanel extends JPanel implements MouseListener {
 			ArrayList<String> end = game.endScreen();
 			for(int i = 0; i < end.size(); i++) {
 				g.drawString("Place: " + (i+1)  + "    " + end.get(i), 940, 400 + (i*30));
-			}
+			} 
+			try { 
 			g.drawString(game.getLongestPath(), 940, 700);
 			g.drawString("MOST CONTRACTS: " + game.getMostContracts().getTrainColor() + " | " + game.getMostContracts().getCompleted()  + " contracts", 940, 740);
+			} catch (Exception e) {}
 		}
 		/*
 		 * BoardDrawer.drawBoard(g, this.clickedEdgeIndecies); HandDrawer.drawHand(g,
