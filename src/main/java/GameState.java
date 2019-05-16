@@ -417,11 +417,11 @@ public class GameState {
 		 * 
 		 * } for (int i = 0; i < 5; i++) displayCards.add(trainCardDeck.pop()); }
 		 */
-		if((!isNonWild() || !checkWilds()) && (displayCards.size() + trainCardDeck.size()) < 5) {
+		if((!isNonWild() || !checkWilds()) && (displayCards.size()) < 5) {
 			trainCardDeck.addAll(discardTrainCards);
 			discardTrainCards.clear();
 		}
-		if(!isNonWild() && displayCards.size() < 5 && trainCardDeck.size() >  5) {
+		if(!isNonWild() && displayCards.size() < 5 && trainCardDeck.size() >  (5-displayCards.size())) {
 			while(displayCards.size() < 5)
 				displayCards.add(trainCardDeck.pop());
 		}
