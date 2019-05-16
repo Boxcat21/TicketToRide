@@ -417,7 +417,7 @@ public class GameState {
 		 * 
 		 * } for (int i = 0; i < 5; i++) displayCards.add(trainCardDeck.pop()); }
 		 */
-		if(!isNonWild() && (displayCards.size() + trainCardDeck.size()) < 5) {
+		if((!isNonWild() || !checkWilds()) && (displayCards.size() + trainCardDeck.size()) < 5) {
 			trainCardDeck.addAll(discardTrainCards);
 			discardTrainCards.clear();
 		}
