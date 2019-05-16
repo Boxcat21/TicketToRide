@@ -417,6 +417,14 @@ public class GameState {
 		 * 
 		 * } for (int i = 0; i < 5; i++) displayCards.add(trainCardDeck.pop()); }
 		 */
+		if(!isNonWild() && (displayCards.size() + trainCardDeck.size()) < 5) {
+			trainCardDeck.addAll(discardTrainCards);
+			discardTrainCards.clear();
+		}
+		if(!isNonWild() && displayCards.size() < 5 && trainCardDeck.size() >  5) {
+			while(displayCards.size() < 5)
+				displayCards.add(trainCardDeck.pop());
+		}
 		System.out.println(trainCardDeck);
 		System.out.println(displayCards);
 		System.out.println(discardTrainCards + "\n");
@@ -481,7 +489,6 @@ public class GameState {
 		ArrayList<String> list = new ArrayList<>();
 		ArrayList<Player> winnerPoints = new ArrayList<>();
 		winnerPoints.addAll(players);
-		winnerPoints.add(curPlayer);
 		Collections.sort(winnerPoints, (p1, p2) -> Integer.compare(p1.getPoints(), p2.getPoints()));
 		Collections.reverse(winnerPoints);
 		for (int i = 0; i < winnerPoints.size(); i++) {

@@ -20,7 +20,7 @@ public class Player {
 		this.points = 0;
 		this.contracts = new ArrayList<ContractCard>();
 		this.trainCards = new ArrayList<TrainCard>();
-		this.trains = 10;
+		this.trains = 40;
 		this.trainColor = trainColor;
 		this.isSetUp = false;
 		this.longestPath = 0;
