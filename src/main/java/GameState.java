@@ -26,7 +26,7 @@ public class GameState {
 	private Queue<Player> players;
 	private Queue<ContractCard> contractDeck;
 	private Stack<TrainCard> trainCardDeck;
-	private ArrayList<TrainCard> discardTrainCard;
+	private ArrayList<TrainCard> discardTrainCards;
 	private ArrayList<TrainCard> displayCards;
 	private ArrayList<City> cities;
 	private ArrayList<City> passedCities;
@@ -40,8 +40,12 @@ public class GameState {
 	private boolean choosingContracts;
 	private String longestPath;
 	private Player mostContracts;
-
+	private boolean cantClickDeck;
+	private boolean cantChooseCard;
 	public GameState() throws FileNotFoundException {
+		//more bools
+		cantClickDeck = false;
+		cantChooseCard = false;
 		// points map
 		routePoints.put(1, 1);
 		routePoints.put(2, 2);
@@ -68,7 +72,7 @@ public class GameState {
 		displayCards = new ArrayList<>();
 		players = new LinkedList<>();
 		passedCities = new ArrayList<>();
-		discardTrainCard = new ArrayList<>();
+		discardTrainCards = new ArrayList<>();
 		lastRound = false;
 		// Adding train cards
 		for (int j = 0; j < 8; j++)
@@ -103,8 +107,8 @@ public class GameState {
 		scan = new Scanner(new File("TextFiles/FixedCon"));
 		while (scan.hasNextLine()) {
 			String line = scan.nextLine();
-			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");//2 cities
-			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.indexOf("/")).split(",");//cnt and color
+			String[] tempFirstTwo = line.substring(0, line.indexOf('|')).split(",");// 2 cities
+			String[] tempLastTwo = line.substring(line.indexOf('|') + 1, line.indexOf("/")).split(",");// cnt and color
 			int serial = Integer.parseInt(line.substring(line.indexOf("/") + 1));
 			ArrayList<City> tempCities = new ArrayList<>();
 			tempCities.add(cityHelper(tempFirstTwo[0]));
@@ -178,7 +182,7 @@ public class GameState {
 				}
 			}
 			if (!(input.size() > 0)) {
-				discardTrainCard.addAll(tempDiscard);
+				discardTrainCards.addAll(tempDiscard);
 				setActualEdge(e, curPlayer.getTrainColor(), curPlayer);
 				e.setPlayer(curPlayer);
 				curPlayer.addEdge(e);
@@ -195,22 +199,20 @@ public class GameState {
 	}
 
 	public boolean chooseTrainCard(int choice) { // player action
-		if (choosingContracts)
+		if (choosingContracts || cantChooseCard)
 			return false;
 		TrainCard t = displayCards.get(choice);
 		if (t.getColor().equals("wild") && turnCounter == 2) {
 			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
-			displayCards.add(choice, trainCardDeck.pop());
+			if(trainCardDeck.size() > 0)
+				displayCards.add(choice, trainCardDeck.pop());
 			turnCounter -= 2;
 		} else if (!t.getColor().equals("wild")) {
 			t = displayCards.remove(choice);
 			curPlayer.addTrainCard(t);
-			try {
+			if(trainCardDeck.size() > 0)
 				displayCards.add(choice, trainCardDeck.pop());
-			} catch (EmptyStackException e) {
-
-			}
 			turnCounter--;
 		} else {
 			// ystem.out.println("Stop right there, criminal scum!");
@@ -220,7 +222,7 @@ public class GameState {
 	}
 
 	public void drawTrainCard() { // player action
-		if (choosingContracts || trainCardDeck.isEmpty())
+		if (choosingContracts || trainCardDeck.isEmpty() || cantClickDeck)
 			return;
 		curPlayer.addTrainCard(trainCardDeck.pop());
 		turnCounter--;
@@ -282,14 +284,6 @@ public class GameState {
 
 	}
 
-	private void checkPoints(ArrayList<Player> p) {
-		for (int i = 0; i < p.size(); i++) {
-			if (p.get(i).getPoints() < 0)
-				p.get(i).addPoints(-1 * (p.get(i).getPoints()));
-		}
-
-	}
-
 	public void endTurn() {
 		players.offer(curPlayer);
 		curPlayer = players.poll();
@@ -308,15 +302,15 @@ public class GameState {
 		ArrayList<Edge> passedEdges = new ArrayList<>();// passed edges (only edges cant be repeated)
 		passedEdges.add(e);
 
-		
-		ArrayList<Edge> same = e.getConnectedPlayerEdges(0);//connected edges from one city (corresponds to possible1)
-		ArrayList<Edge> same1 = e.getConnectedPlayerEdges(1);//connnected edges from the other city (corresponds to possible2)
-		
-		if(same.size() == 0 && same1.size() == 0) {//accounts for case that if an edge is stand alone
+		ArrayList<Edge> same = e.getConnectedPlayerEdges(0);// connected edges from one city (corresponds to possible1)
+		ArrayList<Edge> same1 = e.getConnectedPlayerEdges(1);// connnected edges from the other city (corresponds to
+																// possible2)
+
+		if (same.size() == 0 && same1.size() == 0) {// accounts for case that if an edge is stand alone
 			return e.getLength();
 		}
-		for(int i = 0; i < same.size(); i++) {
-			possible1.add(longestPathRecur(same.get(i),passedEdges)); //all the possibilities for one city
+		for (int i = 0; i < same.size(); i++) {
+			possible1.add(longestPathRecur(same.get(i), passedEdges)); // all the possibilities for one city
 		}
 		for (int i = 0; i < same.size(); i++) {
 			possible2.add(longestPathRecur(same1.get(i), passedEdges));// all the possibilities for the other city
@@ -400,41 +394,72 @@ public class GameState {
 
 	public void checkTurn() {// does not continue to next round, due to the turn counter
 		// we need to force next turn if stuck halfway through a turn
-		while (displayCards.size() < 5 || checkWilds()) { // if there are 3+ wild cards in the deck
-			discardTrainCard.addAll(displayCards);
+		/*
+		 * while (displayCards.size() < 5 || checkWilds()) { // if there are 3+ wild
+		 * cards in the deck discardTrainCards.addAll(displayCards);
+		 * displayCards.clear();
+		 * 
+		 * if (trainCardDeck.empty()) // If the original deck is completely empty {
+		 * 
+		 * // Count the number of cards that are not wild in the discard deck int
+		 * counter = 0; for (TrainCard c : discardTrainCards) if
+		 * (!c.getColor().equals("wild")) counter++; // If the discard deck has less
+		 * than three normal cards, it would enter an // infinite loop because once it
+		 * adds to trainCardDeck, // it would pull 3 wilds and 2 normals, discard them
+		 * because it violates the // rules, pull it out again,etc. // Therefore, end
+		 * the game if the discardDeck has less than three normal cards if (counter < 3)
+		 * { endGame(); break; }
+		 * 
+		 * // Otherwise, if there are more than three normal cards in the discard add
+		 * them // back to the train card deck else {
+		 * trainCardDeck.addAll(discardTrainCards); Collections.shuffle(trainCardDeck);
+		 * discardTrainCards.clear(); }
+		 * 
+		 * } for (int i = 0; i < 5; i++) displayCards.add(trainCardDeck.pop()); }
+		 */
+		System.out.println(trainCardDeck);
+		System.out.println(displayCards);
+		System.out.println(discardTrainCards + "\n");
+		if(trainCardDeck.isEmpty() || displayCards.isEmpty()) {
+			System.out.println("HELLO");
+			if(discardTrainCards.isEmpty() && trainCardDeck.isEmpty())
+				cantClickDeck = true;
+			else {
+				cantClickDeck = false;
+				
+				trainCardDeck.addAll(discardTrainCards);
+				discardTrainCards.clear();
+			}
+		}
+		else {
+			cantClickDeck = false;
+		}
+		if(!isNonWild() && displayCards.isEmpty()) {
+			for(int i = 0; i < 5; i++)
+				displayCards.add(trainCardDeck.pop());
+		}
+		
+		while(checkWilds() && !cantChooseCard) {
+			trainCardDeck.addAll(displayCards);
 			displayCards.clear();
+			Collections.shuffle(trainCardDeck);
 			
-			if (trainCardDeck.empty()) //If the original deck is completely empty
-			{
+			for(int i = 0; i < 5; i++) {
+				if(!trainCardDeck.isEmpty())
+					displayCards.add(trainCardDeck.pop());
+			}
 			
-			//Count the number of cards that are not wild in the discard deck	
-				int counter = 0;
-			for (TrainCard c : discardTrainCard)
-				if (!c.getColor().equals("wild"))
-					counter++;
-			//If the discard deck has less than three normal cards, it would enter an infinite loop because once it adds to trainCardDeck,
-			//it would pull 3 wilds and 2 normals, discard them because it violates the rules, pull it out again,etc.
-			//Therefore, end the game if the discardDeck has less than three normal cards
-			if(counter<3)
-			{
-				endGame();
+			if(checkWilds() && isNonWild()) {
+				System.out.println("Prankes");
+				trainCardDeck.addAll(displayCards);
+				displayCards.clear();
 				break;
 			}
-			
-			//Otherwise, if there are more than three normal cards in the discard add them back to the train card deck
-			else
-			{
-				trainCardDeck.addAll(discardTrainCard);
-				Collections.shuffle(trainCardDeck);
-				discardTrainCard.clear();
-			}
-				
-			}
-			for (int i = 0; i < 5; i++)
-				displayCards.add(trainCardDeck.pop());
-			
-			
 		}
+		if(displayCards.isEmpty())
+			cantChooseCard = true;
+		else
+			cantChooseCard = false;
 		if (lastRound && lastPlayer == curPlayer && turnCounter == 0) {
 			players.add(curPlayer);
 			endGame();
@@ -508,22 +533,6 @@ public class GameState {
 	public Queue<ContractCard> getContractDeck() {
 		return contractDeck;
 	}
-
-	private boolean checkWilds() {
-		int count = 0;
-		for (TrainCard t : displayCards)
-			if (t.getColor().equals("wild"))
-				count++;
-		return count >= 3;
-	}
-
-	private City cityHelper(String name) {
-		for (City c : cities)
-			if (c.getName().equals(name))
-				return c;
-		return null;
-	}
-
 //	private void checkContracts() {
 //		System.out.println(1);
 //		ArrayList<ContractCard> contracts = curPlayer.getContracts();
@@ -602,6 +611,37 @@ public class GameState {
 			}
 		}
 
+	}
+
+	private boolean checkWilds() {
+		int count = 0;
+		for (TrainCard t : displayCards)
+			if (t.getColor().equals("wild"))
+				count++;
+		return count >= 3;
+	}
+	private boolean allWilds() {
+		int count = 0;
+		for (TrainCard t : displayCards)
+			if (t.getColor().equals("wild"))
+				count++;
+		return count == displayCards.size();
+	}
+	private boolean isNonWild() {
+		int count = 0;
+		for (TrainCard t : trainCardDeck)
+			if (!(t.getColor().equals("wild")))
+				count++;
+		for (TrainCard t : displayCards)
+			if (!(t.getColor().equals("wild")))
+				count++;
+		return count < 3;
+	}
+	private City cityHelper(String name) {
+		for (City c : cities)
+			if (c.getName().equals(name))
+				return c;
+		return null;
 	}
 
 	private boolean checkSameSet(City a, City b, Set<City> s) {
@@ -700,5 +740,13 @@ public class GameState {
 			}
 		}
 		return list;
+	}
+
+	private void checkPoints(ArrayList<Player> p) {
+		for (int i = 0; i < p.size(); i++) {
+			if (p.get(i).getPoints() < 0)
+				p.get(i).addPoints(-1 * (p.get(i).getPoints()));
+		}
+
 	}
 }
